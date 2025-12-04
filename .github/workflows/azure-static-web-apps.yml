@@ -5,76 +5,44 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [ opened, synchronize, reopened, closed ]
 
 jobs:
   build_and_deploy:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      # ✅ Use a strict Node 24.x version (adjust if you prefer 24.1.0 / 24.2.0 etc.)
-      # This avoids runners picking an older/newer incompatible patch.
-      - name: Use Node.js 24.x (strict pin)
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.11.1'          # <-- pin exactly; change to a specific 24.x you trust
-          cache: 'npm'                    # npm cache at ~/.npm
-
-      # ✅ Restore node_modules cache (keyed by OS + Node + lockfile)
-      - name: Restore node_modules cache
-        id: node-modules-cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-modules-
-            ${{ runner.os }}-node-
-
-      # (Optional but helpful) print versions to logs
-      - name: Print tool versions
-        run: |
-          node -v
-          npm -v
-          npx ng version || true
-
-      # ✅ Install deps; if cache hit restored node_modules, npm will verify & reuse
-      - name: Install deps
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
-
-      # ✅ Save node_modules after install (if not restored)
-      - name: Save node_modules cache
-        if: steps.node-modules-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-          key: ${{ runner.os }}-node-${{ steps.setup-node.outputs.node-version }}-modules-${{ hashFiles('**/package-lock.json') }}
-
-      # Build Angular (uses local CLI from node_modules/.bin)
-      - name: Build Angular
-        run: |
-          npm run build -- --configuration production
-          ls -la dist/IPA-Ai-Agents_UI/browser || (echo "Build output not found"; exit 1)
-
-      # Deploy to Azure Static Web Apps
-      - name: Build & Deploy
+      # Oryx will build inside the SWA action. We do NOT build locally here.
+      # We tell Oryx which Node version to use and the Angular build command.
+      # We also add a POST_BUILD_COMMAND to debug the artifact paths (runs inside the Oryx container).
+      - name: Build & Deploy (Oryx builds Angular, then deploys)
         uses: Azure/static-web-apps-deploy@v1
         env:
-          NODE_VERSION: '24.11.1'
+          # 👉 Force Oryx to use a supported Node version for Angular 20/21
+          NODE_VERSION: '22.20.0'
+          # 👉 Turn on Angular's persistent build cache in the action environment
+          NG_BUILD_CACHE: 'enabled'
+          # 👉 Run debug commands inside Oryx AFTER the build (before deploy/validation)
+          #    This helps confirm the exact place where index.html is written.
+          POST_BUILD_COMMAND: |
+            echo "===== Oryx build debug: listing dist ====="
+            ls -la dist/IPA-Ai-Agents_UI || true
+            ls -la dist/IPA-Ai-Agents_UI/browser || true
+            echo "===== Oryx build debug: searching for index.html ====="
+            find dist -maxdepth 4 -type f -name "index.html" -print || true
         with:
           action: "upload"
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ZEALOUS_FIELD_0BD7C730F }}
+          # Source code location (repo root)
           app_location: "/"
+          # EXACT path to the Angular build output that contains index.html
           output_location: "dist/IPA-Ai-Agents_UI/browser"
+          # Force the build command Oryx should run for the app
+          app_build_command: "npm run build -- --configuration production"
+          # No API in this project; keep this true if you don't have Functions
           skip_api_build: true
 
   close_preview:
