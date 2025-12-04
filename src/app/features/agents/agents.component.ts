@@ -5,6 +5,8 @@ import { AuthService } from '../../core/auth.service';
 
 interface Agent {
   id: string;
+  imageUrl: string;
+  imageAlt?: string;
   name: string;
   description: string;
   industry: string;
@@ -24,16 +26,17 @@ interface Agent {
 export class AgentsComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  
+
   searchText = signal('');
   selectedIndustry = signal('Banking and Financial');
   selectedTechnology = signal('Azure');
   currentPage = signal(2);
   totalPages = 3;
-  
+
   agents = signal<Agent[]>([
     {
       id: '1',
+      imageUrl: 'assets/images/temp/Mask Group 1.png',
       name: 'Employee Experience',
       description: 'Employee Experience Agent automates the auditing of travel and expense prepayment requests by validating policy compliance and detecting anomalies before disbursement. It enhances financial control and reduces manual review effort through intelligent rule-based checks.',
       industry: 'Finance & Accounting',
@@ -43,6 +46,7 @@ export class AgentsComponent {
     },
     {
       id: '2',
+      imageUrl: 'assets/images/temp/Mask Group 2.png',
       name: 'Insurance Assistant',
       description: 'Insurance Assistant Agent automates the auditing of travel and expense prepayment requests by validating policy compliance and detecting anomalies before disbursement. It enhances financial control and reduces manual review effort through intelligent rule-based checks.',
       industry: 'Finance & Accounting',
@@ -52,6 +56,7 @@ export class AgentsComponent {
     },
     {
       id: '3',
+      imageUrl: 'assets/images/temp/Mask Group 3.png',
       name: 'Medical Records',
       description: 'Medical Records Agent automates the auditing of travel and expense prepayment requests by validating policy compliance and detecting anomalies before disbursement. It enhances financial control and reduces manual review effort through intelligent rule-based checks.',
       industry: 'Finance & Accounting',
@@ -61,6 +66,7 @@ export class AgentsComponent {
     },
     {
       id: '4',
+      imageUrl: 'assets/images/temp/Mask Group 1.png',
       name: 'T&E Pre-Pay Audit',
       description: 'T&E Prepay Audit Agent automates the auditing of travel and expense prepayment requests by validating policy compliance and detecting anomalies before disbursement. It enhances financial control and reduces manual review effort through intelligent rule-based checks.',
       industry: 'Finance & Accounting',
@@ -70,6 +76,7 @@ export class AgentsComponent {
     },
     {
       id: '5',
+      imageUrl: 'assets/images/temp/Mask Group 2.png',
       name: 'Inventory Manager',
       description: 'An agent autonomously manages perishable inventory across distributed F&B locations by forecasting demand, adjusting stock levels, and minimizing waste. It responds dynamically to seasonal trends, promotions, and consumer behaviour, ensuring freshness and cost efficiency.',
       industry: 'Supply Chain',
@@ -79,6 +86,7 @@ export class AgentsComponent {
     },
     {
       id: '6',
+      imageUrl: 'assets/images/temp/Mask Group 3.png',
       name: 'FNOL',
       description: 'First notice of loss - An agent autonomously captures and processes the first notice of loss from policyholders, initiating claims workflows with real-time data validation and triage. It accelerates investigations and support delivery by integrating incident reporting with insurer systems.',
       industry: 'Insurance',

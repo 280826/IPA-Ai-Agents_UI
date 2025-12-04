@@ -428,3 +428,188 @@ footer {
   background-size: 2rem; /* 32px / 16 = 2rem */
   min-width: 15rem; /* 240px / 16 = 15rem */
 }
+
+
+/* --- Rem-based card design (Gellix, 520x720 in rem) --- */
+:root{
+  /* Design tokens in rem-friendly values */
+  --card-bg:#ffffff;
+  --text-body:#1f2937;         /* dark gray */
+  --text-muted:#6b7280;        /* mid gray */
+  --indigo:#483ea8;            /* title color */
+  --accent:#4f46e5;            /* accent line */
+  --divider:#e5e7eb;           /* light gray */
+  --shadow-md:0 0.5rem 1.5rem rgba(17,24,39,0.08); /* 8px 24px */
+  --radius-card:1rem;          /* 16px */
+  --radius-inner:0.75rem;      /* 12px */
+
+  /* Global font already Gellix in your app; ensure fallback consistency */
+  --font-sans: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Card grid */
+.agents-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(32.5rem, 1fr)); /* min 520px */
+  gap:3rem 1rem;                             /* 32px */
+  padding: 0 2rem 1.5rem 2rem;                  /* 24px 32px */
+  width: 115rem;
+    left: 2.5rem;
+    position: relative;
+}
+
+/* Card container */
+.agent-card{
+  width:32.5rem;                         /* 520px */
+  height:45rem;                          /* 720px */
+  background:var(--card-bg);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow-md);
+  border:0.0625rem solid #f3f4f6;        /* 1px */
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  font-family:var(--font-sans);
+  margin: auto;
+}
+
+/* Top media */
+.agent-card__media{ margin:0; line-height:0; }
+.agent-card__img{
+  width:100%;
+  height:12.5rem;                       /* 200px */
+  object-fit:cover;
+  display:block;
+}
+
+/* Content block */
+.agent-card__content{ padding:1.5rem 1.5rem 1.25rem; } /* 24 24 20 */
+.agent-card__title{
+  color:var(--indigo);
+  font-weight:800;
+  font-size:1.625rem;                    /* 26px */
+  margin:0 0 0.75rem 0;                  /* 12px */
+  letter-spacing:0.0125rem;              /* 0.2px -> 0.0125rem */
+}
+.agent-card__desc{
+  color:var(--text-body);
+  font-size:1rem;                        /* 16px */
+  line-height:1.55;
+  margin:0 0 1.25rem 0;                  /* 20px */
+}
+
+/* Feature grid */
+.agent-card__features{
+  display:grid;
+  grid-template-columns:1fr 0.0625rem 1fr 0.0625rem 1fr; /* 1px dividers */
+  align-items:center;
+  gap:1rem;                                /* 16px */
+  padding:1.25rem 1rem;                    /* 20px 16px */
+  border-top:0.0625rem solid var(--divider);
+  border-bottom:0.0625rem solid var(--divider);
+}
+.agent-card__feature{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;                              /* 12px */
+  min-height:3.5rem;                        /* 56px */
+}
+.agent-card__icon{
+  width:2.25rem; height:2.25rem;            /* 36px */
+  display:grid; place-items:center;
+  color:var(--text-muted);
+}
+.agent-card__icon svg{ width:1.75rem; height:1.75rem; } /* 28px */
+.agent-card__icon--pill .agent-card__pill{
+  display:inline-grid; place-items:center;
+  width:2.25rem; height:2.25rem;            /* 36px */
+  border:0.125rem solid var(--divider);     /* 2px */
+  border-radius:999rem;
+  font-weight:700;
+  color:var(--text-body);
+  background:#fff;
+}
+.agent-card__label{
+  color:var(--text-muted);
+  font-size:0.875rem;                       /* 14px */
+  line-height:1.4;
+}
+.agent-card__divider{
+  width:0.0625rem;                          /* 1px */
+  height:2.5rem;                            /* 40px */
+  background:var(--divider);
+  justify-self:center;
+}
+
+/* Accent separator */
+.agent-card__accent{
+  height:0.25rem;                           /* 4px */
+  background:linear-gradient(90deg, var(--indigo), var(--accent));
+  margin:0 1.5rem;                          /* 24px */
+  border-radius:0.125rem;                   /* 2px */
+}
+
+/* Footer */
+.agent-card__footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1.25rem 1.5rem 1.5rem;            /* 20 24 24 */
+}
+.agent-card__stage{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;                               /* 8px */
+  color:var(--text-muted);
+}
+.agent-card__stage-icon{ opacity:0.7; }
+.agent-card__stage-label{ font-weight:500; }
+.agent-card__stage-value{ margin-left:0.25rem; font-weight:700; color:var(--text-body); }
+
+.agent-card__cta{
+  color:var(--indigo);
+  font-weight:800;
+  font-size:1.125rem;                       /* 18px */
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;                               /* 8px */
+  border-radius:0.75rem;                    /* 12px */
+  padding:0.5rem 0.75rem;                   /* 8px 12px */
+}
+.agent-card__cta:hover{ background:rgba(72,62,168,0.08); }
+.agent-card__cta-arrow{ font-size:1.1875rem; line-height:1; } /* 19px */
+
+/* Responsive tweak: stack features on small screens.
+   Card remains fixed size; grid will wrap as needed. */
+@media (max-width:40rem){                   /* 640px */
+  .agent-card__features{ grid-template-columns:1fr; gap:1.25rem; }
+  .agent-card__divider{ display:none; }
+  .agent-card__img{ height:10rem; }         /* 160px */
+}
+
+
+/* Prevent global `footer { ... }` from styling the card footer */
+.agent-card .agent-card__footer{
+  background: transparent !important;
+  border-top: none !important;
+}
+
+/* Round top corners of image to match card and screenshot */
+.agent-card__img{
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-card);
+}
+
+/* Accent spacing like reference */
+.agent-card__accent{
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Title micro-tuning */
+.agent-card__title{
+  font-weight: 800;
+  letter-spacing: 0.01rem;
+}

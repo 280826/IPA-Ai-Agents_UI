@@ -5,7 +5,8 @@
       <!-- Left: IPA image -->
       <div class="flex items-center">
         <div class="header-logo">
-          <img src="/assets/images/agent-store-ipa.png" alt="IPA" onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          <img src="/assets/images/agent-store-ipa.png" alt="IPA"
+            onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
         </div>
       </div>
 
@@ -13,14 +14,16 @@
       <div class="middle flex items-center">
         <div class="separator" aria-hidden="true"></div>
         <div class="header-logo ml-4">
-          <img src="/assets/images/ai-agents-store.png" alt="AI Agents Store" onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          <img src="/assets/images/ai-agents-store.png" alt="AI Agents Store"
+            onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
         </div>
       </div>
 
       <!-- Right: IOA image aligned to right -->
       <div class="flex items-center justify-end">
         <div class="header-logo">
-          <img src="/assets/images/agent-store-ioa.png" alt="Intuitive Operations & Automation" onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          <img src="/assets/images/agent-store-ioa.png" alt="Intuitive Operations & Automation"
+            onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
         </div>
       </div>
     </div>
@@ -30,69 +33,57 @@
   <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem;">
     <!-- Hero Section -->
     <section class="hero-bg text-white">
-    <div class="hero-content text-center relative">
+      <div class="hero-content text-center relative">
         <h1 class="hero-heading">Your Unified Platform for Intelligent Agents</h1>
         <p class="hero-description">
-          From productivity to creativity, find the right agent and get started instantly. Explore, choose, and deploy AI agents designed to power every task, all in one place.
+          From productivity to creativity, find the right agent and get started instantly. Explore, choose, and deploy
+          AI agents designed to power every task, all in one place.
         </p>
 
         <!-- Search pill overlay (positioned at exact XD coords) -->
         <div class="search-pill" role="search">
-            <div class="filter-group filter-group-1">
-              <label class="filter-label">By Industries</label>
-            </div>
-            <div class="filter-group filter-group-2">
-              <label class="filter-label">By Technology</label>
-            </div>
+          <div class="filter-group filter-group-1">
+            <label class="filter-label">By Industries</label>
+          </div>
+          <div class="filter-group filter-group-2">
+            <label class="filter-label">By Technology</label>
+          </div>
 
-            <div class="search-inner">
-              <div class="search-white-area">
-                <img src="/assets/images/search.png" alt="Search" class="search-icon" />
-                <input
-                  type="text"
-                  [value]="searchText()"
-                  (input)="onSearchInput($event)"
-                  placeholder="Search AI Agents..."
-                  class="search-input"
-                />
+          <div class="search-inner">
+            <div class="search-white-area">
+              <img src="/assets/images/search.png" alt="Search" class="search-icon" />
+              <input type="text" [value]="searchText()" (input)="onSearchInput($event)"
+                placeholder="Search AI Agents..." class="search-input" />
 
-                <div class="pill-divider"></div>
+              <div class="pill-divider"></div>
 
-                <div class="filters-inline">
-                  <select
-                    [value]="selectedIndustry()"
-                    (change)="onIndustryChange($event)"
-                    class="filter-select"
-                  >
-                    <option value="">Banking and Financial</option>
-                    <option value="Banking and Financial">Banking and Financial</option>
-                    <option value="Finance & Accounting">Finance & Accounting</option>
-                    <option value="Supply Chain">Supply Chain</option>
-                    <option value="Insurance">Insurance</option>
-                  </select>
+              <div class="filters-inline">
+                <select [value]="selectedIndustry()" (change)="onIndustryChange($event)" class="filter-select">
+                  <option value="">Banking and Financial</option>
+                  <option value="Banking and Financial">Banking and Financial</option>
+                  <option value="Finance & Accounting">Finance & Accounting</option>
+                  <option value="Supply Chain">Supply Chain</option>
+                  <option value="Insurance">Insurance</option>
+                </select>
 
-                  <div class="pill-divider-2"></div>
+                <div class="pill-divider-2"></div>
 
-                  <select
-                    [value]="selectedTechnology()"
-                    (change)="onTechnologyChange($event)"
-                    class="filter-select"
-                  >
-                    <option value="">Azure</option>
-                    <option value="Azure">Azure</option>
-                    <option value="Langchain">Langchain</option>
-                    <option value="Copilot">Copilot Studio</option>
-                    <option value="UiPath">UiPath Agentic</option>
-                  </select>
-                </div>
+                <select [value]="selectedTechnology()" (change)="onTechnologyChange($event)" class="filter-select">
+                  <option value="">Azure</option>
+                  <option value="Azure">Azure</option>
+                  <option value="Langchain">Langchain</option>
+                  <option value="Copilot">Copilot Studio</option>
+                  <option value="UiPath">UiPath Agentic</option>
+                </select>
               </div>
-
-              <button class="search-button">
-                Search
-              </button>
             </div>
+
+            <button class="search-button">
+              Search
+            </button>
           </div>
         </div>
+      </div>
     </section>
 
     <!-- Discover Section with heading background -->
@@ -108,66 +99,100 @@
     </section>
 
     <!-- Agents Grid Section -->
-    <section class="max-w-7xl mx-auto px-8 py-12">
 
-      <!-- Agent Cards Grid -->
-      <div class="grid grid-cols-3 gap-8 mb-12">
+    <section class="agents-store">
+      <div class="agents-grid" role="list">
         @for (agent of agents(); track agent.id) {
-          <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden">
-            <!-- Placeholder Image -->
-            <div class="h-40 bg-gradient-to-br from-blue-900 to-blue-700"></div>
-            
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-cognizantDark mb-3">{{ agent.name }}</h3>
-              <p class="text-sm text-gray-600 mb-4 line-clamp-3">{{ agent.description }}</p>
-              
-              <!-- Agent Metadata -->
-              <div class="flex justify-between items-center text-xs text-gray-500 mb-6 pb-4 border-b border-cyan-200">
-                <div class="flex items-center gap-2">
-                  <span>📊 {{ agent.industry }}</span>
+        <article class="agent-card" role="listitem" aria-label="{{ agent.name }} card">
+          <!-- Hero image -->
+          <figure class="agent-card__media">
+            <img [src]="agent.imageUrl || 'assets/images/placeholder-warehouse.jpg'"
+              [alt]="agent.imageAlt || 'Warehouse aisle with a person holding a tablet'" loading="lazy"
+              class="agent-card__img" />
+          </figure>
+
+          <!-- Content -->
+          <div class="agent-card__content">
+            <h2 class="agent-card__title">{{ agent.name }}</h2>
+
+            <p class="agent-card__desc">
+              {{ agent.description }}
+            </p>
+
+            <!-- Feature grid -->
+            <div class="agent-card__features" role="list">
+              <!-- Supply Chain / Industry -->
+              <div class="agent-card__feature" role="listitem">
+                <div class="agent-card__icon" aria-hidden="true">
+                  <!-- warehouse-ish inline SVG -->
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="10" width="6" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                    <rect x="15" y="6" width="6" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" />
+                    <path d="M3 19h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
                 </div>
-                <div class="flex items-center gap-2">
-                  <span>{{ agent.agentCount }}</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span>💻 {{ agent.technology }}</span>
-                </div>
+                <div class="agent-card__label">{{ agent.industry || 'Supply Chain' }}</div>
               </div>
-              
-              <!-- Footer with Stage and CTA -->
-              <div class="flex items-center justify-between">
-                <span class="text-xs text-gray-500">🔄 Stage: {{ agent.stage }}</span>
-                <a href="#" class="text-cognizantBlue font-semibold text-sm hover:text-blue-700">Explore Agent →</a>
+
+              <div class="agent-card__divider" aria-hidden="true"></div>
+
+              <!-- Agent count -->
+              <div class="agent-card__feature" role="listitem">
+                <div class="agent-card__icon agent-card__icon--pill" aria-hidden="true">
+                  <span class="agent-card__pill">{{ agent.agentCount }}</span>
+                </div>
+                <div class="agent-card__label">Agent count</div>
+              </div>
+
+              <div class="agent-card__divider" aria-hidden="true"></div>
+
+              <!-- Technology -->
+              <div class="agent-card__feature" role="listitem">
+                <div class="agent-card__icon" aria-hidden="true">
+                  <!-- code-brackets inline SVG -->
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 6l-5 6 5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                    <path d="M16 6l5 6-5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </div>
+                <div class="agent-card__label">{{ agent.technology || 'Copilot Studio | UiPath Agentic' }}</div>
               </div>
             </div>
           </div>
-        }
-      </div>
 
-      <!-- Pagination -->
-      <div class="flex items-center justify-center gap-2">
-        <button class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded">← Previous</button>
-        @for (page of [1, 2, 3]; track page) {
-          <button
-            (click)="currentPage.set(page)"
-            [class.bg-cognizantBlue]="currentPage() === page"
-            [class.text-white]="currentPage() === page"
-            [class.bg-gray-100]="currentPage() !== page"
-            class="w-10 h-10 rounded hover:bg-gray-100 font-semibold"
-          >
-            {{ page }}
-          </button>
+          <!-- Accent line -->
+          <div class="agent-card__accent"></div>
+
+          <!-- Footer -->
+          <div class="agent-card__footer" role="contentinfo">
+            <div class="agent-card__stage">
+              <svg class="agent-card__stage-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M20 7l-8 10-4-4-4 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+              <span class="agent-card__stage-label">Stage:</span>
+              <span class="agent-card__stage-value">{{ agent.stage || 'Solution' }}</span>
+            </div>
+
+            <a class="agent-card__cta" [href]="agent.id || '#'" aria-label="Explore {{ agent.name }}">
+              Explore Agent
+              <span class="agent-card__cta-arrow" aria-hidden="true">›</span>
+            </a>
+          </div>
+        </article>
         }
-        <span class="text-gray-400">...</span>
-        <button class="px-3 py-2 text-gray-600 hover:bg-gray-100 rounded">Next →</button>
       </div>
     </section>
-  </main>
 
-  <!-- Footer - Static Position -->
-  <footer class="bg-cognizantDark text-white border-t border-gray-700">
-    <div class="max-w-7xl mx-auto px-8 py-4">
-      <p class="text-sm">©2025 Cognizant, all rights reserved | Privacy Policy</p>
-    </div>
-  </footer>
+
+    <!-- Footer - Static Position -->
+    <footer class="bg-cognizantDark text-white border-t border-gray-700">
+      <div class="mx-auto px-8 py-4">
+        <p class="text-sm">©2025 Cognizant, all rights reserved | Privacy Policy</p>
+      </div>
+    </footer>
+  </main>
 </div>
