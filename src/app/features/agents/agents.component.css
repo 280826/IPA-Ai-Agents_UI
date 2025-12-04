@@ -500,15 +500,6 @@ footer {
 }
 
 /* Feature grid */
-.agent-card__features{
-  display:grid;
-  grid-template-columns:1fr 0.0625rem 1fr 0.0625rem 1fr; /* 1px dividers */
-  align-items:center;
-  gap:1rem;                                /* 16px */
-  padding:1.25rem 1rem;                    /* 20px 16px */
-  border-top:0.0625rem solid var(--divider);
-  border-bottom:0.0625rem solid var(--divider);
-}
 .agent-card__feature{
   display:flex;
   align-items:center;
@@ -613,3 +604,170 @@ footer {
   font-weight: 800;
   letter-spacing: 0.01rem;
 }
+
+
+/* --- PIXEL-MATCH OVERRIDES (rem-based, Gellix) --- */
+:root{
+  --card-bg:#ffffff;
+  --text-body:#1f2937;
+  --text-muted:#6b7280;
+  --indigo:#483ea8;
+  --accent:#4f46e5;
+  --divider:#e5e7eb;
+  --shadow-md:0 0.5rem 1.5rem rgba(17,24,39,0.08); /* 8px 24px */
+  --radius-card:1rem;   /* 16px */
+  --radius-inner:0.75rem; /* 12px */
+  --font-sans: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Grid must honour 32.5rem cards */
+.agents-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(32.5rem, 1fr));
+  gap: 2rem;                 /* 32px */
+  padding: 1.5rem 2rem;      /* 24px 32px */
+}
+
+/* Card container (exact size) */
+.agent-card{
+  width: 32.5rem;            /* 520px */
+  height: 45rem;             /* 720px */
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  border: 0.0625rem solid #f3f4f6;   /* 1px */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+}
+
+/* Top image must have rounded top corners */
+.agent-card__media{ margin:0; line-height:0; }
+.agent-card__img{
+  width:100%;
+  height:11.25rem;           /* 180px */
+  object-fit:cover;
+  display:block;
+  border-top-left-radius: var(--radius-card);
+  border-top-right-radius: var(--radius-card);
+}
+
+/* Content */
+.agent-card__content{ padding: 1.5rem 1.5rem 1.25rem; }
+.agent-card__title{
+  color: var(--indigo);
+  font-weight: 800;
+  font-size: 1.625rem;       /* 26px */
+  letter-spacing: 0.01rem;
+  margin: 0 0 0.75rem 0;
+}
+.agent-card__desc{
+  color: var(--text-body);
+  font-size: 1rem;           /* 16px */
+  line-height: 1.55;
+  margin: 0 0 1.25rem 0;
+}
+
+/* Feature row */
+.agent-card__features{
+  display:grid;
+  grid-template-columns: 1fr 0.0625rem 1fr 0.0625rem 1fr; /* 1px dividers */
+  align-items:center;
+  gap:1rem;                     /* 16px */
+  padding:1.25rem 1rem;         /* 20px 16px */
+  /* border-top:0.0625rem solid var(--divider);
+  border-bottom:0.0625rem solid var(--divider); */
+}
+.agent-card__feature{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;                  /* 12px */
+  min-height:3.5rem;            /* 56px */
+}
+.agent-card__icon{
+  width:2.25rem; height:2.25rem; /* 36px */
+  display:grid; place-items:center;
+  color:var(--text-muted);
+}
+.agent-card__icon svg{ width:1.75rem; height:1.75rem; } /* 28px */
+.agent-card__icon--pill .agent-card__pill{
+  display:inline-grid; place-items:center;
+  width:2.25rem; height:2.25rem;
+  border:0.125rem solid var(--divider); /* 2px */
+  border-radius:999rem;
+  font-weight:700;
+  color:var(--text-body);
+  background:#fff;
+}
+.agent-card__label{
+  color:var(--text-muted);
+  font-size:0.875rem;           /* 14px */
+  line-height:1.4;
+}
+.agent-card__divider{
+  width:0.0625rem;              /* 1px */
+  height:2.5rem;                /* 40px */
+  background:var(--divider);
+  justify-self:center;
+}
+
+/* Accent underline with breathing room (as in reference) */
+.agent-card__accent{
+  height:0.25rem;               /* 4px */
+  background: linear-gradient(90deg, var(--indigo), var(--accent));
+  margin: 0.75rem 1.5rem;       /* 12px top/bottom; 24px sides */
+  border-radius: 0.125rem;      /* 2px */
+}
+
+/* Card footer — neutralize global footer styles */
+.agent-card__footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 1.25rem 1.5rem 1.5rem; /* 20 24 24 */
+  background: transparent !important;
+  border-top: none !important;
+  box-shadow: none;
+}
+.agent-card__stage{
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;                  /* 8px */
+  color:var(--text-muted);
+}
+.agent-card__stage-icon{ opacity:0.7; }
+.agent-card__stage-label{ font-weight:500; }
+.agent-card__stage-value{ margin-left:0.25rem; font-weight:700; color:var(--text-body); }
+
+.agent-card__cta{
+  color: var(--indigo);
+  font-weight: 800;
+  font-size: 1.125rem;         /* 18px */
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;                 /* 8px */
+  border-radius: 0.75rem;      /* 12px */
+  padding: 0.5rem 0.75rem;     /* 8px 12px */
+}
+.agent-card__cta:hover{ background: rgba(72,62,168,0.08); }
+.agent-card__cta-arrow{ font-size: 1.1875rem; line-height: 1; } /* 19px */
+
+/* Small screens */
+@media (max-width: 40rem){     /* 640px */
+  .agent-card__features{ grid-template-columns: 1fr; gap: 1.25rem; }
+  .agent-card__divider{ display: none; }
+  .agent-card__img{ height: 10rem; }      /* 160px */
+}
+
+
+/* --- Feature icon images (industry.png & technology.png) --- */
+.agent-card__icon img{
+  width: 1.75rem;   /* 28px */
+  height: 1.75rem;
+  display: block;
+  object-fit: contain;
+  opacity: 0.9;     /* subtle, like muted icons */
+}
+

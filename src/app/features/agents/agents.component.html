@@ -121,22 +121,18 @@
 
             <!-- Feature grid -->
             <div class="agent-card__features" role="list">
-              <!-- Supply Chain / Industry -->
+              <!-- Industry (left) -->
               <div class="agent-card__feature" role="listitem">
                 <div class="agent-card__icon" aria-hidden="true">
-                  <!-- warehouse-ish inline SVG -->
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="10" width="6" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5" />
-                    <rect x="15" y="6" width="6" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" />
-                    <path d="M3 19h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-                  </svg>
+                  <!-- /assets/images/industry.png -->
+                  <img src="/assets/images/industry.png" alt="" />
                 </div>
                 <div class="agent-card__label">{{ agent.industry || 'Supply Chain' }}</div>
               </div>
 
               <div class="agent-card__divider" aria-hidden="true"></div>
 
-              <!-- Agent count -->
+              <!-- Agent count (center) -->
               <div class="agent-card__feature" role="listitem">
                 <div class="agent-card__icon agent-card__icon--pill" aria-hidden="true">
                   <span class="agent-card__pill">{{ agent.agentCount }}</span>
@@ -146,20 +142,16 @@
 
               <div class="agent-card__divider" aria-hidden="true"></div>
 
-              <!-- Technology -->
+              <!-- Technology (right) -->
               <div class="agent-card__feature" role="listitem">
                 <div class="agent-card__icon" aria-hidden="true">
-                  <!-- code-brackets inline SVG -->
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 6l-5 6 5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                    <path d="M16 6l5 6-5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round" />
-                  </svg>
+                  <!-- /assets/images/technology.png -->
+                  <img src="/assets/images/technology.png" alt="" />
                 </div>
                 <div class="agent-card__label">{{ agent.technology || 'Copilot Studio | UiPath Agentic' }}</div>
               </div>
             </div>
+
           </div>
 
           <!-- Accent line -->
