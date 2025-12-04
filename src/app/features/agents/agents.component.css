@@ -1,0 +1,430 @@
+/* Container - full viewport height */
+:host ::ng-deep {
+  display: contents;
+}
+
+/* Header stays fixed at top */
+header {
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08); /* 2px / 16 = 0.125rem, 8px / 16 = 0.5rem */
+}
+
+/* Ensure footer stays at bottom when content is short */
+main {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb #f3f4f6;
+  background-color: #eaf2fa;
+}
+
+main::-webkit-scrollbar {
+  width: 0.5rem; /* 8px / 16 = 0.5rem */
+}
+
+main::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 0.25rem; /* 4px / 16 = 0.25rem */
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: #d1d5db;
+}
+
+/* Hero section styling - background scrolls with content */
+section {
+  background-attachment: scroll;
+}
+
+/* Agent cards - 3 column layout */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem; /* 32px / 16 = 2rem */
+}
+
+/* Card hover effects */
+div[class*='bg-white rounded-xl'] {
+  transition: all 0.3s ease;
+}
+
+div[class*='bg-white rounded-xl']:hover {
+  transform: translateY(-0.25rem); /* -4px / 16 = -0.25rem */
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12); /* 12px / 16 = 0.75rem, 24px / 16 = 1.5rem */
+}
+
+/* Pagination button styling */
+button[class*='bg-cognizantBlue'] {
+  background-color: #2d63ff;
+}
+
+button[class*='bg-cognizantBlue']:hover {
+  background-color: #1d47cc;
+}
+
+/* Line clamp for description */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Footer styling */
+footer {
+  background-color: #0a0d3a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Header logo area */
+.header-logos {
+  align-items: center;
+}
+
+.header-logo img {
+  max-height: 5rem; /* 80px / 16 = 5rem */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Make sure separator is vertically centered */
+.header-logos .h-10 {
+  height: 4rem; /* 64px / 16 = 4rem - match image height */
+}
+
+/* Small responsive tweak */
+@media (max-width: 56.25rem) {
+  /* 900px / 16 = 56.25rem */
+  .header-logos {
+    gap: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  } /* 16px = 1rem, 12px = 0.75rem */
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+/* Center group: allow center area to expand and center content */
+.center-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+}
+
+/* If left/right images missing, ensure center image remains centered */
+.header-logos > .header-logo:first-child {
+  margin-right: 0.75rem; /* 12px / 16 = 0.75rem */
+}
+.header-logos > .header-logo:last-child {
+  margin-left: 0.75rem; /* 12px / 16 = 0.75rem */
+}
+
+.separator {
+  height: 4rem;
+  width: 0.0625rem;
+  background: #e5e7eb;
+} /* 64px = 4rem, 1px = 0.0625rem */
+
+/* Middle area: make center area left-aligned next to separator while keeping right image at far right */
+.header-logos {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* 24px / 16 = 1.5rem */
+}
+
+.header-logos > .middle {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto; /* allow middle to expand so right image stays right */
+}
+
+.header-logos > .flex.items-center.justify-end {
+  min-width: 10rem; /* 160px / 16 = 10rem */
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Hero background image - scrolls with content */
+.hero-bg {
+  background-image: url('/assets/images/agent-store-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  position: relative;
+  height: 60rem; /* 960px / 16 = 60rem */
+}
+
+/* Hero content - relative positioning for absolute children */
+.hero-content {
+  position: relative;
+  height: 60rem; /* 960px / 16 = 60rem */
+}
+
+/* Hero heading - exact XD positioning */
+.hero-heading {
+  position: absolute;
+  top: 6.25rem; /* (220px - 120px) / 16 = 6.25rem */
+  left: 7.75rem; /* 124px / 16 = 7.75rem */
+  width: 104.5rem; /* 1672px / 16 = 104.5rem */
+  height: 6.6875rem; /* 107px / 16 = 6.6875rem */
+  text-align: center;
+  font: 600 4.5rem/5rem Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* 72px / 16 = 4.5rem, 80px / 16 = 5rem */
+  letter-spacing: 0;
+  color: #26efe9;
+  opacity: 1;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hero description - exact XD positioning */
+.hero-description {
+  position: absolute;
+  top: 13.5625rem; /* (337px - 120px) / 16 = 13.5625rem */
+  left: 16.125rem; /* 258px / 16 = 16.125rem */
+  width: 87.75rem; /* 1404px / 16 = 87.75rem */
+  height: 10.875rem; /* 174px / 16 = 10.875rem */
+  text-align: center;
+  font: 400 2.875rem/3.1875rem Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* 46px / 16 = 2.875rem, 51px / 16 = 3.1875rem */
+  letter-spacing: 0;
+  color: #ffffff;
+  opacity: 1;
+  margin: 0;
+  padding: 0;
+}
+
+/* Search pill styling - exact XD positioning and styling */
+.search-pill {
+  position: absolute;
+  top: 30.75rem; /* (612px - 120px) / 16 = 30.75rem */
+  left: 2.5rem; /* 40px / 16 = 2.5rem */
+  width: 115rem; /* 1840px / 16 = 115rem */
+  height: 12.5rem; /* 200px / 16 = 12.5rem */
+  background: rgba(255, 255, 255, 0.7);
+  border: 0.0625rem solid #707070; /* 1px / 16 = 0.0625rem */
+  border-radius: 2.5rem; /* 40px / 16 = 2.5rem */
+  position: relative;
+  z-index: 8;
+}
+
+.search-inner {
+  position: absolute;
+  top: 5rem; /* 80px / 16 = 5rem */
+  left: 2.75rem; /* 44px / 16 = 2.75rem */
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* 32px / 16 = 2rem */
+}
+
+.search-white-area {
+  width: 95.625rem; /* 1530px / 16 = 95.625rem */
+  height: 5rem; /* 80px / 16 = 5rem */
+  background: #ffffff;
+  border-radius: 2.5rem; /* 40px / 16 = 2.5rem */
+  display: flex;
+  align-items: center;
+  padding: 0 2rem; /* 0 32px / 16 */
+  gap: 1.5rem; /* 24px / 16 = 1.5rem */
+  position: relative;
+}
+
+.search-icon {
+  width: 1.5rem; /* 24px / 16 = 1.5rem */
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font: normal normal normal 1.5rem/1.75rem Arial; /* 24px/28px */
+  letter-spacing: 0;
+  color: #8b8b8b;
+  opacity: 1;
+  outline: none;
+  padding: 0;
+  min-width: 15rem; /* 240px / 16 = 15rem */
+}
+
+.search-input::placeholder {
+  color: #8b8b8b;
+}
+
+.pill-divider {
+  position: absolute;
+  width: 0.125rem; /* 2px / 16 = 0.125rem */
+  height: 5rem; /* 80px / 16 = 5rem */
+  background: #b8b8b8;
+  border: none;
+  opacity: 1;
+  top: 0;
+  left: 50rem; /* 836px from pill left - 44px white area left = 792px / 16 = 49.5rem, rounded to 50rem */
+}
+
+.pill-divider-2 {
+  position: absolute;
+  width: 0.125rem; /* 2px / 16 = 0.125rem */
+  height: 5rem; /* 80px / 16 = 5rem */
+  background: #b8b8b8;
+  border: none;
+  opacity: 1;
+  top: 0;
+  left: 72.78125rem; /* 1208.5px from pill left - 44px white area left = 1164.5px / 16 = 72.78125rem */
+}
+
+.filters-inline {
+  display: flex;
+  gap: 4rem;
+  /* gap: 21.53125rem; Distance between dropdowns: (1208.5 - 836 - 2 - 20) / 16 = 21.90625rem, adjusted for spacing */
+  align-items: center;
+  flex: 1;
+  justify-content: flex-start;
+  padding-left: 2rem; /* 32px / 16 = 2rem - offset from first HR */
+}
+
+.filter-group {
+  position: absolute;
+}
+
+.filter-group-1 {
+  top: 2.1875rem; /* 35px / 16 = 2.1875rem - positioned above white area but within pill */
+  left: 53.8rem; /* Approximately centered between first HR (836px) and second HR (1208.5px) = ~1022px / 16 = 63.875rem from viewport, minus pill offset */
+}
+
+.filter-group-2 {
+  top: 2.1875rem; /* 35px / 16 = 2.1875rem - positioned above white area but within pill */
+  left: 76.5rem; /* Approximately centered in space after second HR to search button */
+}
+
+.filter-label {
+  font: normal normal bold 1.5rem/1.75rem Arial; /* 24px/28px */
+  letter-spacing: 0;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.filter-select {
+  background: transparent;
+  border: none;
+  font: normal normal normal 1.5rem/1.75rem Arial; /* 24px/28px */
+  letter-spacing: 0;
+  color: #000000;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  padding-right: 2.5rem; /* 40px / 16 = 2.5rem for dropdown arrow */
+  background-image: url('/assets/images/arrow.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 1.5rem; /* 24px / 16 = 1.5rem */
+  padding-left: 0;
+  position: relative;
+  width: 18.75rem; /* 300px / 16 = 18.75rem */
+}
+
+.filter-select::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  background-image: url('/assets/images/arrow.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+  transition: transform 0.2s;
+}
+
+.filter-select:focus::after {
+  transform: translateY(-50%) scaleY(-1);
+}
+
+.search-button {
+  width: 12.5rem; /* 200px / 16 = 12.5rem */
+  height: 5rem; /* 80px / 16 = 5rem */
+  background: transparent linear-gradient(180deg, #2323ff 0%, #121280 100%) 0% 0% no-repeat padding-box;
+  border-radius: 5rem; /* 80px / 16 = 5rem */
+  opacity: 1;
+  color: white;
+  border: none;
+  font-size: 1.0625rem; /* 17px / 16 = 1.0625rem */
+  font-weight: 600;
+  font-family: Arial, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.search-button:hover {
+  opacity: 0.9;
+}
+
+/* Make sure main content accounts for the pill overlap */
+/* section + section,
+.grid {
+  margin-top: 6.875rem; /* 110px / 16 = 6.875rem * /
+} */
+
+/* Discover Section - exact XD positioning and styling */
+.discover-section {
+  position: relative;
+  margin-top: -6.75rem; /* -108px / 16 = -6.75rem to overlap with hero */
+  left: 2.5rem; /* 40px / 16 = 2.5rem */
+  width: 115rem; /* 1840px / 16 = 115rem */
+  height: 10rem; /* 160px / 16 = 10rem */
+  background: #eaf2fa;
+  border-radius: 2.5rem 2.5rem 0 0; /* 40px 40px 0px 0px */
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  margin-bottom: 0;
+}
+
+.discover-heading {
+  position: absolute;
+  top: 2.125rem; /* 50px / 16 = 3.125rem */
+  left: 3.75rem; /* 60px / 16 = 3.75rem */
+  width: 61.875rem; /* 990px / 16 = 61.875rem */
+  height: 3.6875rem; /* 59px / 16 = 3.6875rem */
+  text-align: left;
+  font: normal normal 600 3.22rem/3.625rem Gellix-SemiBold, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* 52px / 16 = 3.25rem, 58px / 16 = 3.625rem */
+  letter-spacing: 0;
+  color: #2e308e;
+  margin: 0;
+  padding: 0;
+}
+
+.discover-filter {
+  position: absolute;
+  top: 2.125rem; /* 50px / 16 = 3.125rem */
+  right: 3.75rem; /* 60px / 16 = 3.75rem */
+}
+
+.discover-filter-select {
+  background: transparent;
+  border: none;
+  border-bottom: 0.125rem solid #707070; /* 2px / 16 = 0.125rem */
+  border-radius: 0;
+  font: normal normal normal 1.875rem/2.1875rem Arial; /* 30px/35px */
+  letter-spacing: 0;
+  color: #000000;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  padding: 0.625rem 3.125rem 0.625rem 0; /* 10px 50px 10px 0 */
+  background-image: url('/assets/images/filter.png');
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 2rem; /* 32px / 16 = 2rem */
+  min-width: 15rem; /* 240px / 16 = 15rem */
+}
