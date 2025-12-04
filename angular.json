@@ -35,6 +35,7 @@
               },
               "src/staticwebapp.config.json"
             ],
+            "outputPath": "dist/IPA-Ai-Agents_UI/browser",
             "styles": [
               "src/generated-tailwind.css",
               "src/custom-theme.scss",
