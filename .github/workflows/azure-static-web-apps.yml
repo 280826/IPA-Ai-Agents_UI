@@ -16,10 +16,10 @@ jobs:
 
       # ✅ Use a strict Node 24.x version (adjust if you prefer 24.1.0 / 24.2.0 etc.)
       # This avoids runners picking an older/newer incompatible patch.
-      - name: Use Node.js 24.x (strict pin)
+      - name: Use Node.js 22.x (strict pin)
         uses: actions/setup-node@v4
         with:
-          node-version: '24.11.1'          # <-- pin exactly; change to a specific 24.x you trust
+          node-version: '22.20.0'          # <-- pin exactly; change to a specific 24.x you trust
           cache: 'npm'                    # npm cache at ~/.npm
 
       # ✅ Restore node_modules cache (keyed by OS + Node + lockfile)
@@ -69,7 +69,7 @@ jobs:
       - name: Build & Deploy
         uses: Azure/static-web-apps-deploy@v1
         env:
-          NODE_VERSION: '24.11.1'
+          NODE_VERSION: '22.20.0'
         with:
           action: "upload"
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ZEALOUS_FIELD_0BD7C730F }}
