@@ -51,14 +51,16 @@
               </button>
             </div>
 
-            <div *ngIf="error()" class="text-red-600 text-sm">
-              {{ error() }}
-            </div>
+            @if (error()) {
+              <div class="text-red-600 text-sm">
+                {{ error() }}
+              </div>
+            }
           </form>
         </div>
       </div>
   </main>
-  
+
   <!-- Footer -->
   <footer class="text-white bg-[#0a0d3a]">
     <div class="max-w-7xl py-4 text-sm opacity-90" style="padding-left: 100px;">

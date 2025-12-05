@@ -9,12 +9,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(credentials: { username: string; password: string }) {
-    return this.http.post<{ token: string }>(
+  login(credentials: { email: string; password: string }) {
+    return this.http.post<{ ok: string, data: {accessToken: string, expiresIn: string} }>(
       `${environment.apiBaseUrl}/auth/login`,
       credentials
     ).pipe(
-      tap(({ token }) => localStorage.setItem(this.tokenKey, token))
+      tap(({ ok, data }) => ok && localStorage.setItem(this.tokenKey, data.accessToken))
     );
   }
 

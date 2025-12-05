@@ -19,7 +19,7 @@ export class LoginComponent {
   errorMsg = '';
 
   form = this.fb.group({
-    username: ['', Validators.required],
+    email: ['', Validators.required],
     password: ['', Validators.required]
   });
 
@@ -28,8 +28,8 @@ export class LoginComponent {
     this.loading = true;
     this.errorMsg = '';
 
-    const { username, password } = this.form.value;
-    this.auth.login({ username: username!, password: password! })
+    const { email, password } = this.form.value;
+    this.auth.login({ email: email!, password: password! })
       .subscribe({
         next: () => {
           this.loading = false;
