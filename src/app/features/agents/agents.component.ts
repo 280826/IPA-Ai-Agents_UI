@@ -1,7 +1,8 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
+import { AgentsService } from '../../services/agents.service';
 
 interface Agent {
   id: string;
@@ -13,6 +14,8 @@ interface Agent {
   technology: string;
   stage: 'Production' | 'Solution';
   agentCount: number;
+  usecaseName?: string;
+  totalAgents?: number;
 }
 
 @Component({
@@ -27,13 +30,38 @@ export class AgentsComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
+private svc = inject(AgentsService);
+
+// UI state
+readonly loading = signal<boolean>(true);
+readonly error = signal<string | null>(null);
+readonly agents = signal<Agent[]>([]);
+
+readonly hasData = computed(() => this.agents().length > 0);
+
+ngOnInit(): void {
+  this.svc.list().subscribe({
+    next: (res: any) => {
+      console.log('Loaded agents', res);
+      this.agents.set(res.data.items ?? []);
+      this.error.set(null);
+      this.loading.set(false);
+    },
+    error: (err) => {
+      console.error('Failed to load agents', err);
+      this.error.set('Could not load agents. Please try again.');
+      this.loading.set(false);
+    }
+  });
+}
+
   searchText = signal('');
   selectedIndustry = signal('Banking and Financial');
   selectedTechnology = signal('Azure');
   currentPage = signal(2);
   totalPages = 3;
 
-  agents = signal<Agent[]>([
+  agents1 = signal<Agent[]>([
     {
       id: '1',
       imageUrl: 'assets/images/temp/Mask Group 1.png',

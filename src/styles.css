@@ -35,6 +35,8 @@
 :root {
   --color-cognizant-blue: #0070D2;
   --color-cognizant-dark: #0B1F33;
+  --color-cognizant-std-blue: #2E308E;
+  --color-cognizant-cyan: #06C7CC;
    /* Design tokens in rem-friendly values */
    --card-bg:#ffffff;
    --text-body:#1f2937;         /* dark gray */

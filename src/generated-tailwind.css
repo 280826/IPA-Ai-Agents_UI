@@ -472,6 +472,8 @@
 :root {
   --color-cognizant-blue: #0070D2;
   --color-cognizant-dark: #0B1F33;
+  --color-cognizant-std-blue: #2E308E;
+  --color-cognizant-cyan: #06C7CC;
   --card-bg: #ffffff;
   --text-body: #1f2937;
   --text-muted: #6b7280;
