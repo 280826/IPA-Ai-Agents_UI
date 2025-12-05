@@ -106,14 +106,14 @@
         <article class="agent-card" role="listitem" aria-label="{{ agent.name }} card">
           <!-- Hero image -->
           <figure class="agent-card__media">
-            <img [src]="agent.imageUrl || 'assets/images/placeholder-warehouse.jpg'"
+            <img [src]="agent.imageUrl || 'assets/images/temp/Mask Group 2.png'"
               [alt]="agent.imageAlt || 'Warehouse aisle with a person holding a tablet'" loading="lazy"
               class="agent-card__img" />
           </figure>
 
           <!-- Content -->
           <div class="agent-card__content">
-            <h2 class="agent-card__title">{{ agent.name }}</h2>
+            <h2 class="agent-card__title">{{ agent.usecaseName }}</h2>
 
             <p class="agent-card__desc">
               {{ agent.description }}
@@ -135,7 +135,7 @@
               <!-- Agent count (center) -->
               <div class="agent-card__feature" role="listitem">
                 <div class="agent-card__icon agent-card__icon--pill" aria-hidden="true">
-                  <span class="agent-card__pill">{{ agent.agentCount }}</span>
+                  <span class="agent-card__pill">{{ agent.totalAgents }}</span>
                 </div>
                 <div class="agent-card__label">Agent count</div>
               </div>
