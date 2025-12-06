@@ -51,23 +51,25 @@
 
           <div class="search-inner">
             <div class="search-white-area">
-              <img src="/assets/images/search.png" alt="Search" class="search-icon" />
+              <img src="/assets/images/search.png" />
               <input type="text" [value]="searchText()" (input)="onSearchInput($event)"
                 placeholder="Search AI Agents..." class="search-input" />
 
               <div class="pill-divider"></div>
 
               <div class="filters-inline">
+                <!-- Industry select -->
                 <select [value]="selectedIndustry()" (change)="onIndustryChange($event)" class="filter-select">
                   <option value="">Banking and Financial</option>
                   <option value="Banking and Financial">Banking and Financial</option>
-                  <option value="Finance & Accounting">Finance & Accounting</option>
+                  <option value="Finance &amp; Accounting">Finance &amp; Accounting</option>
                   <option value="Supply Chain">Supply Chain</option>
                   <option value="Insurance">Insurance</option>
                 </select>
 
                 <div class="pill-divider-2"></div>
 
+                <!-- Technology select -->
                 <select [value]="selectedTechnology()" (change)="onTechnologyChange($event)" class="filter-select">
                   <option value="">Azure</option>
                   <option value="Azure">Azure</option>
@@ -101,19 +103,19 @@
     <!-- Agents Grid Section -->
 
     <section class="agents-store">
-      <div class="agents-grid" role="list">
+      <section class="agents-grid" role="list">
         @for (agent of agents(); track agent.id) {
         <article class="agent-card" role="listitem" aria-label="{{ agent.name }} card">
           <!-- Hero image -->
           <figure class="agent-card__media">
-            <img [src]="agent.imageUrl || 'assets/images/temp/Mask Group 2.png'"
-              [alt]="agent.imageAlt || 'Warehouse aisle with a person holding a tablet'" loading="lazy"
+            <img [src]="agent.thumbnailUrl || 'assets/images/temp/Mask Group 2.png'"
+              [alt]="agent.thumbnailUrl || 'Warehouse aisle with a person holding a tablet'" loading="lazy"
               class="agent-card__img" />
           </figure>
 
           <!-- Content -->
           <div class="agent-card__content">
-            <h2 class="agent-card__title">{{ agent.usecaseName }}</h2>
+            <h2 class="agent-card__title">{{ agent.name }}</h2>
 
             <p class="agent-card__desc">
               {{ agent.description }}
@@ -135,7 +137,7 @@
               <!-- Agent count (center) -->
               <div class="agent-card__feature" role="listitem">
                 <div class="agent-card__icon agent-card__icon--pill" aria-hidden="true">
-                  <span class="agent-card__pill">{{ agent.totalAgents }}</span>
+                  <span class="agent-card__pill">{{ agent.agentCount }}</span>
                 </div>
                 <div class="agent-card__label">Agent count</div>
               </div>
@@ -151,40 +153,106 @@
                 <div class="agent-card__label">{{ agent.technology || 'Copilot Studio | UiPath Agentic' }}</div>
               </div>
             </div>
-
           </div>
 
-          <!-- Accent line -->
+          <!-- Accent underline -->
           <div class="agent-card__accent"></div>
 
           <!-- Footer -->
-          <div class="agent-card__footer" role="contentinfo">
+          <div class="agent-card__footer">
             <div class="agent-card__stage">
-              <svg class="agent-card__stage-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M20 7l-8 10-4-4-4 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
+              <span class="agent-card__stage-icon">
+                <img src="/assets/images/tag.png" alt="Stage" />
+              </span>
               <span class="agent-card__stage-label">Stage:</span>
-              <span class="agent-card__stage-value">{{ agent.stage || 'Solution' }}</span>
+              <span class="agent-card__stage-value">{{ agent.stage }}</span>
             </div>
 
-            <a class="agent-card__cta" [href]="agent.id || '#'" aria-label="Explore {{ agent.name }}">
-              Explore Agent
-              <span class="agent-card__cta-arrow" aria-hidden="true">›</span>
-            </a>
+            <!-- CTA (button; swap to routerLink if you have a details route) -->
+            <button class="agent-card__cta" type="button" (click)="navigate({ page: pageIndex()+1, limit: pageSize() })"
+              aria-label="Explore agent {{ agent.name }}">
+              Explore Agent <span class="agent-card__cta-arrow">
+                <img src="/assets/images/explore.png" alt="" />
+              </span>
+            </button>
           </div>
         </article>
         }
-      </div>
+      </section>
     </section>
 
+    <!-- Pagination (pills style) -->
+    <nav class="pager" aria-label="Pagination">
+      <!-- Previous -->
+      <button class="pager-btn" (click)="prev()" [disabled]="pageIndex()===0">
+        ‹ Previous
+      </button>
 
+      <!-- Numbered pills + ellipsis -->
+      @for (p of pagePills(); track p) {
+      @if (p === '…') {
+      <span class="pager-ellipsis">…</span>
+      } @else {
+      <button class="pager-page" [class.active]="(+p) === (pageIndex()+1)" (click)="gotoPage(+p)">
+        {{ p }}
+      </button>
+      }
+      }
+
+      <!-- Next -->
+      <button class="pager-btn" (click)="next()" [disabled]="pageIndex()+1 >= totalPages()">
+        Next ›
+      </button>
+
+      <!-- Page size selector -->
+      <label class="pager-size" aria-label="Select page size">
+        <span>Page size:</span>
+        <select [value]="pageSize()" (change)="changeSize($any($event.target).value)">
+          <option [value]="10">10</option>
+          <option [value]="15">15</option>
+          <option [value]="25">25</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+      </label>
+    </nav>
+
+    <!-- Loading / Error -->
+    @if (loading()) {
+    <div style="padding:1rem 2rem;">Loading...</div>
+    }
+    @if (error()) {
+    <div *ngIf="error() as e" class="error" style="padding:1rem 2rem;color:#b91c1c;">{{ e }}</div>
+    }
+
+
+    <!-- Page footer -->
     <!-- Footer - Static Position -->
     <footer class="bg-cognizantDark text-white border-t border-gray-700">
       <div class="mx-auto px-8 py-4">
         <p class="text-sm">©2025 Cognizant, all rights reserved | Privacy Policy</p>
       </div>
     </footer>
+
+
+
+<!-- Full-page loading overlay (always present for fade in/out) -->
+<div class="loading-overlay black"
+     [class.visible]="loading()"
+     role="status"
+     aria-live="polite"
+     aria-busy="{{ loading() }}">
+  <div class="loading-container" aria-label="Loading, please wait">
+    <!-- CSS spinner (fallback & default) -->
+    <div class="css-spinner" aria-hidden="false"></div>
+
+    <!-- GIF (optional visual) -->
+    /assets/images/loading.gif
+    <!-- Optional text -->
+    <p class="loading-text">Loading, please wait...</p>
+  </div>
+</div>
+
+
   </main>
 </div>
