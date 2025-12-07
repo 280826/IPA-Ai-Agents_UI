@@ -691,8 +691,8 @@ footer {
 
 /* Content */
 .agent-card__content {
-  padding: 1.5rem 1.5rem 1.25rem;
-  height: 27rem;
+  padding: 1.5rem 1.5rem 0rem;
+  height: 28rem;
 }
 .agent-card__title {
   color: var(--color-cognizant-std-blue);
@@ -706,7 +706,8 @@ footer {
 .agent-card__desc {
   color: var(--text-body);
   font-size: 1.25rem; /* 20px */
-  line-height: 1.55;
+  line-height: 1.4;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0 0 1.25rem 0;
   height: 13rem;
 }
@@ -717,19 +718,21 @@ footer {
   grid-template-columns: 1fr 0.0625rem 1fr 0.0625rem 1fr; /* 1px dividers */
   align-items: center;
   gap: 1rem; /* 16px */
+  height: 6rem;
   /* padding: 1.25rem 1rem; 20px 16px */
   /* border-top:0.0625rem solid var(--divider);
   border-bottom:0.0625rem solid var(--divider); */
 }
 .agent-card__feature {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: baseline;
   gap: 0.75rem; /* 12px */
   min-height: 3.5rem; /* 56px */
 }
 .agent-card__icon {
-  width: 2.25rem;
-  height: 2.25rem; /* 36px */
+  width: 3rem;
+  height: 3rem; /* 36px */
   display: grid;
   place-items: center;
   color: var(--text-muted);
@@ -741,22 +744,28 @@ footer {
 .agent-card__icon--pill .agent-card__pill {
   display: inline-grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 0.125rem solid var(--divider); /* 2px */
+  width: 3rem;
+  height: 3rem;
+  border: 0.125rem solid #b1b1b1; /* 2px */
+  /* border: 0.125rem solid var(--divider); 2px */
   border-radius: 999rem;
   font-weight: 700;
+  font-size: 1.25rem;
   color: var(--text-body);
   background: #fff;
 }
 .agent-card__label {
-  color: var(--text-muted);
-  font-size: 0.875rem; /* 14px */
-  line-height: 1.4;
+  color: var(--color-black);
+  font-size: 1rem; /* 16px */
+  line-height: 1.125;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 2rem;
+  /* text-align: center; */
+  padding-left: 0.1rem;
 }
 .agent-card__divider {
   width: 0.0625rem; /* 1px */
-  height: 2.5rem; /* 40px */
+  height: 5rem; /* 80px */
   background: var(--divider);
   justify-self: center;
 }
@@ -765,8 +774,9 @@ footer {
 .agent-card__accent {
   height: 0.25rem; /* 4px */
   background: linear-gradient(90deg, var(--color-cognizant-std-blue), var(--color-cognizant-cyan));
-  margin: 0.75rem 1.5rem; /* 12px top/bottom; 24px sides */
+  margin: 0.75rem 1.5rem 0; /* 0px top/bottom; 24px sides */
   border-radius: 0.125rem; /* 2px */
+  padding: 0.125rem; /* 2px */
 }
 
 /* Card footer — neutralize global footer styles */
@@ -787,26 +797,34 @@ footer {
 }
 .agent-card__stage-icon {
   opacity: 0.7;
+  position: relative;
+  top: -0.4rem;
 }
 .agent-card__stage-label {
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1rem; /* 16px */
+  font-family: Arial, Helvetica, sans-serif;
 }
 .agent-card__stage-value {
   margin-left: 0.25rem;
   font-weight: 700;
+  font-size: 1rem; /* 16px */
+  font-family: Arial, Helvetica, sans-serif;
   color: var(--text-body);
 }
 
 .agent-card__cta {
   color: var(--indigo);
   font-weight: 800;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.5rem; /* 24px */
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem; /* 8px */
   border-radius: 0.75rem; /* 12px */
   padding: 0.5rem 0.75rem; /* 8px 12px */
+  position: relative;
+  top: -0.25rem;
 }
 .agent-card__cta:hover {
   background: rgba(72, 62, 168, 0.08);
@@ -814,6 +832,8 @@ footer {
 .agent-card__cta-arrow {
   font-size: 1.1875rem;
   line-height: 1;
+  position: relative;
+  top: 0.125rem;
 } /* 19px */
 
 /* Small screens */
@@ -833,8 +853,8 @@ footer {
 
 /* --- Feature icon images (industry.png & technology.png) --- */
 .agent-card__icon img {
-  width: 1.75rem; /* 28px */
-  height: 1.75rem;
+  width: 2.75rem; /* 44px */
+  height: 2.75rem;
   display: block;
   object-fit: contain;
   opacity: 0.9; /* subtle, like muted icons */
