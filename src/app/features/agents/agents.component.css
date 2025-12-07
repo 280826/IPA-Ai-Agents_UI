@@ -1056,3 +1056,12 @@ footer {
 .loading-overlay.black {
   background: rgba(0, 0, 0, 0.7);
 }
+
+
+/* Make placeholder lighter and entered text darker (if not already) */
+.search-input {
+  color: #1f2937; /* dark gray text */
+}
+.search-input::placeholder {
+  color: #8b8b8b; /* mid gray placeholder */
+}

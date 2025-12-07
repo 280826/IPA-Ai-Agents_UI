@@ -52,35 +52,47 @@
           <div class="search-inner">
             <div class="search-white-area">
               <img src="/assets/images/search.png" />
-              <input type="text" [value]="searchText()" (input)="onSearchInput($event)"
-                placeholder="Search AI Agents..." class="search-input" />
+
+              <input class="search-input" placeholder="Search AI Agents..." [value]="searchText()"
+                (input)="onSearchInput($event)" />
+
 
               <div class="pill-divider"></div>
 
               <div class="filters-inline">
                 <!-- Industry select -->
-                <select [value]="selectedIndustry()" (change)="onIndustryChange($event)" class="filter-select">
-                  <option value="">Banking and Financial</option>
-                  <option value="Banking and Financial">Banking and Financial</option>
-                  <option value="Finance &amp; Accounting">Finance &amp; Accounting</option>
-                  <option value="Supply Chain">Supply Chain</option>
-                  <option value="Insurance">Insurance</option>
-                </select>
+
+                <!-- <div class="filter-group filter-group-1"> -->
+                  <!-- <span class="filter-label">By Industries</span> -->
+                  <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
+                    <option value="">All</option>
+                    <option>Banking and Financial</option>
+                    <option>Finance &amp; Accounting</option>
+                    <option>Supply Chain</option>
+                    <option>Insurance</option>
+                  </select>
+                <!-- </div> -->
+
 
                 <div class="pill-divider-2"></div>
 
                 <!-- Technology select -->
-                <select [value]="selectedTechnology()" (change)="onTechnologyChange($event)" class="filter-select">
-                  <option value="">Azure</option>
-                  <option value="Azure">Azure</option>
-                  <option value="Langchain">Langchain</option>
-                  <option value="Copilot">Copilot Studio</option>
-                  <option value="UiPath">UiPath Agentic</option>
-                </select>
+
+                <!-- <div class="filter-group filter-group-2"> -->
+                  <!-- <span class="filter-label">By Technology</span> -->
+                  <select class="filter-select" [value]="selectedTechnology()" (change)="onTechnologyChange($event)">
+                    <option value="">All</option>
+                    <option>Azure</option>
+                    <option>Langchain</option>
+                    <option>Copilot Studio</option>
+                    <option>UiPath Agentic</option>
+                  </select>
+                <!-- </div> -->
+
               </div>
             </div>
 
-            <button class="search-button">Search</button>
+            <button class="search-button" (click)="applyFilters()">Search</button>
           </div>
         </div>
       </div>
@@ -92,6 +104,7 @@
       <div class="discover-filter">
         <select class="discover-filter-select">
           <option value="">All</option>
+          <option value="Production">POC</option>
           <option value="Production">Production</option>
           <option value="Solution">Solution</option>
         </select>
@@ -185,34 +198,30 @@
 
     <!-- Pagination (pills style) -->
     <nav class="pager" aria-label="Pagination">
-      <!-- Previous -->
-      <button class="pager-btn" (click)="prev()" [disabled]="pageIndex() === 0">‹ Previous</button>
 
-      <!-- Numbered pills + ellipsis -->
-      @for (p of pagePills(); track p) { @if (p === '…') {
+      <button class="pager-btn" (click)="prev()" [disabled]="!useCursor() && pageIndex() === 0">‹ Previous</button>
+      @for (p of pagePills(); track p) {
+      @if (p === '…') {
       <span class="pager-ellipsis">…</span>
       } @else {
-      <button class="pager-page" [class.active]="+p === pageIndex() + 1" (click)="gotoPage(+p)">
+      <button class="pager-page" (click)="gotoPage(p)" [class.active]="(+p) === (pageIndex() + 1)">
         {{ p }}
       </button>
-      } }
-
-      <!-- Next -->
-      <button class="pager-btn" (click)="next()" [disabled]="pageIndex() + 1 >= totalPages()">
-        Next ›
-      </button>
-
-      <!-- Page size selector -->
-      <label class="pager-size" aria-label="Select page size">
-        <span>Page size:</span>
+      }
+      }
+      <button class="pager-btn" (click)="next()" [disabled]="!useCursor() && (pageIndex() + 1 >= totalPages())">Next
+        ›</button>
+      <span class="pager-size">
+        Page size:
         <select [value]="pageSize()" (change)="changeSize($any($event.target).value)">
-          <option [value]="6">6</option>
-          <option [value]="12">12</option>
-          <option [value]="18">18</option>
-          <option [value]="24">24</option>
+          <option>6</option>
+          <option>12</option>
+          <option>18</option>
+          <option>24</option>
         </select>
-      </label>
+      </span>
     </nav>
+
 
     <!-- Loading / Error -->
     @if (loading()) {
