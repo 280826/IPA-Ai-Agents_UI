@@ -1,12 +1,43 @@
-
 import { Component, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../core/auth.service';
 import { AgentsService, UsecaseFilters } from '../../services/agents.service';
 import { Agent } from '../../models/agent.ui';
 import { UsecaseListItemDTO } from '../../models/usecase-list.dto';
 import { mapUsecaseItemToAgent } from '../../models/mapper';
+
+type StageApi = 'Prod' | 'Solution' | 'POC' | string;
+type StageUi = 'Production' | 'Solution' | 'POC' | '' | string;
+
+// Stage label mapping (UI ↔ API)
+function toUiStage(api: StageApi | undefined): StageUi {
+  if (!api) return '';
+  switch (api) {
+    case 'Prod':
+      return 'Production';
+    case 'POC':
+      return 'POC';
+    case 'Solution':
+      return 'Solution';
+    default:
+      return api;
+  }
+}
+function toApiStage(ui: StageUi | undefined): StageApi | undefined {
+  if (!ui) return undefined;
+  switch (ui.trim()) {
+    case 'Production':
+      return 'Prod';
+    case 'POC':
+      return 'POC';
+    case 'Solution':
+      return 'Solution';
+    default:
+      return ui;
+  }
+}
 
 @Component({
   standalone: true,
@@ -14,41 +45,45 @@ import { mapUsecaseItemToAgent } from '../../models/mapper';
   imports: [CommonModule],
   templateUrl: './agents.component.html',
   styleUrls: ['./agents.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentsComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly route  = inject(ActivatedRoute);
-  private readonly svc    = inject(AgentsService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly svc = inject(AgentsService);
 
-  // UI state
+  // ----- UI state -----
   readonly loading = signal<boolean>(true);
-  readonly error   = signal<string | null>(null);
-  readonly agents  = signal<Agent[]>([]);
+  readonly error = signal<string | null>(null);
+  readonly agents = signal<Agent[]>([]);
   readonly hasData = computed(() => this.agents().length > 0);
 
-  // Filters
-  readonly searchText       = signal<string>('');
-  readonly selectedIndustry = signal<string>('');   // was 'Banking and Financial'
-  readonly selectedTechnology = signal<string>(''); // was 'Azure'
-  readonly selectedStage    = signal<string>('');   // 'Production'|'Solution' (UI)
+  // ----- Filters (UI) -----
+  readonly searchText = signal<string>(''); // shown in pill input
+  readonly selectedIndustry = signal<string>(''); // e.g., 'Banking and Financial' or code like 'BFS'
+  readonly selectedTechnology = signal<string>(''); // CSV or single tech
+  readonly selectedStage = signal<StageUi>(''); // 'Production'|'Solution'|'POC'|''
 
-  // Query filters for API (vertical/stage/techStack)
-  readonly filters = signal<UsecaseFilters>({});
+  // ----- Filters (API) -----
+  readonly filters = signal<UsecaseFilters>({}); // { vertical?: string; stage?: StageApi; techStack?: string[]; search?: string }
 
-  // Pagination (offset mode by default)
+  // ----- Pagination -----
   readonly useCursor = signal<boolean>(false);
   readonly pageIndex = signal<number>(0); // zero-based
-  readonly pageSize  = signal<number>(10);
-  readonly total     = signal<number>(0);
-  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.pageSize())));
+  readonly pageSize = signal<number>(6);
+  readonly total = signal<number>(0);
+  readonly totalPages = computed(() => {
+    const size = Math.max(1, this.pageSize());
+    const t = Math.max(0, this.total());
+    return Math.max(1, Math.ceil(t / size));
+  });
 
-  // Cursor hints
-  readonly cursorId  = signal<string | undefined>(undefined);
+  // ----- Cursor hints -----
+  readonly cursorId = signal<string | undefined>(undefined);
   readonly cursorSkip = signal<number>(1);
 
-  // Build page pills like: [1, '…', 2, 3, '…', total]
+  // ----- Pagination pills -----
   readonly pagePills = computed<(number | string)[]>(() => {
     const total = this.totalPages();
     const current = this.pageIndex() + 1;
@@ -63,7 +98,7 @@ export class AgentsComponent {
     if (current > 3) pills.push('…');
 
     const start = Math.max(2, current - 1);
-    const end   = Math.min(total - 1, current + 1);
+    const end = Math.min(total - 1, current + 1);
     for (let i = start; i <= end; i++) pills.push(i);
 
     if (current < total - 2) pills.push('…');
@@ -71,85 +106,98 @@ export class AgentsComponent {
     return pills;
   });
 
+  // ----- Lifecycle -----
   ngOnInit(): void {
     // initialize from query params (deep-linking)
-    this.route.queryParamMap.subscribe(params => {
-      const page   = +(params.get('page') ?? 1);
-      const limit  = +(params.get('limit') ?? 10);
-      const id     = params.get('id') ?? undefined;
-      const skip   = +(params.get('skip') ?? 1);
+    this.route.queryParamMap.subscribe((params) => {
+      // helpers
+      const toPositiveInt = (v: string | null, d: number) => {
+        const n = Number(v);
+        return Number.isFinite(n) && n > 0 ? n : d;
+      };
 
-      const vertical  = params.get('vertical') ?? undefined;
-      const stage     = params.get('stage') ?? undefined;     // server stage: 'Solution'|'Prod'
-      const techStack = params.get('techStack') ?? undefined;
+      const page = toPositiveInt(params.get('page'), 1);
+      const limit = toPositiveInt(params.get('limit'), 6);
+      const id = params.get('id') ?? undefined;
+      const skipRaw = Number(params.get('skip'));
+      const skip = Number.isFinite(skipRaw) && skipRaw !== 0 ? skipRaw : 1;
 
+      const vertical = params.get('vertical') ?? undefined;
+      const stageApi = params.get('stage') ?? undefined; // server expects 'Prod'|'Solution'|'POC'
+      const techCsv = params.get('techStack') ?? undefined;
+      const search = params.get('search') ?? undefined;
+
+      const techStack = techCsv ? techCsv.split(',').filter(Boolean) : undefined;
+
+      // set core
       this.pageIndex.set(Math.max(page - 1, 0));
       this.pageSize.set(limit);
       this.cursorId.set(id);
-      this.cursorSkip.set(isNaN(skip) ? 1 : skip);
+      this.cursorSkip.set(skip);
 
-      // Set filters for API
-      this.filters.set({
-        vertical,
-        stage,
-        techStack: techStack ? techStack.split(',') : undefined
-      });
+      // set API filters
+      this.filters.set({ vertical, stage: stageApi, techStack, search });
 
-      // UI selected values (optional: reflect what came from URL)
+      // reflect UI selections from URL
       this.selectedIndustry.set(vertical ?? '');
-      this.selectedStage.set(stage === 'Prod' ? 'Production' : (stage ?? ''));
-      this.selectedTechnology.set(techStack ?? '');
+      this.selectedStage.set(toUiStage(stageApi));
+      this.selectedTechnology.set(techCsv ?? '');
+      this.searchText.set(search ?? '');
 
-      // Enable cursor mode if id is present
-      this.useCursor.set(!!id);
+      // toggle mode
+      this.useCursor.set(Boolean(id));
 
+      // fetch data
       this.fetch();
     });
   }
 
+  // ----- Data fetch -----
   private fetch(): void {
     this.loading.set(true);
     const f = this.filters();
 
     if (this.useCursor()) {
-      this.svc.listByCursor(this.cursorId(), this.cursorSkip(), this.pageSize(), f).subscribe({
-        next: (res) => {
-          const data = res?.data;
-          const items: UsecaseListItemDTO[] = data?.items ?? [];
-          this.agents.set(items.map(mapUsecaseItemToAgent));
-          this.total.set(data?.total ?? (this.total() || items.length));
-          // cursor id set from last item's _id or server-provided id
-          const last = items[items.length - 1];
-          const nextId = last?._id ?? data?.id;
-          if (nextId) this.cursorId.set(nextId);
-          this.error.set(null);
-          this.loading.set(false);
-        },
-        error: (err) => {
-          console.error('Cursor fetch failed', err);
-          this.error.set('Could not load agents. Please try again.');
-          this.loading.set(false);
-        }
-      });
+      this.svc
+        .listByCursor(this.cursorId(), this.cursorSkip(), this.pageSize(), f)
+        .pipe(finalize(() => this.loading.set(false)))
+        .subscribe({
+          next: (res) => {
+            const data = res?.data;
+            const items: UsecaseListItemDTO[] = data?.items ?? [];
+            this.agents.set(items.map(mapUsecaseItemToAgent));
+            this.total.set(data?.total ?? (this.total() || items.length));
+            // advance cursor id using last item or server-provided id
+            const last = items[items.length - 1];
+            const nextId = last?._id ?? data?.id;
+            if (nextId) this.cursorId.set(nextId);
+            this.error.set(null);
+          },
+          error: (err) => {
+            console.error('Cursor fetch failed', err);
+            this.error.set('Could not load agents. Please try again.');
+          },
+        });
     } else {
       const page = this.pageIndex() + 1;
-      this.svc.listPaged(page, this.pageSize(), f).subscribe({
-        next: (res) => {
-          const data = res?.data;
-          const items: UsecaseListItemDTO[] = data?.items ?? [];
-          this.agents.set(items.map(mapUsecaseItemToAgent));
-          this.total.set(data?.total ?? items.length);
-          this.pageIndex.set((data?.page ?? page) - 1);
-          this.pageSize.set(data?.limit ?? this.pageSize());
-          this.error.set(null);
-          this.loading.set(false);
-        },
-        error: (err) => {
-          console.error('Paged fetch failed', err);
-          this.error.set('Could not load agents. Please try again.');
-          this.loading.set(false);
-        }
-      });
+      this.svc
+        .listPaged(page, this.pageSize(), f)
+        .pipe(finalize(() => this.loading.set(false)))
+        .subscribe({
+          next: (res) => {
+            const data = res?.data;
+            const items: UsecaseListItemDTO[] = data?.items ?? [];
+            this.agents.set(items.map(mapUsecaseItemToAgent));
+            this.total.set(data?.total ?? items.length);
+            this.pageIndex.set((data?.page ?? page) - 1);
+            this.pageSize.set(data?.limit ?? this.pageSize());
+            this.error.set(null);
+          },
+          error: (err) => {
+            console.error('Paged fetch failed', err);
+            this.error.set('Could not load agents. Please try again.');
+          },
+        });
     }
   }
 
@@ -157,6 +205,9 @@ export class AgentsComponent {
   gotoPage(p: number | string) {
     if (typeof p !== 'number') return;
     this.navigate({ page: p });
+    try {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {}
   }
   prev() {
     if (this.useCursor()) return this.prevCursor();
@@ -167,11 +218,9 @@ export class AgentsComponent {
     if (this.pageIndex() + 1 < this.totalPages()) this.navigate({ page: this.pageIndex() + 2 }); // next page = index+2
   }
   changeSize(size: number) {
-    if (this.useCursor()) {
-      this.navigate({ page: 1, limit: +size, id: undefined, skip: 1 });
-    } else {
-      this.navigate({ page: 1, limit: +size });
-    }
+    const nextLimit = +size;
+    // Change size should not clear other filters; keep mode as-is
+    this.navigate({ page: 1, limit: nextLimit });
   }
 
   // ----- Cursor actions -----
@@ -182,41 +231,65 @@ export class AgentsComponent {
     this.navigate({ id: this.cursorId(), skip: 1, limit: this.pageSize() });
   }
 
-  // ----- Filters (UI handlers) -----
+  // ----- Filter handlers (clear only the changed param when "All") -----
   onSearchInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchText.set(value);
-    // Optional: wire to server if search supported (add ?q=)
+    // No immediate fetch; user clicks Search button to apply (applyFilters)
   }
+
   onIndustryChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
+    const value = (event.target as HTMLSelectElement).value; // '' means All
     this.selectedIndustry.set(value);
-    this.applyFilters();
-  }
-  onTechnologyChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.selectedTechnology.set(value);
-    this.applyFilters();
-  }
-  onStageChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value; // 'Production'|'Solution'|''
-    this.selectedStage.set(value);
-    this.applyFilters();
-  }
-
-  applyFilters() {
-    // Convert UI selections to server filters
-    const vertical = this.selectedIndustry() || undefined;
-    const stageUi  = this.selectedStage() || undefined;    // UI stage
-    const stageApi = stageUi === 'Production' ? 'Prod' : stageUi; // server expects 'Prod'|'Solution'
-    const techCsv  = this.selectedTechnology() || undefined;
-
-    // Reset to first page on filter change
-    if (this.useCursor()) {
-      this.navigate({ page: 1, id: undefined, skip: 1, vertical, stage: stageApi, techStack: techCsv?.split(',') });
-    } else {
-      this.navigate({ page: 1, vertical, stage: stageApi, techStack: techCsv?.split(',') });
+    if (!value) {
+      // Clear only 'vertical', keep other params
+      this.filters.update((f) => ({ ...f, vertical: undefined }));
+      this.navigate({ vertical: undefined });
+      return;
     }
+    // Apply change along with existing others
+    this.applyFilters();
+  }
+
+  onTechnologyChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value; // '' means All
+    this.selectedTechnology.set(value);
+    if (!value) {
+      // Clear only 'techStack', keep other params
+      this.filters.update((f) => ({ ...f, techStack: undefined }));
+      this.navigate({ techStack: [] }); // causes removal in navigate (serialized to null)
+      return;
+    }
+    this.applyFilters();
+  }
+
+  onStageChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value; // 'Production'|'Solution'|'POC'|'' (All)
+    this.selectedStage.set(value);
+    if (!value) {
+      // Clear only 'stage', keep other params
+      this.filters.update((f) => ({ ...f, stage: undefined }));
+      this.navigate({ stage: undefined });
+      return;
+    }
+    this.applyFilters();
+  }
+
+  /** Apply all filters together (when clicking Search) */
+  applyFilters() {
+    const vertical = this.selectedIndustry() || undefined;
+    const stageApi = toApiStage(this.selectedStage() || undefined);
+    const techCsv = this.selectedTechnology() || undefined;
+    const search = this.searchText()?.trim() || undefined;
+
+    // Do not change cursor mode or other params; just set/clear the filters provided
+    this.navigate({
+      page: 1, // optional: reset to first page on search
+      vertical,
+      stage: stageApi,
+      techStack: techCsv?.split(','),
+      search,
+    });
   }
 
   logout(): void {
@@ -228,34 +301,54 @@ export class AgentsComponent {
   public navigate(opts: {
     page?: number;
     limit?: number;
-    id?: string | undefined;
+    id?: string | null | undefined; // null means remove param (not used here except cursor actions)
     skip?: number;
     vertical?: string;
     stage?: string;
     techStack?: string[] | string;
+    search?: string;
   }) {
     const qp: Record<string, any> = {
-      page: opts.page ?? (this.pageIndex() + 1),
+      page: opts.page ?? this.pageIndex() + 1,
       limit: opts.limit ?? this.pageSize(),
     };
-    // cursor hints
-    if (this.useCursor() || opts.id !== undefined)  qp['id']   = opts.id ?? this.cursorId();
-    if (this.useCursor() || opts.skip !== undefined) qp['skip'] = opts.skip ?? this.cursorSkip();
 
-    // filters
-    const vertical = opts.vertical ?? this.filters().vertical;
-    const stage    = opts.stage ?? this.filters().stage;
-    const tech     = opts.techStack ?? this.filters().techStack;
-    const techCsv  = Array.isArray(tech) ? tech.join(',') : (tech ?? '');
+    // cursor hints — only set if provided; don't touch otherwise
+    if (opts.id !== undefined) qp['id'] = opts.id === null ? null : opts.id;
+    if (opts.skip !== undefined) qp['skip'] = opts.skip;
 
-    if (vertical) qp['vertical'] = vertical;
-    if (stage)    qp['stage']    = stage;
-    if (techCsv)  qp['techStack'] = techCsv;
+    // filters: use provided values to set/clear ONLY those; leave others unchanged
+    const current = this.filters();
+
+    const vertical = opts.vertical !== undefined ? opts.vertical : current.vertical;
+    const stage = opts.stage !== undefined ? opts.stage : current.stage;
+    const tech = opts.techStack !== undefined ? opts.techStack : current.techStack;
+    const search = opts.search !== undefined ? opts.search : current.search;
+
+    const techCsv = Array.isArray(tech) ? tech.join(',') : tech ?? '';
+
+    // Write or remove based on provided values (null removal with 'merge')
+    qp['vertical'] = vertical ?? null;
+    qp['stage'] = stage ?? null;
+    qp['techStack'] = techCsv || null;
+    qp['search'] = (search && String(search).trim()) || null;
 
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: qp,
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
     });
+  }
+
+  clearSearch(): void {
+    // Clear the UI signal
+    this.searchText.set('');
+
+    // Clear only the 'search' key in filters
+    this.filters.update((f) => ({ ...f, search: undefined }));
+
+    // Remove only the 'search' param from URL (leave other filters intact)
+    this.navigate({ search: undefined });
   }
 }
