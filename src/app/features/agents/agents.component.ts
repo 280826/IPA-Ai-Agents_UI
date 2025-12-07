@@ -40,7 +40,7 @@ export class AgentsComponent {
   // Pagination (offset mode by default)
   readonly useCursor = signal<boolean>(false);
   readonly pageIndex = signal<number>(0); // zero-based
-  readonly pageSize  = signal<number>(10);
+  readonly pageSize  = signal<number>(6);
   readonly total     = signal<number>(0);
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.total() / this.pageSize())));
 
@@ -75,7 +75,7 @@ export class AgentsComponent {
     // initialize from query params (deep-linking)
     this.route.queryParamMap.subscribe(params => {
       const page   = +(params.get('page') ?? 1);
-      const limit  = +(params.get('limit') ?? 10);
+      const limit  = +(params.get('limit') ?? 6);
       const id     = params.get('id') ?? undefined;
       const skip   = +(params.get('skip') ?? 1);
 

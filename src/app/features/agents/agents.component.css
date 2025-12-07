@@ -657,7 +657,7 @@ footer {
 .agents-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(32.5rem, 1fr));
-  gap: 2rem; /* 32px */
+  gap: 3rem; /* 48px */
   padding: 1.5rem 2rem; /* 24px 32px */
 }
 
@@ -799,6 +799,10 @@ footer {
   opacity: 0.7;
   position: relative;
   top: -0.4rem;
+  img {
+    width: 1.55rem;
+    height: 1.55rem;
+  }
 }
 .agent-card__stage-label {
   font-weight: 600;
@@ -834,6 +838,10 @@ footer {
   line-height: 1;
   position: relative;
   top: 0.125rem;
+  img {
+    width: 1.5rem;
+    height: 1.75rem;
+  }
 } /* 19px */
 
 /* Small screens */
@@ -860,7 +868,6 @@ footer {
   opacity: 0.9; /* subtle, like muted icons */
 }
 
-
 /* --- Pagination pills (screenshot-inspired) --- */
 .pager {
   display: flex;
@@ -874,7 +881,7 @@ footer {
   border: 1px solid #e5e7eb;
   background: #fff;
   color: #1f2937;
-  border-radius: 0.5rem;   /* 8px */
+  border-radius: 0.5rem; /* 8px */
   padding: 0.5rem 0.75rem; /* 8px 12px */
   font-weight: 600;
   cursor: pointer;
@@ -885,7 +892,7 @@ footer {
 }
 
 .pager-page {
-  min-width: 2rem;         /* 32px-ish pill */
+  min-width: 2rem; /* 32px-ish pill */
   text-align: center;
   border: 1px solid #e5e7eb;
   background: #fff;
@@ -899,7 +906,7 @@ footer {
   color: #fff;
   border: none;
   background: linear-gradient(180deg, #26efe9 0%, #2e308e 100%);
-  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.15);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
 }
 
 .pager-ellipsis {
@@ -920,7 +927,6 @@ footer {
   background: #fff;
   color: #1f2937;
 }
-
 
 /* Full-page loading overlay */
 .loading-overlay {
@@ -952,17 +958,16 @@ footer {
   font-weight: 600;
 }
 
-
 /* ===== Loading Overlay (mask) ===== */
 
 /* Theme variables for overlay tint: choose black or light grey */
 :root {
-  --overlay-bg-dark: rgba(10, 13, 58, 0.75);   /* deep navy/black-ish */
-  --overlay-bg-light: rgba(17, 24, 39, 0.35);  /* light grey tint */
+  --overlay-bg-dark: rgba(10, 13, 58, 0.75); /* deep navy/black-ish */
+  --overlay-bg-light: rgba(17, 24, 39, 0.35); /* light grey tint */
   --overlay-bg-active: var(--overlay-bg-dark); /* default = dark; switch to light if you prefer */
   --overlay-z: 9999;
-  --overlay-fade-ms: 250ms;                    /* fade duration */
-  --overlay-text-color: #e5e7eb;               /* light text on dark */
+  --overlay-fade-ms: 250ms; /* fade duration */
+  --overlay-text-color: #e5e7eb; /* light text on dark */
 }
 
 /* Overlay container covers whole viewport */
@@ -974,7 +979,7 @@ footer {
   display: grid;
   place-items: center;
   opacity: 0;
-  pointer-events: none;   /* not clickable when hidden */
+  pointer-events: none; /* not clickable when hidden */
   transition: opacity var(--overlay-fade-ms) ease-in-out;
 }
 
@@ -1004,7 +1009,9 @@ footer {
 /* ===== CSS Spinner (fallback) ===== */
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Dual-ring spinner */

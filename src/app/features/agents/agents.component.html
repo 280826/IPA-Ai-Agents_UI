@@ -1,6 +1,6 @@
 <div class="flex flex-col h-screen bg-gray-50">
   <!-- Fixed Header - 120px height -->
-  <header class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-10" style="height: 120px;">
+  <header class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-10" style="height: 120px">
     <div class="h-full px-12 flex items-center header-logos">
       <!-- Left: IPA image -->
       <div class="flex items-center">
@@ -30,14 +30,14 @@
   </header>
 
   <!-- Scrollable Content Area (accounts for fixed header - 7.5rem) -->
-  <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem;">
+  <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
     <!-- Hero Section -->
     <section class="hero-bg text-white">
       <div class="hero-content text-center relative">
         <h1 class="hero-heading">Your Unified Platform for Intelligent Agents</h1>
         <p class="hero-description">
-          From productivity to creativity, find the right agent and get started instantly. Explore, choose, and deploy
-          AI agents designed to power every task, all in one place.
+          From productivity to creativity, find the right agent and get started instantly. Explore,
+          choose, and deploy AI agents designed to power every task, all in one place.
         </p>
 
         <!-- Search pill overlay (positioned at exact XD coords) -->
@@ -80,9 +80,7 @@
               </div>
             </div>
 
-            <button class="search-button">
-              Search
-            </button>
+            <button class="search-button">Search</button>
           </div>
         </div>
       </div>
@@ -150,7 +148,9 @@
                   <!-- /assets/images/technology.png -->
                   <img src="/assets/images/technology.png" alt="" />
                 </div>
-                <div class="agent-card__label">{{ agent.technology || 'Copilot Studio | UiPath Agentic' }}</div>
+                <div class="agent-card__label">
+                  {{ agent.technology || 'Copilot Studio | UiPath Agentic' }}
+                </div>
               </div>
             </div>
           </div>
@@ -169,9 +169,11 @@
             </div>
 
             <!-- CTA (button; swap to routerLink if you have a details route) -->
-            <button class="agent-card__cta" type="button" (click)="navigate({ page: pageIndex()+1, limit: pageSize() })"
+            <button class="agent-card__cta" type="button"
+              (click)="navigate({ page: pageIndex() + 1, limit: pageSize() })"
               aria-label="Explore agent {{ agent.name }}">
-              Explore Agent <span class="agent-card__cta-arrow">
+              Explore Agent
+              <span class="agent-card__cta-arrow">
                 <img src="/assets/images/explore.png" alt="" />
               </span>
             </button>
@@ -184,23 +186,19 @@
     <!-- Pagination (pills style) -->
     <nav class="pager" aria-label="Pagination">
       <!-- Previous -->
-      <button class="pager-btn" (click)="prev()" [disabled]="pageIndex()===0">
-        ‹ Previous
-      </button>
+      <button class="pager-btn" (click)="prev()" [disabled]="pageIndex() === 0">‹ Previous</button>
 
       <!-- Numbered pills + ellipsis -->
-      @for (p of pagePills(); track p) {
-      @if (p === '…') {
+      @for (p of pagePills(); track p) { @if (p === '…') {
       <span class="pager-ellipsis">…</span>
       } @else {
-      <button class="pager-page" [class.active]="(+p) === (pageIndex()+1)" (click)="gotoPage(+p)">
+      <button class="pager-page" [class.active]="+p === pageIndex() + 1" (click)="gotoPage(+p)">
         {{ p }}
       </button>
-      }
-      }
+      } }
 
       <!-- Next -->
-      <button class="pager-btn" (click)="next()" [disabled]="pageIndex()+1 >= totalPages()">
+      <button class="pager-btn" (click)="next()" [disabled]="pageIndex() + 1 >= totalPages()">
         Next ›
       </button>
 
@@ -208,23 +206,20 @@
       <label class="pager-size" aria-label="Select page size">
         <span>Page size:</span>
         <select [value]="pageSize()" (change)="changeSize($any($event.target).value)">
-          <option [value]="10">10</option>
-          <option [value]="15">15</option>
-          <option [value]="25">25</option>
-          <option [value]="50">50</option>
-          <option [value]="100">100</option>
+          <option [value]="6">6</option>
+          <option [value]="12">12</option>
+          <option [value]="18">18</option>
+          <option [value]="24">24</option>
         </select>
       </label>
     </nav>
 
     <!-- Loading / Error -->
     @if (loading()) {
-    <div style="padding:1rem 2rem;">Loading...</div>
+    <div style="padding: 1rem 2rem">Loading...</div>
+    } @if (error()) {
+    <div class="error" style="padding: 1rem 2rem; color: #b91c1c">{{ error() }}</div>
     }
-    @if (error()) {
-    <div *ngIf="error() as e" class="error" style="padding:1rem 2rem;color:#b91c1c;">{{ e }}</div>
-    }
-
 
     <!-- Page footer -->
     <!-- Footer - Static Position -->
@@ -234,25 +229,18 @@
       </div>
     </footer>
 
+    <!-- Full-page loading overlay (always present for fade in/out) -->
+    <div class="loading-overlay black" [class.visible]="loading()" role="status" aria-live="polite"
+      aria-busy="{{ loading() }}">
+      <div class="loading-container" aria-label="Loading, please wait">
+        <!-- CSS spinner (fallback & default) -->
+        <div class="css-spinner" aria-hidden="false"></div>
 
-
-<!-- Full-page loading overlay (always present for fade in/out) -->
-<div class="loading-overlay black"
-     [class.visible]="loading()"
-     role="status"
-     aria-live="polite"
-     aria-busy="{{ loading() }}">
-  <div class="loading-container" aria-label="Loading, please wait">
-    <!-- CSS spinner (fallback & default) -->
-    <div class="css-spinner" aria-hidden="false"></div>
-
-    <!-- GIF (optional visual) -->
-    /assets/images/loading.gif
-    <!-- Optional text -->
-    <p class="loading-text">Loading, please wait...</p>
-  </div>
-</div>
-
-
+        <!-- GIF (optional visual) -->
+        <!-- /assets/images/loading.gif -->
+        <!-- Optional text -->
+        <p class="loading-text">Loading, please wait...</p>
+      </div>
+    </div>
   </main>
 </div>
