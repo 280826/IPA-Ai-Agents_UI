@@ -54,8 +54,13 @@
               <img src="/assets/images/search.png" />
 
               <input class="search-input" placeholder="Search AI Agents..." [value]="searchText()"
-                (input)="onSearchInput($event)" />
+                (input)="onSearchInput($event)" (keydown.escape)="clearSearch()"
+                (keydown.enter)="applyFilters()">
 
+              <button type="button" class="search-clear" [class.hidden]="!searchText()" (click)="clearSearch()"
+                aria-label="Clear search">
+                ×
+              </button>
 
               <div class="pill-divider"></div>
 
@@ -63,14 +68,14 @@
                 <!-- Industry select -->
 
                 <!-- <div class="filter-group filter-group-1"> -->
-                  <!-- <span class="filter-label">By Industries</span> -->
-                  <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
-                    <option value="">All</option>
-                    <option>Banking and Financial</option>
-                    <option>Finance &amp; Accounting</option>
-                    <option>Supply Chain</option>
-                    <option>Insurance</option>
-                  </select>
+                <!-- <span class="filter-label">By Industries</span> -->
+                <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
+                  <option value="">All</option>
+                  <option>Banking and Financial</option>
+                  <option>Finance &amp; Accounting</option>
+                  <option>Supply Chain</option>
+                  <option>Insurance</option>
+                </select>
                 <!-- </div> -->
 
 
@@ -79,14 +84,14 @@
                 <!-- Technology select -->
 
                 <!-- <div class="filter-group filter-group-2"> -->
-                  <!-- <span class="filter-label">By Technology</span> -->
-                  <select class="filter-select" [value]="selectedTechnology()" (change)="onTechnologyChange($event)">
-                    <option value="">All</option>
-                    <option>Azure</option>
-                    <option>Langchain</option>
-                    <option>Copilot Studio</option>
-                    <option>UiPath Agentic</option>
-                  </select>
+                <!-- <span class="filter-label">By Technology</span> -->
+                <select class="filter-select" [value]="selectedTechnology()" (change)="onTechnologyChange($event)">
+                  <option value="">All</option>
+                  <option>Azure</option>
+                  <option>Langchain</option>
+                  <option>Copilot Studio</option>
+                  <option>UiPath Agentic</option>
+                </select>
                 <!-- </div> -->
 
               </div>
@@ -102,9 +107,9 @@
     <section class="discover-section">
       <h2 class="discover-heading">Discover Intelligent AI Agents in Our Store</h2>
       <div class="discover-filter">
-        <select class="discover-filter-select">
+        <select class="discover-filter-select" [value]="selectedStage()" (change)="onStageChange($event)">
           <option value="">All</option>
-          <option value="Production">POC</option>
+          <option value="POC">POC</option>
           <option value="Production">Production</option>
           <option value="Solution">Solution</option>
         </select>

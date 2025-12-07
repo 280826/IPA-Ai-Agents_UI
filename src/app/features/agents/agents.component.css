@@ -1065,3 +1065,32 @@ footer {
 .search-input::placeholder {
   color: #8b8b8b; /* mid gray placeholder */
 }
+
+
+/* Clear button inside the search pill */
+.search-clear {
+  position: relative;
+  top: 22%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #8b8b8b;
+  font-size: 2.5rem;    /* ~20px */
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.search-clear:hover {
+  color: #4b5563;        /* darker on hover */
+}
+
+.search-clear.hidden {
+  display: none;
+}
+
+/* Ensure the white area can position the clear button absolutely */
+.search-white-area {
+  position: relative;    /* already present in your CSS; ensure it stays */
+  padding-right: 2.5rem; /* room for the clear 'X' so text doesn't overlap */
+}

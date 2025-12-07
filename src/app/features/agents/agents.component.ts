@@ -1,4 +1,3 @@
-
 import { Component, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -10,25 +9,33 @@ import { UsecaseListItemDTO } from '../../models/usecase-list.dto';
 import { mapUsecaseItemToAgent } from '../../models/mapper';
 
 type StageApi = 'Prod' | 'Solution' | 'POC' | string;
-type StageUi  = 'Production' | 'Solution' | 'POC' | '' | string;
+type StageUi = 'Production' | 'Solution' | 'POC' | '' | string;
 
 // Stage label mapping (UI ↔ API)
 function toUiStage(api: StageApi | undefined): StageUi {
   if (!api) return '';
   switch (api) {
-    case 'Prod':     return 'Production';
-    case 'POC':      return 'POC';
-    case 'Solution': return 'Solution';
-    default:         return api;
+    case 'Prod':
+      return 'Production';
+    case 'POC':
+      return 'POC';
+    case 'Solution':
+      return 'Solution';
+    default:
+      return api;
   }
 }
 function toApiStage(ui: StageUi | undefined): StageApi | undefined {
   if (!ui) return undefined;
   switch (ui.trim()) {
-    case 'Production': return 'Prod';
-    case 'POC':        return 'POC';
-    case 'Solution':   return 'Solution';
-    default:           return ui;
+    case 'Production':
+      return 'Prod';
+    case 'POC':
+      return 'POC';
+    case 'Solution':
+      return 'Solution';
+    default:
+      return ui;
   }
 }
 
@@ -38,34 +45,34 @@ function toApiStage(ui: StageUi | undefined): StageApi | undefined {
   imports: [CommonModule],
   templateUrl: './agents.component.html',
   styleUrls: ['./agents.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AgentsComponent {
-  private readonly auth   = inject(AuthService);
+  private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly route  = inject(ActivatedRoute);
-  private readonly svc    = inject(AgentsService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly svc = inject(AgentsService);
 
   // ----- UI state -----
   readonly loading = signal<boolean>(true);
-  readonly error   = signal<string | null>(null);
-  readonly agents  = signal<Agent[]>([]);
+  readonly error = signal<string | null>(null);
+  readonly agents = signal<Agent[]>([]);
   readonly hasData = computed(() => this.agents().length > 0);
 
   // ----- Filters (UI) -----
-  readonly searchText         = signal<string>(''); // shown in pill input
-  readonly selectedIndustry   = signal<string>(''); // e.g., 'Banking and Financial' or codes like 'INS'
+  readonly searchText = signal<string>(''); // shown in pill input
+  readonly selectedIndustry = signal<string>(''); // e.g., 'Banking and Financial' or code like 'BFS'
   readonly selectedTechnology = signal<string>(''); // CSV or single tech
-  readonly selectedStage      = signal<StageUi>(''); // 'Production'|'Solution'|'POC'|''
+  readonly selectedStage = signal<StageUi>(''); // 'Production'|'Solution'|'POC'|''
 
   // ----- Filters (API) -----
-  readonly filters = signal<UsecaseFilters>({});      // { vertical?: string; stage?: StageApi; techStack?: string[]; search?: string }
+  readonly filters = signal<UsecaseFilters>({}); // { vertical?: string; stage?: StageApi; techStack?: string[]; search?: string }
 
   // ----- Pagination -----
   readonly useCursor = signal<boolean>(false);
   readonly pageIndex = signal<number>(0); // zero-based
-  readonly pageSize  = signal<number>(6);
-  readonly total     = signal<number>(0);
+  readonly pageSize = signal<number>(6);
+  readonly total = signal<number>(0);
   readonly totalPages = computed(() => {
     const size = Math.max(1, this.pageSize());
     const t = Math.max(0, this.total());
@@ -73,7 +80,7 @@ export class AgentsComponent {
   });
 
   // ----- Cursor hints -----
-  readonly cursorId   = signal<string | undefined>(undefined);
+  readonly cursorId = signal<string | undefined>(undefined);
   readonly cursorSkip = signal<number>(1);
 
   // ----- Pagination pills -----
@@ -91,7 +98,7 @@ export class AgentsComponent {
     if (current > 3) pills.push('…');
 
     const start = Math.max(2, current - 1);
-    const end   = Math.min(total - 1, current + 1);
+    const end = Math.min(total - 1, current + 1);
     for (let i = start; i <= end; i++) pills.push(i);
 
     if (current < total - 2) pills.push('…');
@@ -102,23 +109,23 @@ export class AgentsComponent {
   // ----- Lifecycle -----
   ngOnInit(): void {
     // initialize from query params (deep-linking)
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       // helpers
       const toPositiveInt = (v: string | null, d: number) => {
         const n = Number(v);
         return Number.isFinite(n) && n > 0 ? n : d;
       };
 
-      const page   = toPositiveInt(params.get('page'), 1);
-      const limit  = toPositiveInt(params.get('limit'), 6);
-      const id     = params.get('id') ?? undefined;
+      const page = toPositiveInt(params.get('page'), 1);
+      const limit = toPositiveInt(params.get('limit'), 6);
+      const id = params.get('id') ?? undefined;
       const skipRaw = Number(params.get('skip'));
-      const skip   = Number.isFinite(skipRaw) && skipRaw !== 0 ? skipRaw : 1;
+      const skip = Number.isFinite(skipRaw) && skipRaw !== 0 ? skipRaw : 1;
 
-      const vertical  = params.get('vertical') ?? undefined;
-      const stageApi  = params.get('stage') ?? undefined;       // server expects 'Prod'|'Solution'|'POC'
-      const techCsv   = params.get('techStack') ?? undefined;
-      const search    = params.get('search') ?? undefined;
+      const vertical = params.get('vertical') ?? undefined;
+      const stageApi = params.get('stage') ?? undefined; // server expects 'Prod'|'Solution'|'POC'
+      const techCsv = params.get('techStack') ?? undefined;
+      const search = params.get('search') ?? undefined;
 
       const techStack = techCsv ? techCsv.split(',').filter(Boolean) : undefined;
 
@@ -151,7 +158,8 @@ export class AgentsComponent {
     const f = this.filters();
 
     if (this.useCursor()) {
-      this.svc.listByCursor(this.cursorId(), this.cursorSkip(), this.pageSize(), f)
+      this.svc
+        .listByCursor(this.cursorId(), this.cursorSkip(), this.pageSize(), f)
         .pipe(finalize(() => this.loading.set(false)))
         .subscribe({
           next: (res) => {
@@ -168,11 +176,12 @@ export class AgentsComponent {
           error: (err) => {
             console.error('Cursor fetch failed', err);
             this.error.set('Could not load agents. Please try again.');
-          }
+          },
         });
     } else {
       const page = this.pageIndex() + 1;
-      this.svc.listPaged(page, this.pageSize(), f)
+      this.svc
+        .listPaged(page, this.pageSize(), f)
         .pipe(finalize(() => this.loading.set(false)))
         .subscribe({
           next: (res) => {
@@ -187,7 +196,7 @@ export class AgentsComponent {
           error: (err) => {
             console.error('Paged fetch failed', err);
             this.error.set('Could not load agents. Please try again.');
-          }
+          },
         });
     }
   }
@@ -196,7 +205,9 @@ export class AgentsComponent {
   gotoPage(p: number | string) {
     if (typeof p !== 'number') return;
     this.navigate({ page: p });
-    try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+    try {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {}
   }
   prev() {
     if (this.useCursor()) return this.prevCursor();
@@ -208,12 +219,8 @@ export class AgentsComponent {
   }
   changeSize(size: number) {
     const nextLimit = +size;
-    if (this.useCursor()) {
-      // leave cursor mode & reset to page 1
-      this.navigate({ page: 1, limit: nextLimit, id: null, skip: 1 });
-    } else {
-      this.navigate({ page: 1, limit: nextLimit });
-    }
+    // Change size should not clear other filters; keep mode as-is
+    this.navigate({ page: 1, limit: nextLimit });
   }
 
   // ----- Cursor actions -----
@@ -224,41 +231,65 @@ export class AgentsComponent {
     this.navigate({ id: this.cursorId(), skip: 1, limit: this.pageSize() });
   }
 
-  // ----- Filter handlers -----
+  // ----- Filter handlers (clear only the changed param when "All") -----
   onSearchInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchText.set(value);
+    // No immediate fetch; user clicks Search button to apply (applyFilters)
   }
+
   onIndustryChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
+    const value = (event.target as HTMLSelectElement).value; // '' means All
     this.selectedIndustry.set(value);
-    this.applyFilters();
-  }
-  onTechnologyChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.selectedTechnology.set(value);
-    this.applyFilters();
-  }
-  onStageChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value; // 'Production'|'Solution'|'POC'|''
-    this.selectedStage.set(value);
+    if (!value) {
+      // Clear only 'vertical', keep other params
+      this.filters.update((f) => ({ ...f, vertical: undefined }));
+      this.navigate({ vertical: undefined });
+      return;
+    }
+    // Apply change along with existing others
     this.applyFilters();
   }
 
-  /** Apply filters and deep-link */
+  onTechnologyChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value; // '' means All
+    this.selectedTechnology.set(value);
+    if (!value) {
+      // Clear only 'techStack', keep other params
+      this.filters.update((f) => ({ ...f, techStack: undefined }));
+      this.navigate({ techStack: [] }); // causes removal in navigate (serialized to null)
+      return;
+    }
+    this.applyFilters();
+  }
+
+  onStageChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value; // 'Production'|'Solution'|'POC'|'' (All)
+    this.selectedStage.set(value);
+    if (!value) {
+      // Clear only 'stage', keep other params
+      this.filters.update((f) => ({ ...f, stage: undefined }));
+      this.navigate({ stage: undefined });
+      return;
+    }
+    this.applyFilters();
+  }
+
+  /** Apply all filters together (when clicking Search) */
   applyFilters() {
-    // Convert UI selections to server filters
     const vertical = this.selectedIndustry() || undefined;
     const stageApi = toApiStage(this.selectedStage() || undefined);
-    const techCsv  = this.selectedTechnology() || undefined;
-    const search   = this.searchText()?.trim() || undefined;
+    const techCsv = this.selectedTechnology() || undefined;
+    const search = this.searchText()?.trim() || undefined;
 
-    // Reset to first page on filter change
-    if (this.useCursor()) {
-      this.navigate({ page: 1, id: null, skip: 1, vertical, stage: stageApi, techStack: techCsv?.split(','), search });
-    } else {
-      this.navigate({ page: 1, vertical, stage: stageApi, techStack: techCsv?.split(','), search });
-    }
+    // Do not change cursor mode or other params; just set/clear the filters provided
+    this.navigate({
+      page: 1, // optional: reset to first page on search
+      vertical,
+      stage: stageApi,
+      techStack: techCsv?.split(','),
+      search,
+    });
   }
 
   logout(): void {
@@ -270,7 +301,7 @@ export class AgentsComponent {
   public navigate(opts: {
     page?: number;
     limit?: number;
-    id?: string | null | undefined; // null means remove param
+    id?: string | null | undefined; // null means remove param (not used here except cursor actions)
     skip?: number;
     vertical?: string;
     stage?: string;
@@ -278,28 +309,29 @@ export class AgentsComponent {
     search?: string;
   }) {
     const qp: Record<string, any> = {
-      page: opts.page ?? (this.pageIndex() + 1),
+      page: opts.page ?? this.pageIndex() + 1,
       limit: opts.limit ?? this.pageSize(),
     };
 
-    // cursor hints — allow null to remove
-    const nextId   = opts.id ?? (this.useCursor() ? this.cursorId() : undefined);
-    const nextSkip = opts.skip ?? (this.useCursor() ? this.cursorSkip() : undefined);
-    if (nextId !== undefined)   qp['id']   = nextId === null ? null : nextId;
-    if (nextSkip !== undefined) qp['skip'] = nextSkip;
+    // cursor hints — only set if provided; don't touch otherwise
+    if (opts.id !== undefined) qp['id'] = opts.id === null ? null : opts.id;
+    if (opts.skip !== undefined) qp['skip'] = opts.skip;
 
-    // filters
-    const vertical = opts.vertical ?? this.filters().vertical;
-    const stage    = opts.stage ?? this.filters().stage;
-    const tech     = opts.techStack ?? this.filters().techStack;
-    const search   = opts.search ?? this.filters().search;
+    // filters: use provided values to set/clear ONLY those; leave others unchanged
+    const current = this.filters();
 
-    const techCsv  = Array.isArray(tech) ? tech.join(',') : (tech ?? '');
+    const vertical = opts.vertical !== undefined ? opts.vertical : current.vertical;
+    const stage = opts.stage !== undefined ? opts.stage : current.stage;
+    const tech = opts.techStack !== undefined ? opts.techStack : current.techStack;
+    const search = opts.search !== undefined ? opts.search : current.search;
 
-    qp['vertical']  = vertical ?? null;
-    qp['stage']     = stage ?? null;
+    const techCsv = Array.isArray(tech) ? tech.join(',') : tech ?? '';
+
+    // Write or remove based on provided values (null removal with 'merge')
+    qp['vertical'] = vertical ?? null;
+    qp['stage'] = stage ?? null;
     qp['techStack'] = techCsv || null;
-    qp['search']    = (search && search.trim()) || null;
+    qp['search'] = (search && String(search).trim()) || null;
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -307,5 +339,16 @@ export class AgentsComponent {
       queryParamsHandling: 'merge',
       replaceUrl: true,
     });
+  }
+
+  clearSearch(): void {
+    // Clear the UI signal
+    this.searchText.set('');
+
+    // Clear only the 'search' key in filters
+    this.filters.update((f) => ({ ...f, search: undefined }));
+
+    // Remove only the 'search' param from URL (leave other filters intact)
+    this.navigate({ search: undefined });
   }
 }
