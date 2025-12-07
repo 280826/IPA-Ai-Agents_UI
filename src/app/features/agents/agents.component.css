@@ -691,8 +691,8 @@ footer {
 
 /* Content */
 .agent-card__content {
-  padding: 1.5rem 1.5rem 1.25rem;
-  height: 27rem;
+  padding: 1.5rem 1.5rem 0rem;
+  height: 28rem;
 }
 .agent-card__title {
   color: var(--color-cognizant-std-blue);
@@ -706,7 +706,8 @@ footer {
 .agent-card__desc {
   color: var(--text-body);
   font-size: 1.25rem; /* 20px */
-  line-height: 1.55;
+  line-height: 1.4;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0 0 1.25rem 0;
   height: 13rem;
 }
@@ -717,19 +718,21 @@ footer {
   grid-template-columns: 1fr 0.0625rem 1fr 0.0625rem 1fr; /* 1px dividers */
   align-items: center;
   gap: 1rem; /* 16px */
+  height: 6rem;
   /* padding: 1.25rem 1rem; 20px 16px */
   /* border-top:0.0625rem solid var(--divider);
   border-bottom:0.0625rem solid var(--divider); */
 }
 .agent-card__feature {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: baseline;
   gap: 0.75rem; /* 12px */
   min-height: 3.5rem; /* 56px */
 }
 .agent-card__icon {
-  width: 2.25rem;
-  height: 2.25rem; /* 36px */
+  width: 3rem;
+  height: 3rem; /* 36px */
   display: grid;
   place-items: center;
   color: var(--text-muted);
@@ -741,22 +744,28 @@ footer {
 .agent-card__icon--pill .agent-card__pill {
   display: inline-grid;
   place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 0.125rem solid var(--divider); /* 2px */
+  width: 3rem;
+  height: 3rem;
+  border: 0.125rem solid #b1b1b1; /* 2px */
+  /* border: 0.125rem solid var(--divider); 2px */
   border-radius: 999rem;
   font-weight: 700;
+  font-size: 1.25rem;
   color: var(--text-body);
   background: #fff;
 }
 .agent-card__label {
-  color: var(--text-muted);
-  font-size: 0.875rem; /* 14px */
-  line-height: 1.4;
+  color: var(--color-black);
+  font-size: 1rem; /* 16px */
+  line-height: 1.125;
+  font-family: Arial, Helvetica, sans-serif;
+  height: 2rem;
+  /* text-align: center; */
+  padding-left: 0.1rem;
 }
 .agent-card__divider {
   width: 0.0625rem; /* 1px */
-  height: 2.5rem; /* 40px */
+  height: 5rem; /* 80px */
   background: var(--divider);
   justify-self: center;
 }
@@ -765,8 +774,9 @@ footer {
 .agent-card__accent {
   height: 0.25rem; /* 4px */
   background: linear-gradient(90deg, var(--color-cognizant-std-blue), var(--color-cognizant-cyan));
-  margin: 0.75rem 1.5rem; /* 12px top/bottom; 24px sides */
+  margin: 0.75rem 1.5rem 0; /* 0px top/bottom; 24px sides */
   border-radius: 0.125rem; /* 2px */
+  padding: 0.125rem; /* 2px */
 }
 
 /* Card footer — neutralize global footer styles */
@@ -787,26 +797,34 @@ footer {
 }
 .agent-card__stage-icon {
   opacity: 0.7;
+  position: relative;
+  top: -0.4rem;
 }
 .agent-card__stage-label {
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1rem; /* 16px */
+  font-family: Arial, Helvetica, sans-serif;
 }
 .agent-card__stage-value {
   margin-left: 0.25rem;
   font-weight: 700;
+  font-size: 1rem; /* 16px */
+  font-family: Arial, Helvetica, sans-serif;
   color: var(--text-body);
 }
 
 .agent-card__cta {
   color: var(--indigo);
   font-weight: 800;
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.5rem; /* 24px */
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem; /* 8px */
   border-radius: 0.75rem; /* 12px */
   padding: 0.5rem 0.75rem; /* 8px 12px */
+  position: relative;
+  top: -0.25rem;
 }
 .agent-card__cta:hover {
   background: rgba(72, 62, 168, 0.08);
@@ -814,6 +832,8 @@ footer {
 .agent-card__cta-arrow {
   font-size: 1.1875rem;
   line-height: 1;
+  position: relative;
+  top: 0.125rem;
 } /* 19px */
 
 /* Small screens */
@@ -833,9 +853,199 @@ footer {
 
 /* --- Feature icon images (industry.png & technology.png) --- */
 .agent-card__icon img {
-  width: 1.75rem; /* 28px */
-  height: 1.75rem;
+  width: 2.75rem; /* 44px */
+  height: 2.75rem;
   display: block;
   object-fit: contain;
   opacity: 0.9; /* subtle, like muted icons */
+}
+
+
+/* --- Pagination pills (screenshot-inspired) --- */
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 2rem;
+  justify-content: center;
+}
+
+.pager-btn {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #1f2937;
+  border-radius: 0.5rem;   /* 8px */
+  padding: 0.5rem 0.75rem; /* 8px 12px */
+  font-weight: 600;
+  cursor: pointer;
+}
+.pager-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pager-page {
+  min-width: 2rem;         /* 32px-ish pill */
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #1f2937;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.pager-page.active {
+  color: #fff;
+  border: none;
+  background: linear-gradient(180deg, #26efe9 0%, #2e308e 100%);
+  box-shadow: 0 0.25rem 0.75rem rgba(0,0,0,0.15);
+}
+
+.pager-ellipsis {
+  padding: 0.5rem 0.75rem;
+  color: #6b7280;
+}
+
+.pager-size {
+  margin-left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pager-size select {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: #fff;
+  color: #1f2937;
+}
+
+
+/* Full-page loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8); /* semi-transparent white */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999; /* above everything */
+}
+
+.loading-spinner {
+  text-align: center;
+}
+
+.loading-spinner img {
+  width: 80px; /* adjust size of GIF */
+  height: 80px;
+}
+
+.loading-spinner p {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+  color: #2e308e; /* match your theme */
+  font-weight: 600;
+}
+
+
+/* ===== Loading Overlay (mask) ===== */
+
+/* Theme variables for overlay tint: choose black or light grey */
+:root {
+  --overlay-bg-dark: rgba(10, 13, 58, 0.75);   /* deep navy/black-ish */
+  --overlay-bg-light: rgba(17, 24, 39, 0.35);  /* light grey tint */
+  --overlay-bg-active: var(--overlay-bg-dark); /* default = dark; switch to light if you prefer */
+  --overlay-z: 9999;
+  --overlay-fade-ms: 250ms;                    /* fade duration */
+  --overlay-text-color: #e5e7eb;               /* light text on dark */
+}
+
+/* Overlay container covers whole viewport */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--overlay-z);
+  background: var(--overlay-bg-active);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;   /* not clickable when hidden */
+  transition: opacity var(--overlay-fade-ms) ease-in-out;
+}
+
+/* Visible state: enable pointer and fade to 1 */
+.loading-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Centered inner box */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  text-align: center;
+}
+
+/* Optional loading text */
+.loading-text {
+  margin: 0.25rem 0 0;
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  color: var(--overlay-text-color);
+}
+
+/* ===== CSS Spinner (fallback) ===== */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Dual-ring spinner */
+.css-spinner {
+  width: 80px;
+  height: 80px;
+  border: 6px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #26efe9; /* cyan accent */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  /* If GIF loads, both will be shown; you can hide one in HTML if preferred */
+}
+
+/* GIF spinner (optional visual) */
+.gif-spinner {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Prefer reduced motion: stop animations & fade */
+@media (prefers-reduced-motion: reduce) {
+  .loading-overlay {
+    transition: opacity 0.01ms; /* essentially no fade */
+  }
+  .css-spinner {
+    animation: none;
+    border-top-color: #26efe9;
+  }
+}
+
+/* ===== Theme toggle examples ===== */
+/* If you want a lighter tint overlay instead of dark, set this class on the overlay container */
+/* <div class="loading-overlay light" [class.visible]="loading()"> ... */
+.loading-overlay.light {
+  background: var(--overlay-bg-light);
+}
+
+/* You can also define a very dark black overlay variant */
+/* <div class="loading-overlay black" [class.visible]="loading()"> ... */
+.loading-overlay.black {
+  background: rgba(0, 0, 0, 0.7);
 }
