@@ -240,12 +240,6 @@
   .ml-4 {
     margin-left: calc(var(--spacing) * 4);
   }
-  .line-clamp-6 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 6;
-  }
   .line-clamp-8 {
     overflow: hidden;
     display: -webkit-box;
