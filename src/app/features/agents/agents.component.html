@@ -31,6 +31,12 @@
 
   <!-- Scrollable Content Area (accounts for fixed header - 7.5rem) -->
   <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
+    <router-outlet></router-outlet>
+<!-- Store grid & pagination (only when not in detail-mode) -->
+@if (!detailMode()) {
+  <!-- your existing agents grid & pager content exactly as-is -->
+
+
     <!-- Hero Section -->
     <section class="hero-bg text-white">
       <div class="hero-content text-center relative">
@@ -117,7 +123,6 @@
     </section>
 
     <!-- Agents Grid Section -->
-
     <section class="agents-store">
       <section class="agents-grid" role="list">
         @for (agent of agents(); track agent.id) {
@@ -131,9 +136,9 @@
 
           <!-- Content -->
           <div class="agent-card__content">
-            <h2 class="agent-card__title">{{ agent.name }}</h2>
+            <h2 class="agent-card__title truncate" [title]="agent.name">{{ agent.name }}</h2>
 
-            <p class="agent-card__desc">
+            <p class="agent-card__desc line-clamp-8" [title]="agent.description">
               {{ agent.description }}
             </p>
 
@@ -188,7 +193,7 @@
 
             <!-- CTA (button; swap to routerLink if you have a details route) -->
             <button class="agent-card__cta" type="button"
-              (click)="navigate({ page: pageIndex() + 1, limit: pageSize() })"
+              (click)="openAgent(agent.id)"
               aria-label="Explore agent {{ agent.name }}">
               Explore Agent
               <span class="agent-card__cta-arrow">
@@ -203,7 +208,6 @@
 
     <!-- Pagination (pills style) -->
     <nav class="pager" aria-label="Pagination">
-
       <button class="pager-btn" (click)="prev()" [disabled]="!useCursor() && pageIndex() === 0">‹ Previous</button>
       @for (p of pagePills(); track p) {
       @if (p === '…') {
@@ -227,14 +231,13 @@
       </span>
     </nav>
 
-
     <!-- Loading / Error -->
     @if (loading()) {
     <div style="padding: 1rem 2rem">Loading...</div>
     } @if (error()) {
     <div class="error" style="padding: 1rem 2rem; color: #b91c1c">{{ error() }}</div>
     }
-
+  }
     <!-- Page footer -->
     <!-- Footer - Static Position -->
     <footer class="bg-cognizantDark text-white border-t border-gray-700">

@@ -701,7 +701,7 @@ footer {
   font-size: 1.75rem; /* 32px */
   letter-spacing: 0.01rem;
   margin: 0 0 0.75rem 0;
-  height: 5rem;
+  height: 3rem;
 }
 .agent-card__desc {
   color: var(--text-body);
@@ -709,7 +709,7 @@ footer {
   line-height: 1.4;
   font-family: Arial, Helvetica, sans-serif;
   margin: 0 0 1.25rem 0;
-  height: 13rem;
+  height: 14rem;
 }
 
 /* Feature row */
@@ -719,6 +719,8 @@ footer {
   align-items: center;
   gap: 1rem; /* 16px */
   height: 6rem;
+  position: relative;
+  bottom: 1rem;
   /* padding: 1.25rem 1rem; 20px 16px */
   /* border-top:0.0625rem solid var(--divider);
   border-bottom:0.0625rem solid var(--divider); */

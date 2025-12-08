@@ -1,0 +1,327 @@
+/* agent-detail.component.css */
+.detail-wrap {
+  margin: 0 auto;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: #2e308e;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.detail-title {
+  font: 800 2.25rem/2.5rem Gellix, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--color-cognizant-std-blue, #2e308e);
+  margin: 0.25rem 0 1rem;
+}
+
+.detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+.badge img {
+  width: 20px;
+  height: 20px;
+}
+
+.badge.stage {
+  color: #111827;
+  border-color: #c7d2fe;
+}
+
+.detail-body {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr;
+  gap: 2rem;
+}
+
+.section-title {
+  font-weight: 700;
+  color: #2e308e;
+  margin: 1rem 0 0.5rem;
+}
+
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.bullet-list li {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+.bullet-list strong {
+  color: #111827;
+}
+.bullet-list span {
+  color: #374151;
+}
+
+.video-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
+  padding: 0.75rem;
+}
+.video-card video {
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+
+.resources h4 {
+  font-weight: 700;
+  margin: 1rem 0 0.5rem;
+  color: #2e308e;
+}
+.resources ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.resource-link {
+  background: none;
+  border: none;
+  color: #1f2937;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.preview-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 58, 0.75);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 9999;
+}
+.preview-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.preview-dialog {
+  width: min(64rem, 90vw);
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1rem;
+  position: relative;
+}
+.preview-dialog .close {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(255, 255, 255, 0.6);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+.loading-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== Hero strip (1920x200px => 12.5rem) ===== */
+
+/* ===== Hero height & bg (unchanged semantics, exact size) ===== */
+.agent-hero {
+  height: 12.5rem; /* 200px */
+  background-image: url('/assets/images/details/gradient-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 2.5rem; /* 40px */
+  border-bottom: 0.25rem solid rgba(255, 255, 255, 0.12);
+}
+
+/* Container grid stays as you had */
+.agent-hero__inner {
+  display: grid;
+  grid-template-columns: 1.6fr 1.4fr;
+  align-items: center;
+  gap: 2rem; /* 32px */
+  width: 100%;
+  max-width: 120rem; /* 1920px cap */
+  margin: 0 auto;
+}
+
+/* ===== Title typography per spec: Gellix 600 46/51 ===== */
+.agent-hero__title {
+  margin: 0;
+  font-family: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  font-weight: 600; /* “normal normal 600” */
+  font-size: 2.875rem; /* 46px */
+  line-height: 3.1875rem; /* 51px */
+  letter-spacing: 0; /* per spec */
+  color: #fff;
+}
+
+/* ===== Stage row per spec ===== */
+/* Icon: tag.png 26x26px */
+.agent-hero__stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+}
+.agent-hero__stage-icon {
+  width: 1.625rem; /* 26px */
+  height: 1.625rem; /* 26px */
+}
+
+/* “Stage:” label: no bold; 16/18 Arial */
+.agent-hero__stage-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400; /* no bold */
+  font-size: 1rem; /* 16px */
+  line-height: 1.125rem; /* 18px */
+  color: #e6faff; /* subtle tint to match hero */
+}
+
+/* Value “Production” (or Solution/POC) bold 16/18 Arial */
+.agent-hero__stage-value {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700; /* bold */
+  font-size: 1rem; /* 16px */
+  line-height: 1.125rem; /* 18px */
+  color: #ffffff;
+}
+
+/* ===== Right-side badges ===== */
+/* Badge text: normal 20/23 Arial */
+.hero-badge__text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400; /* normal */
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.4375rem; /* 23px */
+  color: #ffffff;
+}
+
+/* Industry icon: 45x45 */
+.hero-badge__icon.industry {
+  width: 2.8125rem; /* 45px */
+  height: 2.8125rem; /* 45px */
+}
+
+/* Technology icon: 44x41 */
+.hero-badge__icon.technology {
+  width: 2.75rem; /* 44px */
+  height: 2.5625rem; /* 41px */
+}
+
+/* If you can’t change class in HTML, you can target by src ends-with (optional fallback) */
+/*
+.hero-badge img[src$="industry.png"]   { width: 2.8125rem; height: 2.8125rem; }
+.hero-badge img[src$="technology.png"] { width: 2.75rem;   height: 2.5625rem; }
+*/
+
+/* Frosted badge pill (kept as before, slight padding tune to host bigger icons) */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem; /* 10px, gives air with larger icons */
+  color: #ffffff;
+  font-weight: 700;
+  /* background: rgba(255, 255, 255, 0.12);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.18); 1px */
+  /* padding: 0.5rem 0.75rem; 8px 12px */
+  border-radius: 0.75rem; /* 12px */
+  backdrop-filter: blur(2px);
+  word-break: break-word;
+}
+
+/* Vertical separators stay same */
+.hero-sep {
+  width: 0.0625rem; /* 1px */
+  height: 5.625rem; /* 90px */
+  background: rgba(255, 255, 255, 0.45);
+  display: inline-block;
+  margin: 0 2rem; /* 6px */
+}
+
+/* ===== Agent Count circle per your spec ===== */
+.hero-badge--count > .hero-badge__text {
+  word-break: normal;
+  width: 7rem;
+}
+
+.count-circle {
+  width: 2.875rem; /* 46px */
+  height: 2.8125rem; /* 45px */
+  border: 0.125rem solid #ffffff; /* 2px */
+  border-radius: 1.4375rem; /* 23px */
+  display: inline-grid;
+  place-items: center;
+  background: transparent; /* see-through */
+}
+
+.count-circle__num {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700; /* visually balanced vs label */
+  font-size: 1.25rem; /* 20px (keeps center crisp) */
+  line-height: 1; /* avoid vertical jitter */
+  color: #ffffff;
+  min-width: 1ch; /* avoid shift on 1-digit */
+  text-align: center;
+}
+
+/* ===== Right-side icon base class (apply sizes via modifiers above) ===== */
+.hero-badge__icon {
+  display: inline-block;
+  object-fit: contain;
+}
+
+/* Responsive stack (keep as before) */
+@media (max-width: 56.25rem) {
+  /* 900px */
+  .agent-hero__inner {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .agent-hero {
+    height: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  .agent-hero__right {
+    justify-content: flex-start;
+  }
+}
