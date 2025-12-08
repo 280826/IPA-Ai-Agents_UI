@@ -1,16 +1,20 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UsecaseListResponseDTO } from '../models/usecase-list.dto';
+import { UsecaseListItemDTO, UsecaseListResponseDTO } from '../models/usecase-list.dto';
 
 /** Shared filter type across app */
 export interface UsecaseFilters {
-  vertical?: string;                   // e.g. 'INS'
-  techStack?: string | string[];       // 'UiPath Agentic,Copilot' or ['UiPath Agentic','Copilot']
+  vertical?: string; // e.g. 'INS'
+  techStack?: string | string[]; // 'UiPath Agentic,Copilot' or ['UiPath Agentic','Copilot']
   stage?: 'Prod' | 'Solution' | 'POC' | string;
-  search?: string;                     // standardized search param
+  search?: string; // standardized search param
+}
+
+export interface UsecaseOneResponseDTO {
+  ok?: boolean;
+  data: UsecaseListItemDTO; // SINGLE item (not array)
 }
 
 /** --------- Query helpers --------- */
@@ -18,7 +22,7 @@ export interface UsecaseFilters {
 function toCsv(input?: string | string[]): string | undefined {
   if (input === undefined) return undefined;
   if (Array.isArray(input)) {
-    const filtered = input.map(s => s?.trim()).filter(Boolean);
+    const filtered = input.map((s) => s?.trim()).filter(Boolean);
     return filtered.length ? filtered.join(',') : undefined;
   }
   const trimmed = input.trim();
@@ -29,7 +33,7 @@ function buildFilterParams(filters?: UsecaseFilters): Record<string, string> {
   if (!filters) return {};
   const out: Record<string, string> = {};
   if (filters.vertical) out['vertical'] = filters.vertical.trim();
-  if (filters.stage)    out['stage']    = filters.stage.trim();
+  if (filters.stage) out['stage'] = filters.stage.trim();
   const csv = toCsv(filters.techStack);
   if (csv) out['techStack'] = csv;
   if (filters.search) out['search'] = filters.search.trim();
@@ -48,9 +52,9 @@ function buildParams(base: Record<string, string | number | undefined>): HttpPar
 /** A single builder for both offset & cursor modes */
 function buildQuery(opts: {
   mode: 'offset' | 'cursor';
-  page?: number;            // offset
-  id?: string;              // cursor
-  skip?: number;            // cursor step: -1 | 1
+  page?: number; // offset
+  id?: string; // cursor
+  skip?: number; // cursor step: -1 | 1
   limit?: number;
   filters?: UsecaseFilters;
 }): HttpParams {
@@ -58,8 +62,8 @@ function buildQuery(opts: {
 
   const f = buildFilterParams(filters);
   const safeLimit = Math.max(1, Number(limit ?? 10));
-  const safePage  = Math.max(1, Number(page ?? 1));
-  const safeSkip  = (() => {
+  const safePage = Math.max(1, Number(page ?? 1));
+  const safeSkip = (() => {
     const k = Number(skip ?? 1);
     return k === 0 ? 1 : Math.sign(k) || 1; // normalize to -1 or 1
   })();
@@ -77,17 +81,34 @@ export class AgentsService {
   /** Offset-based pagination (page & limit) */
   listPaged(page = 1, limit = 10, filters?: UsecaseFilters): Observable<UsecaseListResponseDTO> {
     const params = buildQuery({ mode: 'offset', page, limit, filters });
-    return this.http.get<UsecaseListResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, { params });
+    return this.http.get<UsecaseListResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, {
+      params,
+    });
   }
 
   /** Cursor/seek-based pagination (id, skip & limit) */
-  listByCursor(id?: string, skip = 1, limit = 10, filters?: UsecaseFilters): Observable<UsecaseListResponseDTO> {
+  listByCursor(
+    id?: string,
+    skip = 1,
+    limit = 10,
+    filters?: UsecaseFilters
+  ): Observable<UsecaseListResponseDTO> {
     const params = buildQuery({ mode: 'cursor', id, skip, limit, filters });
-    return this.http.get<UsecaseListResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, { params });
+    return this.http.get<UsecaseListResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, {
+      params,
+    });
   }
 
   /** Legacy flat list */
   list(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}/usecase/list`);
+  }
+
+  /** NEW: Get-by-id, server returns a single item in data */
+  getOne(id: string): Observable<UsecaseOneResponseDTO> {
+    const params = new HttpParams().set('id', id).set('limit', '1'); // limit optional; keeps parity if server accepts it
+    return this.http.get<UsecaseOneResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, {
+      params,
+    });
   }
 }

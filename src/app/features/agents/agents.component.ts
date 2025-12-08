@@ -1,7 +1,7 @@
 import { Component, inject, signal, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { finalize } from 'rxjs/operators';
+import { Router, ActivatedRoute, RouterOutlet, NavigationEnd } from '@angular/router';
+import { filter, finalize } from 'rxjs/operators';
 import { AuthService } from '../../core/auth.service';
 import { AgentsService, UsecaseFilters } from '../../services/agents.service';
 import { Agent } from '../../models/agent.ui';
@@ -42,7 +42,7 @@ function toApiStage(ui: StageUi | undefined): StageApi | undefined {
 @Component({
   standalone: true,
   selector: 'app-agents',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './agents.component.html',
   styleUrls: ['./agents.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,6 +106,17 @@ export class AgentsComponent {
     return pills;
   });
 
+  /** True when we're on /agents/:id (detail page) */
+  readonly detailMode = signal<boolean>(false);
+
+  /** Helper: set detailMode based on current route snapshot (works on hard refresh) */
+  private updateDetailModeFromSnapshot(): void {
+    // If /agents has a child route with an 'id' param, we’re in detail mode
+    const child = this.route.snapshot.firstChild;
+    const id = child?.paramMap.get('id');
+    this.detailMode.set(Boolean(id));
+  }
+
   // ----- Lifecycle -----
   ngOnInit(): void {
     // initialize from query params (deep-linking)
@@ -150,6 +161,14 @@ export class AgentsComponent {
       // fetch data
       this.fetch();
     });
+
+    // Set detailMode immediately on init (covers page refresh & direct deep-linking)
+    this.updateDetailModeFromSnapshot();
+
+    // Toggle detail mode based on child :id
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe(() => this.updateDetailModeFromSnapshot());
   }
 
   // ----- Data fetch -----
@@ -350,5 +369,15 @@ export class AgentsComponent {
 
     // Remove only the 'search' param from URL (leave other filters intact)
     this.navigate({ search: undefined });
+  }
+
+  openAgent(id: string, evt?: Event): void {
+    if (evt) evt.preventDefault(); // if using <a href>
+
+    // Navigate to the child detail route: /agents/:id
+    this.router.navigate([id], {
+      relativeTo: this.route, // stay under /agents
+      queryParamsHandling: 'preserve', // keep current filters/paging in URL history
+    });
   }
 }

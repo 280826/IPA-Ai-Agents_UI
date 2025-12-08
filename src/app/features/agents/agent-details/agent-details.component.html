@@ -1,0 +1,155 @@
+<!-- agent-detail.component.html -->
+<section class="detail-wrap">
+
+
+  <!-- Hero strip below the global header (1920x200px => height: 12.5rem) -->
+  <section class="agent-hero" aria-labelledby="agent-hero-title">
+    <div class="agent-hero__inner">
+      <!-- Left: Title + Stage -->
+      <div class="agent-hero__left">
+        <h1 id="agent-hero-title" class="agent-hero__title">
+          {{ agent()?.name }}
+        </h1>
+
+        <div class="agent-hero__stage" aria-label="Stage">
+          <img src="/assets/images/details/tag.png" />
+          <span class="agent-hero__stage-label">Stage:</span>
+          <span class="agent-hero__stage-value">{{ stageUi() }}</span>
+        </div>
+      </div>
+
+
+<!-- Right: badges with separators -->
+<div class="agent-hero__right flex" role="group" aria-label="Agent metadata">
+  <!-- Industry -->
+  <div class="hero-badge">
+    <img src="/assets/images/details/industry.png" class="hero-badge__icon industry"/>
+    <span class="hero-badge__text">
+      {{ agent()?.industry || 'Finance & Accounting' }}
+    </span>
+  </div>
+
+  <span class="hero-sep" aria-hidden="true"></span>
+
+  <!-- Agent Count (with see-through circle) -->
+  <div class="hero-badge hero-badge--count">
+    <div class="count-circle" aria-hidden="true">
+      <span class="count-circle__num">
+        {{ agent()?.agentCount ?? agent()?.agentNames?.length ?? 0 }}
+      </span>
+    </div>
+    <span class="hero-badge__text">Agent Count</span>
+  </div>
+
+  <span class="hero-sep" aria-hidden="true"></span>
+
+  <!-- Technology -->
+  <div class="hero-badge">
+    <img src="/assets/images/details/technology.png" class="hero-badge__icon technology"/>
+    <span class="hero-badge__text">
+      @for (t of techList(); track t; let last = $last) {
+        {{ t }} @if (!last) { <span class="pipe" aria-hidden="true"> | </span> }
+      }
+    </span>
+  </div>
+</div>
+
+    </div>
+  </section>
+
+
+
+  <!-- Two-column layout like your screenshot -->
+  <div class="detail-body">
+    <div class="detail-left">
+      <!-- Solution Overview -->
+      <h3 class="section-title">Solution Overview</h3>
+      <div class="section-body">
+        @if (agent()?.solutionOverview?.description) {
+        <p>{{ agent()?.solutionOverview?.description }}</p>
+        }
+        <ul class="bullet-list">
+          @for (p of agent()?.solutionOverview?.points ?? []; track p.heading) {
+          <li>
+            <strong>{{ p.heading }}</strong>
+            <span>{{ p.description }}</span>
+          </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Optional: Business Challenge -->
+      @if (agent()?.businessChallenge) {
+      <h3 class="section-title">Business Challenge</h3>
+      <ul class="bullet-list">
+        @for (p of agent()?.businessChallenge?.points ?? []; track p.heading) {
+        <li>
+          <strong>{{ p.heading }}</strong>
+          <span>{{ p.description }}</span>
+        </li>
+        }
+      </ul>
+      }
+
+      <!-- Benefits -->
+      @if (agent()?.benefits) {
+      <h3 class="section-title">Benefits</h3>
+      <ul class="bullet-list">
+        @for (p of agent()?.benefits?.points ?? []; track p.heading) {
+        <li>
+          <strong>{{ p.heading }}</strong>
+          <span>{{ p.description }}</span>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+
+    <div class="detail-right">
+      <!-- Inline primary video -->
+      @if (agent()?.videoUrl) {
+      <div class="video-card">
+        <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
+      </div>
+      } @else {
+      <div class="video-card placeholder">
+        <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
+      </div>
+      }
+
+      <!-- Resources -->
+      <div class="resources">
+        <h4>Resources</h4>
+        <ul>
+          @for (r of agent()?.resources ?? []; track r.url) {
+          <li>
+            <button class="resource-link" (click)="openResource(r.url)">
+              {{ r.description }}
+            </button>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Simple modal for video preview -->
+<div class="preview-overlay" [class.visible]="previewOpen()">
+  <div class="preview-dialog">
+    <button class="close" (click)="closePreview()">×</button>
+    <video controls [src]="previewUrl()" preload="metadata"></video>
+  </div>
+</div>
+
+<!-- Loading / Error -->
+<div class="loading-overlay" [class.visible]="loading()">
+  <div class="loading-container">
+    <div class="css-spinner" aria-hidden="true"></div>
+    <p class="loading-text">Loading, please wait…</p>
+  </div>
+</div>
+
+@if (error()) {
+<div class="text-red-600 font-semibold text-center py-4">{{ error() }}</div>
+}
