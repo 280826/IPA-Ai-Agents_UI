@@ -94,7 +94,7 @@
 
           } @else {
           <div class="video-card placeholder">
-            <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
+            <img src="/assets/images/details/video-ph.png" alt="No video available" />
           </div>
           }
         </div>
@@ -129,18 +129,34 @@
     <div class="resources-block">
       <h3 class="resources-heading">Resources</h3>
 
-      <div class="resources-grid">
-        @for (r of agent()?.resources ?? []; track r.url) {
-        <article class="resource-card">
-          <!-- Click opens in new tab; keep simple & reliable across file types -->
-          <a class="resource-thumb" [href]="r.url" target="_blank" rel="noopener">
-            <!-- Optional: show play/icon overlays via CSS if you want -->
-            <img src="/assets/images/details/placeholder-doc.png" />
-          </a>
-          <p class="resource-caption">{{ r.description }}</p>
-        </article>
-        }
-      </div>
+
+<div class="resources-grid">
+  @for (r of agent()?.resources ?? []; track r.url) {
+    <div class="resource-card">
+      <!-- If it's a video URL, show <video> -->
+      @if (isVideoUrl(r.url)) {
+        <div class="resource-thumb">
+          <video controls [src]="r.url" preload="metadata"></video>
+        </div>
+      } @else {
+        <!-- Otherwise, link opens in new tab and show appropriate placeholder -->
+        <a
+          class="resource-thumb"
+          [href]="r.url"
+          target="_blank"
+          rel="noopener"
+          aria-label="Open resource: {{ r.description }}"
+        >
+          <img [src]="resourceThumb(r.url)" alt="{{ r.description }}" />
+        </a>
+      }
+
+      <!-- Caption -->
+      <p class="resource-caption">{{ r.description }}</p>
+    </div>
+  }
+</div>
+
     </div>
     }
 
@@ -162,20 +178,20 @@
   </section>
 
   <!-- Simple modal for video preview -->
-  <div class="preview-overlay" [class.visible]="previewOpen()">
+  <!-- <div class="preview-overlay" [class.visible]="previewOpen()">
     <div class="preview-dialog">
       <button class="close" (click)="closePreview()">×</button>
       <video controls [src]="previewUrl()" preload="metadata"></video>
     </div>
-  </div>
+  </div> -->
 
   <!-- Loading / Error -->
-  <div class="loading-overlay" [class.visible]="loading()">
+  <!-- <div class="loading-overlay" [class.visible]="loading()">
     <div class="loading-container">
       <div class="css-spinner" aria-hidden="true"></div>
       <p class="loading-text">Loading, please wait…</p>
     </div>
-  </div>
+  </div> -->
 
   @if (error()) {
   <div class="text-red-600 font-semibold text-center py-4">{{ error() }}</div>
