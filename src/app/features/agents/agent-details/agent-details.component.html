@@ -38,7 +38,7 @@
               {{ agent()?.agentCount ?? agent()?.agentNames?.length ?? 0 }}
             </span>
           </div>
-          <span class="hero-badge__text">Agent Count</span>
+          <span class="hero-badge__text count">Agent Count</span>
         </div>
 
         <span class="hero-sep" aria-hidden="true"></span>
@@ -62,46 +62,46 @@
   <!-- Two-column layout like your screenshot -->
 
   <!-- ===== Below-hero content: Solution Overview (left) + Inline Video (right) ===== -->
+
   <section class="detail-content">
     <div class="detail-columns">
-      <!-- LEFT: Title, intro, bullets -->
       <div class="detail-left">
         <h2 class="detail-heading">Solution Overview</h2>
 
         @if (agent()?.solutionOverview?.description) {
-          <p class="detail-intro">{{ agent()?.solutionOverview?.description }}</p>
+        <p class="detail-intro">{{ agent()?.solutionOverview?.description }}</p>
         }
 
         <ul class="detail-list">
           @for (p of (agent()?.solutionOverview?.points ?? []); track p.heading + p.description) {
-            @if ((p.heading?.trim() || p.description?.trim())) {
-              <li class="detail-item">
-                <span class="detail-dot" aria-hidden="true"></span>
-                <div class="detail-item-content">
-                  @if (p.heading?.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
-                  @if (p.description?.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
-                </div>
-              </li>
-            }
+          @if ((p.heading?.trim() || p.description?.trim())) {
+          <li class="detail-item">
+            <span class="detail-dot" aria-hidden="true"></span>
+            <div class="detail-item-content">
+              @if (p.heading?.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
+              @if (p.description?.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
+            </div>
+          </li>
+          }
           }
         </ul>
       </div>
 
-      <!-- RIGHT: Media card (image/video as-is) -->
       <div class="detail-right">
         <div class="video-card">
           @if (agent()?.videoUrl) {
-            <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
+          <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
 
           } @else {
-            <div class="video-card placeholder">
-              <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
-            </div>
+          <div class="video-card placeholder">
+            <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
+          </div>
           }
         </div>
       </div>
     </div>
   </section>
+
 
 
   <!-- ===== Benefits band (titles only). Tooltip = description. ===== -->
