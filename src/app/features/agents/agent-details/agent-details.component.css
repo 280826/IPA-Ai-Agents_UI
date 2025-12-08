@@ -1,4 +1,3 @@
-
 /* =========================================================
    Agent Details – consolidated styles (latest overrides)
    Units: rem only (1rem = 16px @ 1920x1080)
@@ -8,434 +7,508 @@
 /* ------------------------------
    1) HERO STRIP (no stage accent)
    ------------------------------ */
-   .agent-hero {
-    height: 12.5rem; /* 200px */
-    background-image: url('/assets/images/details/gradient-bg.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    padding: 0 6.25rem; /* 40px sides */
-    border-bottom: 0.25rem solid rgba(255, 255, 255, 0.12); /* 4px */
-  }
+.agent-hero {
+  height: 12.5rem; /* 200px */
+  background-image: url('/assets/images/details/gradient-bg.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 6.25rem; /* 40px sides */
+  border-bottom: 0.25rem solid rgba(255, 255, 255, 0.12); /* 4px */
+}
 
+.agent-hero__inner {
+  display: grid;
+  grid-template-columns: 1.6fr 1.4fr;
+  align-items: center;
+  gap: 2rem; /* 32px */
+  width: 100%;
+  max-width: 120rem; /* 1920px cap */
+  margin: 0 auto;
+}
+
+.agent-hero__title {
+  margin: 0;
+  font-family: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  font-weight: 600;
+  font-size: 2.875rem; /* 46px */
+  line-height: 3.1875rem; /* 51px */
+  letter-spacing: 0;
+  color: #ffffff;
+}
+
+.agent-hero__stage {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+  margin-top: 0.5rem;
+}
+.agent-hero__stage-icon {
+  width: 1.625rem;
+  height: 1.625rem;
+} /* 26x26 */
+.agent-hero__stage-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.125rem; /* 18px */
+  color: #e6faff;
+}
+.agent-hero__stage-value {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1rem; /* 16px */
+  line-height: 1.125rem; /* 18px */
+  color: #ffffff; /* keep white (no accent) */
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem; /* 10px */
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 0.75rem; /* 12px */
+  backdrop-filter: blur(0.125rem); /* 2px */
+  word-break: break-word;
+}
+.hero-badge__text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.4375rem; /* 23px */
+  color: #ffffff;
+}
+.hero-badge__text.count {
+  width: 7rem;
+}
+.hero-badge__icon {
+  display: inline-block;
+  object-fit: contain;
+}
+.hero-badge__icon.industry {
+  width: 2.8125rem;
+  height: 2.8125rem;
+} /* 45x45 */
+.hero-badge__icon.technology {
+  width: 2.75rem;
+  height: 2.5625rem;
+} /* 44x41 */
+
+.hero-sep {
+  width: 0.0625rem; /* 1px */
+  height: 5.625rem; /* 90px */
+  background: rgba(255, 255, 255, 0.45);
+  display: inline-block;
+  margin: 0 2rem;
+}
+
+.count-circle {
+  width: 2.875rem; /* 46px */
+  height: 2.8125rem; /* 45px */
+  border: 0.125rem solid #ffffff; /* 2px */
+  border-radius: 1.4375rem; /* 23px */
+  display: inline-grid;
+  place-items: center;
+  background: transparent;
+}
+.count-circle__num {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums lining-nums;
+  min-width: 1ch;
+  text-align: center;
+}
+
+/* Responsive hero stack */
+@media (max-width: 56.25rem) {
+  /* 900px */
   .agent-hero__inner {
-    display: grid;
-    grid-template-columns: 1.6fr 1.4fr;
-    align-items: center;
-    gap: 2rem;                 /* 32px */
-    width: 100%;
-    max-width: 120rem;         /* 1920px cap */
-    margin: 0 auto;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
+  .agent-hero {
+    height: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
 
-  .agent-hero__title {
-    margin: 0;
-    font-family: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 600;
-    font-size: 2.875rem;       /* 46px */
-    line-height: 3.1875rem;    /* 51px */
-    letter-spacing: 0;
-    color: #ffffff;
-  }
-
-  .agent-hero__stage {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;               /* 8px */
-    margin-top: 0.5rem;
-  }
-  .agent-hero__stage-icon { width: 1.625rem; height: 1.625rem; } /* 26x26 */
-  .agent-hero__stage-label {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;
-    font-size: 1rem;           /* 16px */
-    line-height: 1.125rem;     /* 18px */
-    color: #e6faff;
-  }
-  .agent-hero__stage-value {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 1rem;           /* 16px */
-    line-height: 1.125rem;     /* 18px */
-    color: #ffffff;            /* keep white (no accent) */
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.625rem;             /* 10px */
-    color: #ffffff;
-    font-weight: 700;
-    border-radius: 0.75rem;    /* 12px */
-    backdrop-filter: blur(0.125rem); /* 2px */
-    word-break: break-word;
-  }
-  .hero-badge__text {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;
-    font-size: 1.25rem;        /* 20px */
-    line-height: 1.4375rem;    /* 23px */
-    color: #ffffff;
-  }
-  .hero-badge__text.count {
-    width: 7rem;
-  }
-  .hero-badge__icon { display: inline-block; object-fit: contain; }
-  .hero-badge__icon.industry { width: 2.8125rem; height: 2.8125rem; }     /* 45x45 */
-  .hero-badge__icon.technology { width: 2.75rem; height: 2.5625rem; }     /* 44x41 */
-
-  .hero-sep {
-    width: 0.0625rem;          /* 1px */
-    height: 5.625rem;          /* 90px */
-    background: rgba(255, 255, 255, 0.45);
-    display: inline-block;
-    margin: 0 2rem;
-  }
-
-  .count-circle {
-    width: 2.875rem;           /* 46px */
-    height: 2.8125rem;         /* 45px */
-    border: 0.125rem solid #ffffff; /* 2px */
-    border-radius: 1.4375rem;  /* 23px */
-    display: inline-grid;
-    place-items: center;
-    background: transparent;
-  }
-  .count-circle__num {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 1.25rem;        /* 20px */
-    line-height: 1;
-    color: #ffffff;
-    font-variant-numeric: tabular-nums lining-nums;
-    min-width: 1ch;
-    text-align: center;
-  }
-
-  /* Responsive hero stack */
-  @media (max-width: 56.25rem) { /* 900px */
-    .agent-hero__inner { grid-template-columns: 1fr; gap: 1rem; }
-    .agent-hero { height: auto; padding-top: 1rem; padding-bottom: 1rem; }
-  }
-
-
-  /* ---------------------------------------------
+/* ---------------------------------------------
      2) SOLUTION OVERVIEW (below hero, above benefits)
      Latest spec: Title 38/43 bold Arial; Desc 24/28 Arial
      Bullets: compact rhythm; Media: 860x480 fixed
      --------------------------------------------- */
 
-  /* Panel container */
-  .detail-content {
-    background: #eaf2fa;
-    padding: 5rem 6.25rem;
-  }
+/* Panel container */
+.detail-content {
+  background: #eaf2fa;
+  padding: 5rem 6.25rem;
+}
 
-  /* Two-column layout */
+/* Two-column layout */
+.detail-columns {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr; /* text left wider, media right */
+  gap: 2rem; /* 32px */
+  max-width: 120rem; /* 1920px cap */
+  margin: 0 auto;
+}
+
+/* LEFT column stack */
+.detail-left {
+  width: 56rem;
+  display: grid;
+  align-content: start;
+  gap: 2rem;
+  margin-top: -1.5rem;
+}
+
+/* Title: Arial bold 38/43, #2E308E */
+.detail-heading {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 2.375rem; /* 38px */
+  line-height: 2.6875rem; /* 43px */
+  letter-spacing: 0;
+  color: #2e308e;
+}
+
+/* Description / intro: Arial normal 24/28 */
+.detail-intro {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.75rem; /* 28px */
+  color: #1f2937;
+}
+
+/* Bulleted list */
+.detail-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1.3rem;
+}
+
+/* Bullet row: dot + text */
+.detail-item {
+  display: grid;
+  grid-template-columns: 0.625rem 1fr; /* 10px bullet column */
+  gap: 0.75rem; /* 12px */
+  align-items: start;
+}
+
+/* Bullet dot: 6px circle, aligned to first text line */
+.detail-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  background: #4b5563;
+  border-radius: 999rem;
+  margin-top: 0.5rem;
+}
+
+/* Stack heading + description tightly */
+.detail-item-content {
+  display: grid;
+  gap: 0.5rem;
+} /* 4px */
+
+/* Bullet title: bold 24/28 */
+.detail-item-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.75rem; /* 28px */
+  color: #111827;
+}
+
+/* Bullet description: normal 24/28 */
+.detail-item-desc {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.75rem; /* 28px */
+  color: #374151;
+}
+
+/* RIGHT column: media card */
+.detail-right {
+  width: 53.75rem;
+  display: grid;
+  align-content: start;
+}
+
+/* Card: white bg, subtle border & shadow, rounded corners */
+.video-card {
+  background: #ffffff;
+  border-radius: 0rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
+}
+
+/* Fixed media size: 860x480 (53.75rem x 30rem) */
+.video-card img,
+.video-card video {
+  width: 53.75rem; /* 860px */
+  height: 30rem; /* 480px */
+  display: block;
+  border-radius: 0rem;
+  object-fit: cover; /* fills frame; switch to 'contain' if no crop */
+  object-position: center;
+  max-width: 100%; /* responsive on smaller viewports */
+}
+
+/* Responsive: stack columns on <= 900px */
+@media (max-width: 56.25rem) {
   .detail-columns {
-    display: grid;
-    grid-template-columns: 2fr 1.4fr;   /* text left wider, media right */
-    gap: 2rem;                          /* 32px */
-    max-width: 120rem;                  /* 1920px cap */
-    margin: 0 auto;
+    grid-template-columns: 1fr;
   }
-
-  /* LEFT column stack */
-  .detail-left {
-    width: 56rem;
-    display: grid;
-    align-content: start;
-    gap: 2rem;
-    margin-top: -1.5rem;
-  }
-
-  /* Title: Arial bold 38/43, #2E308E */
-  .detail-heading {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 2.375rem;                /* 38px */
-    line-height: 2.6875rem;             /* 43px */
-    letter-spacing: 0;
-    color: #2E308E;
-  }
-
-  /* Description / intro: Arial normal 24/28 */
-  .detail-intro {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;
-    font-size: 1.5rem;                  /* 24px */
-    line-height: 1.75rem;               /* 28px */
-    color: #1f2937;
-  }
-
-  /* Bulleted list */
-  .detail-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 1.3rem;
-  }
-
-  /* Bullet row: dot + text */
-  .detail-item {
-    display: grid;
-    grid-template-columns: 0.625rem 1fr; /* 10px bullet column */
-    gap: 0.75rem;                        /* 12px */
-    align-items: start;
-  }
-
-  /* Bullet dot: 6px circle, aligned to first text line */
-  .detail-dot {
-    width: 0.625rem;
-    height: 0.625rem;
-    background: #4b5563;
-    border-radius: 999rem;
-    margin-top: 0.5rem;
-  }
-
-  /* Stack heading + description tightly */
-  .detail-item-content { display: grid; gap: 0.5rem; } /* 4px */
-
-  /* Bullet title: bold 24/28 */
-  .detail-item-title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 1.5rem;                  /* 24px */
-    line-height: 1.75rem;               /* 28px */
-    color: #111827;
-  }
-
-  /* Bullet description: normal 24/28 */
-  .detail-item-desc {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;
-    font-size: 1.5rem;                  /* 24px */
-    line-height: 1.75rem;               /* 28px */
-    color: #374151;
-  }
-
-  /* RIGHT column: media card */
-  .detail-right { width: 53.75rem;display: grid; align-content: start; }
-
-  /* Card: white bg, subtle border & shadow, rounded corners */
-  .video-card {
-    background: #ffffff;
-    border-radius: 0rem;
-    box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
-  }
-
-  /* Fixed media size: 860x480 (53.75rem x 30rem) */
   .video-card img,
   .video-card video {
-    width: 53.75rem;                    /* 860px */
-    height: 30rem;                      /* 480px */
-    display: block;
-    border-radius: 0rem;
-    object-fit: cover;                  /* fills frame; switch to 'contain' if no crop */
-    object-position: center;
-    max-width: 100%;                    /* responsive on smaller viewports */
+    width: 100%;
+    height: auto;
   }
+}
 
-  /* Responsive: stack columns on <= 900px */
-  @media (max-width: 56.25rem) {
-    .detail-columns { grid-template-columns: 1fr; }
-    .video-card img,
-    .video-card video { width: 100%; height: auto; }
-  }
+/* ---------------------------------
+   BENEFITS BAND (updated)
+   --------------------------------- */
 
+/* Outer band: fixed height, centered */
+.benefits-band {
+  background: #2e308e; /* Cognizant indigo */
+  color: #ffffff;
+  margin-top: 1rem; /* 16px spacing above */
+  height: 12.5rem; /* 200px */
+  display: flex;
+  align-items: center; /* vertical centering */
+  padding: 0 2.5rem 0 6.25rem;
+}
 
-  /* ---------------------------------
-     3) BENEFITS BAND (locked height)
-     Double chevron + dividers
-     --------------------------------- */
+/* Inner layout: title + chevron | headings row */
+.benefits-band__inner {
+  max-width: 120rem; /* 1920px cap */
+  /* margin: 0 auto; */
+  display: grid;
+  grid-template-columns: auto 1fr; /* left: title+chevron, right: list */
+  align-items: center;
+  gap: 1.5rem; /* 24px */
+}
 
-  /* Outer band: fixed height 12.5rem (200px), centered content */
-  .benefits-band {
-    background: #2e308e;               /* Cognizant indigo */
-    color: #ffffff;
-    margin-top: 1rem;                  /* 16px spacing above band */
-    height: 12.5rem;                   /* 200px fixed height */
-    display: flex;
-    align-items: center;               /* vertical centering */
-    padding: 0 2.5rem;                 /* 40px left/right; no extra top/bottom */
-  }
+/* Title + double chevron */
+.benefits-title {
+  margin: 0;
+  font-family: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1.75rem; /* 28px */
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem; /* 16px between word and chevron */
+}
+.benefits-title::after {
+  content: '»';
+  font-size: 2.5rem;
+  line-height: 1;
+  color: #ffffff;
+}
 
-  /* Inner layout: title+chevron | headings row */
-  .benefits-band__inner {
-    max-width: 120rem;                 /* 1920px cap */
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: auto 1fr;   /* title+chevron, then list */
-    align-items: center;
-    gap: 1.5rem;                       /* 24px between title and list */
-  }
+/* Items row with vertical dividers (desktop) */
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  flex-wrap: nowrap; /* single line on desktop */
+  gap: 2.5rem; /* 40px between items */
+  position: relative;
+  top: 0.375rem;
+}
 
-  /* Title + double chevron */
-  .benefits-title {
-    margin: 0;
-    font-family: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 800;
-    font-size: 1.5rem;                 /* 24px */
-    line-height: 1.75rem;              /* 28px */
-    color: #ffffff;
-    display: inline-flex;
-    align-items: center;
-    gap: 1rem;                         /* 16px between word and chevron */
-  }
+/* Each item and its divider */
+.benefit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-right: 2.5rem; /* 40px room for divider */
+}
+.benefit::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.15rem;
+  height: 2.75rem;
+  background: rgba(255, 255, 255, 0.85);
+}
+.benefit:last-child::after {
+  display: none;
+}
 
-  /* Double chevron to match mock */
-  .benefits-title::after {
-    content: "»»";
-    font-size: 1.625rem;               /* 26px */
-    line-height: 1;
-    color: #ffffff;
-  }
+/* Item text */
+.benefit-text {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400; /* regular (per mock) */
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.75rem; /* 28px */
+  color: #ffffff;
+  white-space: nowrap; /* single-line on desktop */
+}
 
-  /* Headings row with vertical dividers */
+/* Wrapping on smaller screens: hide dividers */
+@media (max-width: 56.25rem) {
+  /* 900px */
   .benefits-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: inline-flex;
-    flex-wrap: nowrap;                 /* keep on one line at desktop */
-    gap: 2.5rem;                       /* 40px spacing between items */
-    overflow-x: auto;                  /* safe overflow for narrower screens */
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem; /* 16px row, 24px column gap */
   }
-
-  /* Each benefit item with divider */
   .benefit {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    padding-right: 2.5rem;             /* 40px room for divider */
+    padding-right: 0;
   }
-
-  /* Vertical divider */
   .benefit::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0.0625rem;                  /* 1px */
-    height: 1.75rem;                   /* 28px */
-    background: rgba(255, 255, 255, 0.85);
+    display: none;
   }
-  .benefit:last-child::after { display: none; }
-
-  /* Benefit heading text */
   .benefit-text {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;                  /* regular to match mock */
-    font-size: 1.5rem;                 /* 24px */
-    line-height: 1.75rem;              /* 28px */
-    color: #ffffff;
-    white-space: nowrap;               /* keep single-line items */
+    white-space: normal;
   }
+}
 
-
-  /* ---------------------------------------------
+/* ---------------------------------------------
      4) RESOURCES + CONTACT (compact modern styles)
      --------------------------------------------- */
+.resources-contact-row {
+  background: #eaf2fa;
+  padding: 1.5rem 2.5rem 2rem; /* 24px top, 40px sides, 32px bottom */
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem; /* 32px */
+  max-width: 120rem;
+  margin: 0 auto;
+}
+
+/* Resources block */
+.resources-block {
+  display: grid;
+  gap: 1rem;
+} /* 16px */
+.resources-heading {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.4375rem; /* 23px */
+  color: #2e308e;
+  border-bottom: 0.125rem solid #c7d2fe; /* 2px */
+  padding-bottom: 0.5rem; /* 8px */
+}
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+/* Resource card/thumb – fixed 520x290 */
+.resource-card {
+  display: grid;
+  gap: 0.5rem;
+} /* 8px */
+.resource-thumb {
+  display: block;
+  background: #fff;
+  border: 0.0625rem solid #e5e7eb; /* 1px */
+  border-radius: 0.75rem; /* 12px */
+  box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
+  overflow: hidden;
+  padding: 0;
+  width: 32.5rem; /* 520px */
+  height: 18.125rem; /* 290px */
+}
+.resource-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+.resource-caption {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.25rem; /* 20px */
+  color: #1f2937;
+  text-align: center;
+}
+
+/* Contact block */
+.contact-block {
+  display: grid;
+  gap: 1rem;
+} /* 16px */
+.contact-heading {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.4375rem; /* 23px */
+  color: #2e308e;
+  border-bottom: 0.125rem solid #c7d2fe; /* 2px */
+  padding-bottom: 0.5rem; /* 8px */
+}
+.contact-card {
+  background: #fff;
+  border: 0.0625rem solid #e5e7eb; /* 1px */
+  border-radius: 0.75rem; /* 12px */
+  box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
+  padding: 1rem; /* 16px */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+}
+.contact-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+} /* 40x40 */
+.contact-text {
+  display: grid;
+  gap: 0.25rem;
+} /* 4px */
+.contact-name {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1rem; /* 16px */
+  line-height: 1.25rem; /* 20px */
+  color: #0a0d3a;
+}
+.contact-email {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.25rem; /* 20px */
+  color: #1f2937;
+  text-decoration: underline;
+}
+
+/* Responsive resources/contact */
+@media (max-width: 56.25rem) {
   .resources-contact-row {
-    background: #eaf2fa;
-    padding: 1.5rem 2.5rem 2rem;       /* 24px top, 40px sides, 32px bottom */
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;                         /* 32px */
-    max-width: 120rem;
-    margin: 0 auto;
+    grid-template-columns: 1fr;
   }
-
-  /* Resources block */
-  .resources-block { display: grid; gap: 1rem; } /* 16px */
-  .resources-heading {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 1.25rem;                /* 20px */
-    line-height: 1.4375rem;            /* 23px */
-    color: #2e308e;
-    border-bottom: 0.125rem solid #c7d2fe; /* 2px */
-    padding-bottom: 0.5rem;            /* 8px */
+  .resources-grid {
+    grid-template-columns: 1fr;
   }
-  .resources-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
-
-  /* Resource card/thumb – fixed 520x290 */
-  .resource-card { display: grid; gap: 0.5rem; } /* 8px */
-  .resource-thumb {
-    display: block;
-    background: #fff;
-    border: 0.0625rem solid #e5e7eb;   /* 1px */
-    border-radius: 0.75rem;            /* 12px */
-    box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
-    overflow: hidden;
-    padding: 0;
-    width: 32.5rem;                    /* 520px */
-    height: 18.125rem;                 /* 290px */
-  }
-  .resource-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; object-position: center;
-    display: block;
-  }
-  .resource-caption {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 600;
-    font-size: 0.9375rem;              /* 15px */
-    line-height: 1.25rem;              /* 20px */
-    color: #1f2937;
-    text-align: center;
-  }
-
-  /* Contact block */
-  .contact-block { display: grid; gap: 1rem; } /* 16px */
-  .contact-heading {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 1.25rem;                /* 20px */
-    line-height: 1.4375rem;            /* 23px */
-    color: #2e308e;
-    border-bottom: 0.125rem solid #c7d2fe; /* 2px */
-    padding-bottom: 0.5rem;            /* 8px */
-  }
-  .contact-card {
-    background: #fff;
-    border: 0.0625rem solid #e5e7eb;   /* 1px */
-    border-radius: 0.75rem;            /* 12px */
-    box-shadow: 0 0.5rem 1.5rem rgba(17, 24, 39, 0.08);
-    padding: 1rem;                     /* 16px */
-    display: grid; grid-template-columns: auto 1fr; gap: 1rem;
-  }
-  .contact-icon { width: 2.5rem; height: 2.5rem; object-fit: contain; } /* 40x40 */
-  .contact-text { display: grid; gap: 0.25rem; } /* 4px */
-  .contact-name {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 700;
-    font-size: 1rem;                   /* 16px */
-    line-height: 1.25rem;              /* 20px */
-    color: #0a0d3a;
-  }
-  .contact-email {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 600;
-    font-size: 0.9375rem;              /* 15px */
-    line-height: 1.25rem;              /* 20px */
-    color: #1f2937;
-    text-decoration: underline;
-  }
-
-  /* Responsive resources/contact */
-  @media (max-width: 56.25rem) {
-    .resources-contact-row { grid-template-columns: 1fr; }
-    .resources-grid { grid-template-columns: 1fr; }
-  }
+}
