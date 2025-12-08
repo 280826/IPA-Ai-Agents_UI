@@ -149,4 +149,34 @@ export class AgentDetailComponent {
   private isVideo(url: string): boolean {
     return /\.mp4(\?|$)/i.test(url) || /\.webm(\?|$)/i.test(url);
   }
+
+
+// --- Inside AgentDetailComponent class ---
+
+/** Returns true if URL looks like a video we can embed (mp4 or webm) */
+isVideoUrl(url: string | undefined | null): boolean {
+  if (!url) return false;
+  const u = url.split('?')[0].toLowerCase(); // strip query
+  return u.lastIndexOf('.mp4') >= 0 || u.lastIndexOf('.webm') >= 0;
+}
+
+/** Returns 'pdf' | 'ppt' | 'other' */
+resourceKind(url: string | undefined | null): 'pdf' | 'ppt' | 'other' {
+  if (!url) return 'other';
+  const u = url.split('?')[0].toLowerCase();
+  if (u.lastIndexOf('.pdf') >= 0) return 'pdf';
+  if (u.lastIndexOf('.ppt') >= 0 || u.lastIndexOf('.pptx') >= 0) return 'ppt';
+  return 'other';
+}
+
+/** Returns the placeholder thumbnail path based on URL kind */
+resourceThumb(url: string | undefined | null): string {
+  const kind = this.resourceKind(url);
+  switch (kind) {
+    case 'pdf': return '/assets/images/details/pdf-ph.png';
+    case 'ppt': return '/assets/images/details/ppt-ph.png';
+    default:    return '/assets/images/details/doc-ph.png'; // optional fallback
+  }
+}
+
 }
