@@ -19,40 +19,40 @@
       </div>
 
 
-<!-- Right: badges with separators -->
-<div class="agent-hero__right flex" role="group" aria-label="Agent metadata">
-  <!-- Industry -->
-  <div class="hero-badge">
-    <img src="/assets/images/details/industry.png" class="hero-badge__icon industry"/>
-    <span class="hero-badge__text">
-      {{ agent()?.industry || 'Finance & Accounting' }}
-    </span>
-  </div>
+      <!-- Right: badges with separators -->
+      <div class="agent-hero__right flex" role="group" aria-label="Agent metadata">
+        <!-- Industry -->
+        <div class="hero-badge">
+          <img src="/assets/images/details/industry.png" class="hero-badge__icon industry" />
+          <span class="hero-badge__text">
+            {{ agent()?.industry || 'Finance & Accounting' }}
+          </span>
+        </div>
 
-  <span class="hero-sep" aria-hidden="true"></span>
+        <span class="hero-sep" aria-hidden="true"></span>
 
-  <!-- Agent Count (with see-through circle) -->
-  <div class="hero-badge hero-badge--count">
-    <div class="count-circle" aria-hidden="true">
-      <span class="count-circle__num">
-        {{ agent()?.agentCount ?? agent()?.agentNames?.length ?? 0 }}
-      </span>
-    </div>
-    <span class="hero-badge__text">Agent Count</span>
-  </div>
+        <!-- Agent Count (with see-through circle) -->
+        <div class="hero-badge hero-badge--count">
+          <div class="count-circle" aria-hidden="true">
+            <span class="count-circle__num">
+              {{ agent()?.agentCount ?? agent()?.agentNames?.length ?? 0 }}
+            </span>
+          </div>
+          <span class="hero-badge__text">Agent Count</span>
+        </div>
 
-  <span class="hero-sep" aria-hidden="true"></span>
+        <span class="hero-sep" aria-hidden="true"></span>
 
-  <!-- Technology -->
-  <div class="hero-badge">
-    <img src="/assets/images/details/technology.png" class="hero-badge__icon technology"/>
-    <span class="hero-badge__text">
-      @for (t of techList(); track t; let last = $last) {
-        {{ t }} @if (!last) { <span class="pipe" aria-hidden="true"> | </span> }
-      }
-    </span>
-  </div>
-</div>
+        <!-- Technology -->
+        <div class="hero-badge">
+          <img src="/assets/images/details/technology.png" class="hero-badge__icon technology" />
+          <span class="hero-badge__text">
+            @for (t of techList(); track t; let last = $last) {
+            {{ t }} @if (!last) { <span class="pipe" aria-hidden="true"> | </span> }
+            }
+          </span>
+        </div>
+      </div>
 
     </div>
   </section>
@@ -60,78 +60,109 @@
 
 
   <!-- Two-column layout like your screenshot -->
-  <div class="detail-body">
+
+<!-- ===== Below-hero content: Solution Overview (left) + Inline Video (right) ===== -->
+<section class="detail-content" aria-label="Solution Overview section">
+  <div class="detail-columns">
+    <!-- LEFT: Copy -->
     <div class="detail-left">
-      <!-- Solution Overview -->
-      <h3 class="section-title">Solution Overview</h3>
-      <div class="section-body">
-        @if (agent()?.solutionOverview?.description) {
-        <p>{{ agent()?.solutionOverview?.description }}</p>
-        }
-        <ul class="bullet-list">
-          @for (p of agent()?.solutionOverview?.points ?? []; track p.heading) {
-          <li>
-            <strong>{{ p.heading }}</strong>
-            <span>{{ p.description }}</span>
+      <h2 class="detail-heading">Solution Overview</h2>
+
+      @if (agent()?.solutionOverview?.description) {
+        <p class="detail-intro">
+          {{ agent()?.solutionOverview?.description }}
+        </p>
+      }
+
+      <!-- Bullet list -->
+      <ul class="detail-list">
+        @for (p of agent()?.solutionOverview?.points ?? []; track p.heading) {
+          <li class="detail-item">
+            <span class="detail-dot" aria-hidden="true"></span>
+            <div class="detail-item-content">
+              <strong class="detail-item-title">{{ p.heading }}</strong>
+              <span class="detail-item-desc">{{ p.description }}</span>
+            </div>
           </li>
-          }
-        </ul>
-      </div>
-
-      <!-- Optional: Business Challenge -->
-      @if (agent()?.businessChallenge) {
-      <h3 class="section-title">Business Challenge</h3>
-      <ul class="bullet-list">
-        @for (p of agent()?.businessChallenge?.points ?? []; track p.heading) {
-        <li>
-          <strong>{{ p.heading }}</strong>
-          <span>{{ p.description }}</span>
-        </li>
         }
       </ul>
-      }
-
-      <!-- Benefits -->
-      @if (agent()?.benefits) {
-      <h3 class="section-title">Benefits</h3>
-      <ul class="bullet-list">
-        @for (p of agent()?.benefits?.points ?? []; track p.heading) {
-        <li>
-          <strong>{{ p.heading }}</strong>
-          <span>{{ p.description }}</span>
-        </li>
-        }
-      </ul>
-      }
     </div>
 
-    <div class="detail-right">
-      <!-- Inline primary video -->
+    <!-- RIGHT: Inline video / placeholder (no resources here anymore) -->
+    <aside class="detail-right">
       @if (agent()?.videoUrl) {
-      <div class="video-card">
-        <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
-      </div>
+        <div class="video-card">
+          <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
+        </div>
       } @else {
       <div class="video-card placeholder">
         <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
       </div>
       }
+    </aside>
+  </div>
+</section>
 
-      <!-- Resources -->
-      <div class="resources">
-        <h4>Resources</h4>
-        <ul>
-          @for (r of agent()?.resources ?? []; track r.url) {
-          <li>
-            <button class="resource-link" (click)="openResource(r.url)">
-              {{ r.description }}
-            </button>
+<!-- ===== Benefits band (titles only). Tooltip = description. ===== -->
+@if (agent()?.benefits?.points?.length) {
+  <section class="benefits-band" aria-labelledby="benefits-title">
+    <div class="benefits-band__inner">
+      <h2 id="benefits-title" class="benefits-title">Benefits</h2>
+
+      <ul class="benefits-list" role="list">
+        @for (b of agent()?.benefits?.points ?? []; track b.heading) {
+          <!-- Tooltip via title; also expose for a11y via aria-label -->
+          <li class="benefit"
+              [attr.title]="b.description"
+              [attr.aria-label]="b.description">
+            <span class="benefit-text">{{ b.heading }}</span>
           </li>
-          }
-        </ul>
+        }
+      </ul>
+    </div>
+  </section>
+}
+
+<!-- ===== Resources & Contact Info row (below benefits) ===== -->
+<section class="resources-contact-row" aria-label="Resources & Contact">
+  <!-- Resources block -->
+  @if (agent()?.resources?.length) {
+    <div class="resources-block">
+      <h3 class="resources-heading">Resources</h3>
+
+      <div class="resources-grid">
+        @for (r of agent()?.resources ?? []; track r.url) {
+          <article class="resource-card">
+            <!-- Click opens in new tab; keep simple & reliable across file types -->
+            <a class="resource-thumb"
+               [href]="r.url"
+               target="_blank"
+               rel="noopener">
+              <!-- Optional: show play/icon overlays via CSS if you want -->
+              <img src="/assets/images/details/placeholder-doc.png" />
+            </a>
+            <p class="resource-caption">{{ r.description }}</p>
+          </article>
+        }
       </div>
     </div>
-  </div>
+  }
+
+  <!-- Contact block -->
+  <aside class="contact-block">
+    <h3 class="contact-heading">Contact Info</h3>
+
+    <div class="contact-card">
+      <img src="/assets/images/details/mail.png" />
+      <div class="contact-text">
+        <div class="contact-name">{{ agent()?.pocName }}</div>
+        @if (agent()?.pocEmail) {
+          <a class="contact-email" [href]="'mailto:' + agent()?.pocEmail">{{ agent()?.pocEmail }}</a>
+        }
+      </div>
+    </div>
+  </aside>
+
 </section>
 
 <!-- Simple modal for video preview -->
