@@ -61,126 +61,122 @@
 
   <!-- Two-column layout like your screenshot -->
 
-<!-- ===== Below-hero content: Solution Overview (left) + Inline Video (right) ===== -->
-<section class="detail-content" aria-label="Solution Overview section">
-  <div class="detail-columns">
-    <!-- LEFT: Copy -->
-    <div class="detail-left">
-      <h2 class="detail-heading">Solution Overview</h2>
+  <!-- ===== Below-hero content: Solution Overview (left) + Inline Video (right) ===== -->
+  <section class="detail-content">
+    <div class="detail-columns">
+      <!-- LEFT: Title, intro, bullets -->
+      <div class="detail-left">
+        <h2 class="detail-heading">Solution Overview</h2>
 
-      @if (agent()?.solutionOverview?.description) {
-        <p class="detail-intro">
-          {{ agent()?.solutionOverview?.description }}
-        </p>
-      }
-
-      <!-- Bullet list -->
-      <ul class="detail-list">
-        @for (p of agent()?.solutionOverview?.points ?? []; track p.heading) {
-          <li class="detail-item">
-            <span class="detail-dot" aria-hidden="true"></span>
-            <div class="detail-item-content">
-              <strong class="detail-item-title">{{ p.heading }}</strong>
-              <span class="detail-item-desc">{{ p.description }}</span>
-            </div>
-          </li>
+        @if (agent()?.solutionOverview?.description) {
+          <p class="detail-intro">{{ agent()?.solutionOverview?.description }}</p>
         }
-      </ul>
-    </div>
 
-    <!-- RIGHT: Inline video / placeholder (no resources here anymore) -->
-    <aside class="detail-right">
-      @if (agent()?.videoUrl) {
-        <div class="video-card">
-          <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
-        </div>
-      } @else {
-      <div class="video-card placeholder">
-        <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
+        <ul class="detail-list">
+          @for (p of (agent()?.solutionOverview?.points ?? []); track p.heading + p.description) {
+            @if ((p.heading?.trim() || p.description?.trim())) {
+              <li class="detail-item">
+                <span class="detail-dot" aria-hidden="true"></span>
+                <div class="detail-item-content">
+                  @if (p.heading?.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
+                  @if (p.description?.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
+                </div>
+              </li>
+            }
+          }
+        </ul>
       </div>
-      }
-    </aside>
-  </div>
-</section>
 
-<!-- ===== Benefits band (titles only). Tooltip = description. ===== -->
-@if (agent()?.benefits?.points?.length) {
+      <!-- RIGHT: Media card (image/video as-is) -->
+      <div class="detail-right">
+        <div class="video-card">
+          @if (agent()?.videoUrl) {
+            <video controls [src]="agent()?.videoUrl" preload="metadata"></video>
+
+          } @else {
+            <div class="video-card placeholder">
+              <img src="/assets/images/details/placeholder-video.png" alt="No video available" />
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== Benefits band (titles only). Tooltip = description. ===== -->
+  @if (agent()?.benefits?.points?.length) {
   <section class="benefits-band" aria-labelledby="benefits-title">
     <div class="benefits-band__inner">
       <h2 id="benefits-title" class="benefits-title">Benefits</h2>
 
       <ul class="benefits-list" role="list">
         @for (b of agent()?.benefits?.points ?? []; track b.heading) {
-          <!-- Tooltip via title; also expose for a11y via aria-label -->
-          <li class="benefit"
-              [attr.title]="b.description"
-              [attr.aria-label]="b.description">
-            <span class="benefit-text">{{ b.heading }}</span>
-          </li>
+        <!-- Tooltip via title; also expose for a11y via aria-label -->
+        <li class="benefit" [attr.title]="b.description" [attr.aria-label]="b.description">
+          <span class="benefit-text">{{ b.heading }}</span>
+        </li>
         }
       </ul>
     </div>
   </section>
-}
+  }
 
-<!-- ===== Resources & Contact Info row (below benefits) ===== -->
-<section class="resources-contact-row" aria-label="Resources & Contact">
-  <!-- Resources block -->
-  @if (agent()?.resources?.length) {
+  <!-- ===== Resources & Contact Info row (below benefits) ===== -->
+  <section class="resources-contact-row" aria-label="Resources & Contact">
+    <!-- Resources block -->
+    @if (agent()?.resources?.length) {
     <div class="resources-block">
       <h3 class="resources-heading">Resources</h3>
 
       <div class="resources-grid">
         @for (r of agent()?.resources ?? []; track r.url) {
-          <article class="resource-card">
-            <!-- Click opens in new tab; keep simple & reliable across file types -->
-            <a class="resource-thumb"
-               [href]="r.url"
-               target="_blank"
-               rel="noopener">
-              <!-- Optional: show play/icon overlays via CSS if you want -->
-              <img src="/assets/images/details/placeholder-doc.png" />
-            </a>
-            <p class="resource-caption">{{ r.description }}</p>
-          </article>
+        <article class="resource-card">
+          <!-- Click opens in new tab; keep simple & reliable across file types -->
+          <a class="resource-thumb" [href]="r.url" target="_blank" rel="noopener">
+            <!-- Optional: show play/icon overlays via CSS if you want -->
+            <img src="/assets/images/details/placeholder-doc.png" />
+          </a>
+          <p class="resource-caption">{{ r.description }}</p>
+        </article>
         }
       </div>
     </div>
-  }
+    }
 
-  <!-- Contact block -->
-  <aside class="contact-block">
-    <h3 class="contact-heading">Contact Info</h3>
+    <!-- Contact block -->
+    <aside class="contact-block">
+      <h3 class="contact-heading">Contact Info</h3>
 
-    <div class="contact-card">
-      <img src="/assets/images/details/mail.png" />
-      <div class="contact-text">
-        <div class="contact-name">{{ agent()?.pocName }}</div>
-        @if (agent()?.pocEmail) {
+      <div class="contact-card">
+        <img src="/assets/images/details/mail.png" />
+        <div class="contact-text">
+          <div class="contact-name">{{ agent()?.pocName }}</div>
+          @if (agent()?.pocEmail) {
           <a class="contact-email" [href]="'mailto:' + agent()?.pocEmail">{{ agent()?.pocEmail }}</a>
-        }
+          }
+        </div>
       </div>
+    </aside>
+
+  </section>
+
+  <!-- Simple modal for video preview -->
+  <div class="preview-overlay" [class.visible]="previewOpen()">
+    <div class="preview-dialog">
+      <button class="close" (click)="closePreview()">×</button>
+      <video controls [src]="previewUrl()" preload="metadata"></video>
     </div>
-  </aside>
-
-</section>
-
-<!-- Simple modal for video preview -->
-<div class="preview-overlay" [class.visible]="previewOpen()">
-  <div class="preview-dialog">
-    <button class="close" (click)="closePreview()">×</button>
-    <video controls [src]="previewUrl()" preload="metadata"></video>
   </div>
-</div>
 
-<!-- Loading / Error -->
-<div class="loading-overlay" [class.visible]="loading()">
-  <div class="loading-container">
-    <div class="css-spinner" aria-hidden="true"></div>
-    <p class="loading-text">Loading, please wait…</p>
+  <!-- Loading / Error -->
+  <div class="loading-overlay" [class.visible]="loading()">
+    <div class="loading-container">
+      <div class="css-spinner" aria-hidden="true"></div>
+      <p class="loading-text">Loading, please wait…</p>
+    </div>
   </div>
-</div>
 
-@if (error()) {
-<div class="text-red-600 font-semibold text-center py-4">{{ error() }}</div>
-}
+  @if (error()) {
+  <div class="text-red-600 font-semibold text-center py-4">{{ error() }}</div>
+  }
