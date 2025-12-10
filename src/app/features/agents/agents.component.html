@@ -30,7 +30,7 @@
   </header>
 
   <!-- Scrollable Content Area (accounts for fixed header - 7.5rem) -->
-  <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
+  <main id="agents-scroll" class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
     <router-outlet></router-outlet>
     <!-- Store grid & pagination (only when not in detail-mode) -->
     @if (!detailMode()) {

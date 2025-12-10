@@ -108,7 +108,9 @@
   @if (agent()?.benefits?.points?.length) {
   <section class="benefits-band" aria-labelledby="benefits-title">
     <div class="benefits-band__inner">
-      <h2 id="benefits-title" class="benefits-title">Benefits</h2>
+      <h2 id="benefits-title" class="benefits-title">Benefits
+        <span><img src="/assets/images/details/double-right-arrow.png" /></span>
+      </h2>
 
       <ul class="benefits-list" role="list">
         @for (b of agent()?.benefits?.points ?? []; track b.heading) {

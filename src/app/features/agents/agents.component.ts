@@ -205,7 +205,16 @@ export class AgentsComponent {
     // Toggle detail mode based on child :id
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
-      .subscribe(() => this.updateDetailModeFromSnapshot());
+      .subscribe(() => {
+        // update detail mode
+        this.updateDetailModeFromSnapshot();
+
+        // If we've entered detail mode, ensure the scrollable container is at the top.
+        // Use a microtask to let the router/outlet render before changing scroll.
+        if (this.detailMode()) {
+          Promise.resolve().then(() => this.scrollMainToTop());
+        }
+      });
   }
 
   // ----- Data fetch -----
@@ -416,5 +425,18 @@ export class AgentsComponent {
       relativeTo: this.route, // stay under /agents
       queryParamsHandling: 'preserve', // keep current filters/paging in URL history
     });
+  }
+
+  /** Scroll the primary agents scroll container to top (safe fallback) */
+  private scrollMainToTop(): void {
+    const el = document.getElementById('agents-scroll');
+    if (!el) return;
+    try {
+      // prefer smooth behaviour only when user initiated navigation from list UI
+      el.scrollTo({ top: 0 });
+    } catch {
+      // fallback if scrollTo with options is not supported
+      el.scrollTop = 0;
+    }
   }
 }
