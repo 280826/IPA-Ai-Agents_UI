@@ -74,12 +74,12 @@
 
         <ul class="detail-list">
           @for (p of (agent()?.solutionOverview?.points ?? []); track p.heading + p.description) {
-          @if ((p.heading?.trim() || p.description?.trim())) {
+          @if ((p.heading.trim() || p.description.trim())) {
           <li class="detail-item">
             <span class="detail-dot" aria-hidden="true"></span>
             <div class="detail-item-content">
-              @if (p.heading?.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
-              @if (p.description?.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
+              @if (p.heading.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
+              @if (p.description.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
             </div>
           </li>
           }
@@ -130,32 +130,27 @@
       <h3 class="resources-heading">Resources</h3>
 
 
-<div class="resources-grid">
-  @for (r of agent()?.resources ?? []; track r.url) {
-    <div class="resource-card">
-      <!-- If it's a video URL, show <video> -->
-      @if (isVideoUrl(r.url)) {
-        <div class="resource-thumb">
-          <video controls [src]="r.url" preload="metadata"></video>
-        </div>
-      } @else {
-        <!-- Otherwise, link opens in new tab and show appropriate placeholder -->
-        <a
-          class="resource-thumb"
-          [href]="r.url"
-          target="_blank"
-          rel="noopener"
-          aria-label="Open resource: {{ r.description }}"
-        >
-          <img [src]="resourceThumb(r.url)" alt="{{ r.description }}" />
-        </a>
-      }
+      <div class="resources-grid">
+        @for (r of agent()?.resources ?? []; track r.url) {
+        <div class="resource-card">
+          <!-- If it's a video URL, show <video> -->
+          @if (isVideoUrl(r.url)) {
+          <div class="resource-thumb">
+            <video controls [src]="r.url" preload="metadata"></video>
+          </div>
+          } @else {
+          <!-- Otherwise, link opens in new tab and show appropriate placeholder -->
+          <a class="resource-thumb" [href]="r.url" target="_blank" rel="noopener"
+            aria-label="Open resource: {{ r.description }}">
+            <img [src]="resourceThumb(r.url)" alt="{{ r.description }}" />
+          </a>
+          }
 
-      <!-- Caption -->
-      <p class="resource-caption">{{ r.description }}</p>
-    </div>
-  }
-</div>
+          <!-- Caption -->
+          <p class="resource-caption">{{ r.description }}</p>
+        </div>
+        }
+      </div>
 
     </div>
     }
