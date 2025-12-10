@@ -14,8 +14,18 @@
       <div class="middle flex items-center">
         <div class="separator" aria-hidden="true"></div>
         <div class="header-logo ml-4">
-          <img src="/assets/images/ai-agents-store.png" alt="AI Agents Store"
-            onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          <!-- Accessible button that navigates to landing page; styled to look like the original image -->
+          <!-- title="Home" -->
+          <button
+            type="button"
+            class="logo-btn"
+            aria-label="Go to landing page"
+            (click)="navigateHome()"
+            style="background: none; border: 0; padding: 0; cursor: pointer;"
+          >
+            <img src="/assets/images/ai-agents-store.png" alt="AI Agents Store"
+              onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          </button>
         </div>
       </div>
 
@@ -202,7 +212,7 @@
 
     <!-- Pagination (pills style) -->
     <nav class="pager" aria-label="Pagination">
-      <button class="pager-btn" (click)="prev()" [disabled]="!useCursor() && pageIndex() === 0">‹ Previous</button>
+      <button class="pager-btn" (click)="prev()" [disabled]="!useCursor() && pageIndex() === 0"><span><img class="left" src="/assets/images/left.png"></span> Previous</button>
       @for (p of pagePills(); track p) {
       @if (p === '…') {
       <span class="pager-ellipsis">…</span>
@@ -212,8 +222,7 @@
       </button>
       }
       }
-      <button class="pager-btn" (click)="next()" [disabled]="!useCursor() && (pageIndex() + 1 >= totalPages())">Next
-        ›</button>
+      <button class="pager-btn" (click)="next()" [disabled]="!useCursor() && (pageIndex() + 1 >= totalPages())">Next <span><img src="/assets/images/right.png"></span></button>
       <span class="pager-size">
         Page size:
         <select [value]="pageSize()" (change)="changeSize($any($event.target).value)">

@@ -427,6 +427,12 @@ export class AgentsComponent {
     });
   }
 
+  /** Navigate to the landing page (header logo action) */
+  navigateHome(): void {
+    // preserve expected behavior of a full landing change
+    this.router.navigateByUrl('/agents');
+  }
+
   /** Scroll the primary agents scroll container to top (safe fallback) */
   private scrollMainToTop(): void {
     const el = document.getElementById('agents-scroll');
