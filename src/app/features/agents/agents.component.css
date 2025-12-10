@@ -311,7 +311,7 @@ footer {
 .filter-select {
   background: transparent;
   border: none;
-  font: normal normal normal 1.5rem/1.75rem Arial; /* 24px/28px */
+  font: normal normal normal 1.25rem/1.75rem Arial; /* 24px/28px */
   letter-spacing: 0;
   color: #000000;
   cursor: pointer;
