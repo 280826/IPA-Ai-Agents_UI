@@ -3,7 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter, finalize } from 'rxjs/operators';
 import { AuthService } from '../../core/auth.service';
-import { AgentsService, UsecaseFilters } from '../../services/agents.service';
+import {
+  AgentsService,
+  UsecaseFilters,
+  DropdownsDTO,
+  DropdownItem,
+} from '../../services/agents.service';
 import { Agent } from '../../models/agent.ui';
 import { UsecaseListItemDTO } from '../../models/usecase-list.dto';
 import { mapUsecaseItemToAgent } from '../../models/mapper';
@@ -65,6 +70,11 @@ export class AgentsComponent {
   readonly selectedTechnology = signal<string>(''); // CSV or single tech
   readonly selectedStage = signal<StageUi>(''); // 'Production'|'Solution'|'POC'|''
 
+  // Dropdown option signals
+  readonly verticalOptions = signal<DropdownItem[]>([]);
+  readonly stageOptions = signal<DropdownItem[]>([]);
+  readonly techOptions = signal<DropdownItem[]>([]);
+
   // ----- Filters (API) -----
   readonly filters = signal<UsecaseFilters>({}); // { vertical?: string; stage?: StageApi; techStack?: string[]; search?: string }
 
@@ -119,6 +129,33 @@ export class AgentsComponent {
 
   // ----- Lifecycle -----
   ngOnInit(): void {
+    // fetch dropdowns once
+    this.svc.dropdowns().subscribe({
+      next: (dd: DropdownsDTO) => {
+        const v = dd?.data?.vertical ?? [];
+        const s = dd?.data?.stage ?? [];
+        const t = dd?.data?.techStack ?? [];
+
+        // Normalize stage values for UI consistency
+        const normalizedStage = s.map((it) => {
+          const val = it.value?.trim();
+          let uiLabel = it.label;
+          if (val === 'Prod') uiLabel = 'Production';
+          if (val?.toLowerCase() === 'poc' || val === 'Poc') uiLabel = 'POC';
+          return { ...it, label: uiLabel };
+        });
+
+        // Prepend "All" option (value '')
+        const allOpt = (label: string): DropdownItem => ({ _id: 'all', label, value: '' });
+        this.verticalOptions.set([allOpt('All'), ...v]);
+        this.stageOptions.set([allOpt('All'), ...normalizedStage]);
+        this.techOptions.set([allOpt('All'), ...t]);
+      },
+      error: () => {
+        // Fallback: keep empty lists; selects will still show an "All" option via template
+      },
+    });
+
     // initialize from query params (deep-linking)
     this.route.queryParamMap.subscribe((params) => {
       // helpers
@@ -168,7 +205,16 @@ export class AgentsComponent {
     // Toggle detail mode based on child :id
     this.router.events
       .pipe(filter((e) => e instanceof NavigationEnd))
-      .subscribe(() => this.updateDetailModeFromSnapshot());
+      .subscribe(() => {
+        // update detail mode
+        this.updateDetailModeFromSnapshot();
+
+        // If we've entered detail mode, ensure the scrollable container is at the top.
+        // Use a microtask to let the router/outlet render before changing scroll.
+        if (this.detailMode()) {
+          Promise.resolve().then(() => this.scrollMainToTop());
+        }
+      });
   }
 
   // ----- Data fetch -----
@@ -379,5 +425,24 @@ export class AgentsComponent {
       relativeTo: this.route, // stay under /agents
       queryParamsHandling: 'preserve', // keep current filters/paging in URL history
     });
+  }
+
+  /** Navigate to the landing page (header logo action) */
+  navigateHome(): void {
+    // preserve expected behavior of a full landing change
+    this.router.navigateByUrl('/agents');
+  }
+
+  /** Scroll the primary agents scroll container to top (safe fallback) */
+  private scrollMainToTop(): void {
+    const el = document.getElementById('agents-scroll');
+    if (!el) return;
+    try {
+      // prefer smooth behaviour only when user initiated navigation from list UI
+      el.scrollTo({ top: 0 });
+    } catch {
+      // fallback if scrollTo with options is not supported
+      el.scrollTop = 0;
+    }
   }
 }

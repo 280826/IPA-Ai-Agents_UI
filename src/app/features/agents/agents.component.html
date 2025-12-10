@@ -14,8 +14,18 @@
       <div class="middle flex items-center">
         <div class="separator" aria-hidden="true"></div>
         <div class="header-logo ml-4">
-          <img src="/assets/images/ai-agents-store.png" alt="AI Agents Store"
-            onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          <!-- Accessible button that navigates to landing page; styled to look like the original image -->
+          <!-- title="Home" -->
+          <button
+            type="button"
+            class="logo-btn"
+            aria-label="Go to landing page"
+            (click)="navigateHome()"
+            style="background: none; border: 0; padding: 0; cursor: pointer;"
+          >
+            <img src="/assets/images/ai-agents-store.png" alt="AI Agents Store"
+              onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
+          </button>
         </div>
       </div>
 
@@ -30,11 +40,11 @@
   </header>
 
   <!-- Scrollable Content Area (accounts for fixed header - 7.5rem) -->
-  <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
+  <main id="agents-scroll" class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
     <router-outlet></router-outlet>
-<!-- Store grid & pagination (only when not in detail-mode) -->
-@if (!detailMode()) {
-  <!-- your existing agents grid & pager content exactly as-is -->
+    <!-- Store grid & pagination (only when not in detail-mode) -->
+    @if (!detailMode()) {
+    <!-- your existing agents grid & pager content exactly as-is -->
 
 
     <!-- Hero Section -->
@@ -55,13 +65,13 @@
             <label class="filter-label">By Technology</label>
           </div>
 
-          <div class="search-inner" (click)="$event.stopPropagation()">
+          <!--  (click)="$event.stopPropagation()" -->
+          <div class="search-inner">
             <div class="search-white-area">
               <img src="/assets/images/search.png" />
 
               <input class="search-input" placeholder="Search AI Agents..." [value]="searchText()"
-                (input)="onSearchInput($event)" (keydown.escape)="clearSearch()"
-                (keydown.enter)="applyFilters()">
+                (input)="onSearchInput($event)" (keydown.escape)="clearSearch()" (keydown.enter)="applyFilters()">
 
               <button type="button" class="search-clear" [class.hidden]="!searchText()" (click)="clearSearch()"
                 aria-label="Clear search">
@@ -72,17 +82,11 @@
 
               <div class="filters-inline">
                 <!-- Industry select -->
-
-                <!-- <div class="filter-group filter-group-1"> -->
-                <!-- <span class="filter-label">By Industries</span> -->
                 <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
-                  <option value="">All</option>
-                  <option value="BFS">Banking and Financial</option>
-                  <option value="F&A">Finance &amp; Accounting</option>
-                  <option value="LS">Life Sciences</option>
-                  <option value="INS">Insurance</option>
-                  <option value="HC">Healthcare</option>
-                  <option value="IT">Information Technology</option>
+                  <!-- <option value="">All</option> -->
+                  @for (opt of verticalOptions(); track opt._id) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                  }
                 </select>
                 <!-- </div> -->
 
@@ -94,11 +98,10 @@
                 <!-- <div class="filter-group filter-group-2"> -->
                 <!-- <span class="filter-label">By Technology</span> -->
                 <select class="filter-select" [value]="selectedTechnology()" (change)="onTechnologyChange($event)">
-                  <option value="">All</option>
-                  <option>Azure</option>
-                  <option>Langchain</option>
-                  <option>Copilot Studio</option>
-                  <option>UiPath Agentic</option>
+                  <!-- <option value="">All</option> -->
+                  @for (opt of techOptions(); track opt._id) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                  }
                 </select>
                 <!-- </div> -->
 
@@ -116,10 +119,10 @@
       <h2 class="discover-heading">Discover Intelligent AI Agents in Our Store</h2>
       <div class="discover-filter">
         <select class="discover-filter-select" [value]="selectedStage()" (change)="onStageChange($event)">
-          <option value="">All</option>
-          <option value="POC">POC</option>
-          <option value="Production">Production</option>
-          <option value="Solution">Solution</option>
+          <!-- <option value="">All</option> -->
+          @for (opt of stageOptions(); track opt._id) {
+          <option [value]="opt.label">{{ opt.label }}</option>
+          }
         </select>
       </div>
     </section>
@@ -194,8 +197,7 @@
             </div>
 
             <!-- CTA (button; swap to routerLink if you have a details route) -->
-            <button class="agent-card__cta" type="button"
-              (click)="openAgent(agent.id)"
+            <button class="agent-card__cta" type="button" (click)="openAgent(agent.id)"
               aria-label="Explore agent {{ agent.name }}">
               Explore Agent
               <span class="agent-card__cta-arrow">
@@ -210,7 +212,7 @@
 
     <!-- Pagination (pills style) -->
     <nav class="pager" aria-label="Pagination">
-      <button class="pager-btn" (click)="prev()" [disabled]="!useCursor() && pageIndex() === 0">‹ Previous</button>
+      <button class="pager-btn" (click)="prev()" [disabled]="!useCursor() && pageIndex() === 0"><span><img class="left" src="/assets/images/left.png"></span> Previous</button>
       @for (p of pagePills(); track p) {
       @if (p === '…') {
       <span class="pager-ellipsis">…</span>
@@ -220,8 +222,7 @@
       </button>
       }
       }
-      <button class="pager-btn" (click)="next()" [disabled]="!useCursor() && (pageIndex() + 1 >= totalPages())">Next
-        ›</button>
+      <button class="pager-btn" (click)="next()" [disabled]="!useCursor() && (pageIndex() + 1 >= totalPages())">Next <span><img src="/assets/images/right.png"></span></button>
       <span class="pager-size">
         Page size:
         <select [value]="pageSize()" (change)="changeSize($any($event.target).value)">
@@ -239,7 +240,7 @@
     } @if (error()) {
     <div class="error" style="padding: 1rem 2rem; color: #b91c1c">{{ error() }}</div>
     }
-  }
+    }
     <!-- Page footer -->
     <!-- Footer - Static Position -->
     <footer class="bg-cognizantDark text-white border-t border-gray-700">
