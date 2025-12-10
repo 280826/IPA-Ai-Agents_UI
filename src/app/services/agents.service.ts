@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { UsecaseListItemDTO, UsecaseListResponseDTO } from '../models/usecase-list.dto';
 
@@ -15,6 +16,21 @@ export interface UsecaseFilters {
 export interface UsecaseOneResponseDTO {
   ok?: boolean;
   data: UsecaseListItemDTO; // SINGLE item (not array)
+}
+
+export interface DropdownItem {
+  _id: string;
+  label: string;
+  value: string;
+  __v?: number;
+}
+export interface DropdownsDTO {
+  ok: boolean;
+  data: {
+    vertical: DropdownItem[];
+    stage: DropdownItem[];
+    techStack: DropdownItem[];
+  };
 }
 
 /** --------- Query helpers --------- */
@@ -78,12 +94,42 @@ function buildQuery(opts: {
 export class AgentsService {
   constructor(private http: HttpClient) {}
 
+  // --- lightweight local cache (per params) ---
+  private readonly cache = new Map<
+    string,
+    { ts: number; data: UsecaseListResponseDTO | DropdownsDTO }
+  >();
+  private readonly ttlMs = 15_000; // 15s; adjust as needed
+
+  private getCache<T>(key: string): T | undefined {
+    const entry = this.cache.get(key);
+    if (!entry) return undefined;
+    const fresh = Date.now() - entry.ts < this.ttlMs;
+    if (!fresh) {
+      this.cache.delete(key);
+      return undefined;
+    }
+    return entry.data as T;
+  }
+  private setCache(key: string, data: unknown): void {
+    this.cache.set(key, { ts: Date.now(), data: data as UsecaseListResponseDTO });
+  }
+  private keyFromParams(url: string, params?: HttpParams): string {
+    return params ? `${url}?${params.toString()}` : url;
+  }
+
   /** Offset-based pagination (page & limit) */
   listPaged(page = 1, limit = 10, filters?: UsecaseFilters): Observable<UsecaseListResponseDTO> {
     const params = buildQuery({ mode: 'offset', page, limit, filters });
-    return this.http.get<UsecaseListResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, {
-      params,
-    });
+    const url = `${environment.apiBaseUrl}/usecase/list`;
+    const key = this.keyFromParams(url, params);
+
+    const cached = this.getCache(key);
+    if (cached) return of(cached as UsecaseListResponseDTO);
+
+    return this.http
+      .get<UsecaseListResponseDTO>(url, { params })
+      .pipe(tap((data) => this.setCache(key, data)));
   }
 
   /** Cursor/seek-based pagination (id, skip & limit) */
@@ -94,21 +140,40 @@ export class AgentsService {
     filters?: UsecaseFilters
   ): Observable<UsecaseListResponseDTO> {
     const params = buildQuery({ mode: 'cursor', id, skip, limit, filters });
-    return this.http.get<UsecaseListResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, {
-      params,
-    });
+    const url = `${environment.apiBaseUrl}/usecase/list`;
+    const key = this.keyFromParams(url, params);
+
+    const cached = this.getCache(key);
+    if (cached) return of(cached as UsecaseListResponseDTO);
+
+    return this.http
+      .get<UsecaseListResponseDTO>(url, { params })
+      .pipe(tap((data) => this.setCache(key, data)));
   }
 
   /** Legacy flat list */
-  list(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}/usecase/list`);
+  list(): Observable<unknown> {
+    return this.http.get<unknown>(`${environment.apiBaseUrl}/usecase/list`);
+  }
+
+  /** NEW: dropdowns for vertical, stage, techStack */
+  dropdowns(): Observable<DropdownsDTO> {
+    const url = `${environment.apiBaseUrl}/usecase/dropdowns`;
+    const key = this.keyFromParams(url);
+    const cached = this.getCache<DropdownsDTO>(key);
+    if (cached) return of(cached);
+    return this.http.get<DropdownsDTO>(url).pipe(tap((data) => this.setCache(key, data)));
   }
 
   /** NEW: Get-by-id, server returns a single item in data */
   getOne(id: string): Observable<UsecaseOneResponseDTO> {
     const params = new HttpParams().set('id', id).set('limit', '1'); // limit optional; keeps parity if server accepts it
-    return this.http.get<UsecaseOneResponseDTO>(`${environment.apiBaseUrl}/usecase/list`, {
-      params,
-    });
+    const url = `${environment.apiBaseUrl}/usecase/list`;
+    const key = this.keyFromParams(url, params);
+    const cached = this.getCache<UsecaseListResponseDTO>(key);
+    if (cached) return of(cached as unknown as UsecaseOneResponseDTO);
+    return this.http
+      .get<UsecaseOneResponseDTO>(url, { params })
+      .pipe(tap((data) => this.setCache(key, data as unknown as UsecaseListResponseDTO)));
   }
 }

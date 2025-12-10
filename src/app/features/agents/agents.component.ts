@@ -3,7 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute, RouterOutlet, NavigationEnd } from '@angular/router';
 import { filter, finalize } from 'rxjs/operators';
 import { AuthService } from '../../core/auth.service';
-import { AgentsService, UsecaseFilters } from '../../services/agents.service';
+import {
+  AgentsService,
+  UsecaseFilters,
+  DropdownsDTO,
+  DropdownItem,
+} from '../../services/agents.service';
 import { Agent } from '../../models/agent.ui';
 import { UsecaseListItemDTO } from '../../models/usecase-list.dto';
 import { mapUsecaseItemToAgent } from '../../models/mapper';
@@ -65,6 +70,11 @@ export class AgentsComponent {
   readonly selectedTechnology = signal<string>(''); // CSV or single tech
   readonly selectedStage = signal<StageUi>(''); // 'Production'|'Solution'|'POC'|''
 
+  // Dropdown option signals
+  readonly verticalOptions = signal<DropdownItem[]>([]);
+  readonly stageOptions = signal<DropdownItem[]>([]);
+  readonly techOptions = signal<DropdownItem[]>([]);
+
   // ----- Filters (API) -----
   readonly filters = signal<UsecaseFilters>({}); // { vertical?: string; stage?: StageApi; techStack?: string[]; search?: string }
 
@@ -119,6 +129,33 @@ export class AgentsComponent {
 
   // ----- Lifecycle -----
   ngOnInit(): void {
+    // fetch dropdowns once
+    this.svc.dropdowns().subscribe({
+      next: (dd: DropdownsDTO) => {
+        const v = dd?.data?.vertical ?? [];
+        const s = dd?.data?.stage ?? [];
+        const t = dd?.data?.techStack ?? [];
+
+        // Normalize stage values for UI consistency
+        const normalizedStage = s.map((it) => {
+          const val = it.value?.trim();
+          let uiLabel = it.label;
+          if (val === 'Prod') uiLabel = 'Production';
+          if (val?.toLowerCase() === 'poc' || val === 'Poc') uiLabel = 'POC';
+          return { ...it, label: uiLabel };
+        });
+
+        // Prepend "All" option (value '')
+        const allOpt = (label: string): DropdownItem => ({ _id: 'all', label, value: '' });
+        this.verticalOptions.set([allOpt('All'), ...v]);
+        this.stageOptions.set([allOpt('All'), ...normalizedStage]);
+        this.techOptions.set([allOpt('All'), ...t]);
+      },
+      error: () => {
+        // Fallback: keep empty lists; selects will still show an "All" option via template
+      },
+    });
+
     // initialize from query params (deep-linking)
     this.route.queryParamMap.subscribe((params) => {
       // helpers

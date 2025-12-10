@@ -32,9 +32,9 @@
   <!-- Scrollable Content Area (accounts for fixed header - 7.5rem) -->
   <main class="flex-1 overflow-y-auto" style="margin-top: 7.5rem">
     <router-outlet></router-outlet>
-<!-- Store grid & pagination (only when not in detail-mode) -->
-@if (!detailMode()) {
-  <!-- your existing agents grid & pager content exactly as-is -->
+    <!-- Store grid & pagination (only when not in detail-mode) -->
+    @if (!detailMode()) {
+    <!-- your existing agents grid & pager content exactly as-is -->
 
 
     <!-- Hero Section -->
@@ -55,13 +55,13 @@
             <label class="filter-label">By Technology</label>
           </div>
 
-          <div class="search-inner" (click)="$event.stopPropagation()">
+          <!--  (click)="$event.stopPropagation()" -->
+          <div class="search-inner">
             <div class="search-white-area">
               <img src="/assets/images/search.png" />
 
               <input class="search-input" placeholder="Search AI Agents..." [value]="searchText()"
-                (input)="onSearchInput($event)" (keydown.escape)="clearSearch()"
-                (keydown.enter)="applyFilters()">
+                (input)="onSearchInput($event)" (keydown.escape)="clearSearch()" (keydown.enter)="applyFilters()">
 
               <button type="button" class="search-clear" [class.hidden]="!searchText()" (click)="clearSearch()"
                 aria-label="Clear search">
@@ -72,17 +72,11 @@
 
               <div class="filters-inline">
                 <!-- Industry select -->
-
-                <!-- <div class="filter-group filter-group-1"> -->
-                <!-- <span class="filter-label">By Industries</span> -->
                 <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
-                  <option value="">All</option>
-                  <option value="BFS">Banking and Financial</option>
-                  <option value="F&A">Finance &amp; Accounting</option>
-                  <option value="LS">Life Sciences</option>
-                  <option value="INS">Insurance</option>
-                  <option value="HC">Healthcare</option>
-                  <option value="IT">Information Technology</option>
+                  <!-- <option value="">All</option> -->
+                  @for (opt of verticalOptions(); track opt._id) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                  }
                 </select>
                 <!-- </div> -->
 
@@ -94,11 +88,10 @@
                 <!-- <div class="filter-group filter-group-2"> -->
                 <!-- <span class="filter-label">By Technology</span> -->
                 <select class="filter-select" [value]="selectedTechnology()" (change)="onTechnologyChange($event)">
-                  <option value="">All</option>
-                  <option>Azure</option>
-                  <option>Langchain</option>
-                  <option>Copilot Studio</option>
-                  <option>UiPath Agentic</option>
+                  <!-- <option value="">All</option> -->
+                  @for (opt of techOptions(); track opt._id) {
+                  <option [value]="opt.value">{{ opt.label }}</option>
+                  }
                 </select>
                 <!-- </div> -->
 
@@ -116,10 +109,10 @@
       <h2 class="discover-heading">Discover Intelligent AI Agents in Our Store</h2>
       <div class="discover-filter">
         <select class="discover-filter-select" [value]="selectedStage()" (change)="onStageChange($event)">
-          <option value="">All</option>
-          <option value="POC">POC</option>
-          <option value="Production">Production</option>
-          <option value="Solution">Solution</option>
+          <!-- <option value="">All</option> -->
+          @for (opt of stageOptions(); track opt._id) {
+          <option [value]="opt.label">{{ opt.label }}</option>
+          }
         </select>
       </div>
     </section>
@@ -194,8 +187,7 @@
             </div>
 
             <!-- CTA (button; swap to routerLink if you have a details route) -->
-            <button class="agent-card__cta" type="button"
-              (click)="openAgent(agent.id)"
+            <button class="agent-card__cta" type="button" (click)="openAgent(agent.id)"
               aria-label="Explore agent {{ agent.name }}">
               Explore Agent
               <span class="agent-card__cta-arrow">
@@ -239,7 +231,7 @@
     } @if (error()) {
     <div class="error" style="padding: 1rem 2rem; color: #b91c1c">{{ error() }}</div>
     }
-  }
+    }
     <!-- Page footer -->
     <!-- Footer - Static Position -->
     <footer class="bg-cognizantDark text-white border-t border-gray-700">
