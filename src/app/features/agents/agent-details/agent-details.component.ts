@@ -1,6 +1,6 @@
 // components/agents/agent-detail.component.ts
 import { Component, inject, signal, computed, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgentsService } from '../../../services/agents.service';
 import { Agent } from '../../../models/agent.ui';
@@ -26,7 +26,7 @@ function toUiStage(api: StageApi | undefined): StageUi {
 @Component({
   standalone: true,
   selector: 'app-agent-details',
-  imports: [CommonModule],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './agent-details.component.html',
   styleUrls: ['./agent-details.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,6 +60,12 @@ export class AgentDetailComponent {
       .filter(Boolean);
   });
 
+  // New: derived list of sub-agent names from the API (agentNames)
+  readonly subAgentNames = computed<string[]>(() => {
+    const names = this.agent()?.agentNames ?? [];
+    return Array.isArray(names) ? names.map(n => String(n).trim()).filter(Boolean) : [];
+  });
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id) {
@@ -88,42 +94,6 @@ export class AgentDetailComponent {
         this.loading.set(false);
       },
     });
-
-    // this.svc.listPaged(1, 1, { /* filters empty */ })
-    //   .subscribe({
-    //     next: (res) => {
-    //       // Prefer a dedicated getOne(id) if your backend supports it.
-    //       // As a fallback, try listByCursor(id,0,1) or filter from a larger page.
-    //       const item = res?.data?.items?.find(x => x._id === id);
-    //       if (!item) {
-    //         // Fallback: try cursor with id
-    //         this.svc.listByCursor(id, 1, 1, {}).subscribe({
-    //           next: (r2) => {
-    //             const i2 = r2?.data?.items?.[0];
-    //             if (!i2) {
-    //               this.error.set('Agent not found.');
-    //             } else {
-    //               this.agent.set(mapUsecaseItemToAgent(i2));
-    //               this.error.set(null);
-    //             }
-    //             this.loading.set(false);
-    //           },
-    //           error: () => {
-    //             this.error.set('Could not load agent details.');
-    //             this.loading.set(false);
-    //           }
-    //         });
-    //       } else {
-    //         this.agent.set(mapUsecaseItemToAgent(item));
-    //         this.error.set(null);
-    //         this.loading.set(false);
-    //       }
-    //     },
-    //     error: () => {
-    //       this.error.set('Could not load agent details.');
-    //       this.loading.set(false);
-    //     }
-    //   });
   }
 
   back(): void {
@@ -150,33 +120,34 @@ export class AgentDetailComponent {
     return /\.mp4(\?|$)/i.test(url) || /\.webm(\?|$)/i.test(url);
   }
 
+  // --- Inside AgentDetailComponent class ---
 
-// --- Inside AgentDetailComponent class ---
-
-/** Returns true if URL looks like a video we can embed (mp4 or webm) */
-isVideoUrl(url: string | undefined | null): boolean {
-  if (!url) return false;
-  const u = url.split('?')[0].toLowerCase(); // strip query
-  return u.lastIndexOf('.mp4') >= 0 || u.lastIndexOf('.webm') >= 0;
-}
-
-/** Returns 'pdf' | 'ppt' | 'other' */
-resourceKind(url: string | undefined | null): 'pdf' | 'ppt' | 'other' {
-  if (!url) return 'other';
-  const u = url.split('?')[0].toLowerCase();
-  if (u.lastIndexOf('.pdf') >= 0) return 'pdf';
-  if (u.lastIndexOf('.ppt') >= 0 || u.lastIndexOf('.pptx') >= 0) return 'ppt';
-  return 'other';
-}
-
-/** Returns the placeholder thumbnail path based on URL kind */
-resourceThumb(url: string | undefined | null): string {
-  const kind = this.resourceKind(url);
-  switch (kind) {
-    case 'pdf': return '/assets/images/details/pdf-ph.png';
-    case 'ppt': return '/assets/images/details/ppt-ph.png';
-    default:    return '/assets/images/details/doc-ph.png'; // optional fallback
+  /** Returns true if URL looks like a video we can embed (mp4 or webm) */
+  isVideoUrl(url: string | undefined | null): boolean {
+    if (!url) return false;
+    const u = url.split('?')[0].toLowerCase(); // strip query
+    return u.lastIndexOf('.mp4') >= 0 || u.lastIndexOf('.webm') >= 0;
   }
-}
 
+  /** Returns 'pdf' | 'ppt' | 'other' */
+  resourceKind(url: string | undefined | null): 'pdf' | 'ppt' | 'other' {
+    if (!url) return 'other';
+    const u = url.split('?')[0].toLowerCase();
+    if (u.lastIndexOf('.pdf') >= 0) return 'pdf';
+    if (u.lastIndexOf('.ppt') >= 0 || u.lastIndexOf('.pptx') >= 0) return 'ppt';
+    return 'other';
+  }
+
+  /** Returns the placeholder thumbnail path based on URL kind */
+  resourceThumb(url: string | undefined | null): string {
+    const kind = this.resourceKind(url);
+    switch (kind) {
+      case 'pdf':
+        return '/assets/images/details/pdf-ph.png';
+      case 'ppt':
+        return '/assets/images/details/ppt-ph.png';
+      default:
+        return '/assets/images/details/doc-ph.png'; // optional fallback
+    }
+  }
 }
