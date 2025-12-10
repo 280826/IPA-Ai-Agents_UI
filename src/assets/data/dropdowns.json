@@ -1,0 +1,161 @@
+{
+  "ok": true,
+  "data": {
+    "vertical": [
+      {
+        "_id": "69355be18d90937ac870cf76",
+        "label": "Life Sciences",
+        "value": "LS",
+        "__v": 0
+      },
+      {
+        "_id": "69355be28d90937ac870cf78",
+        "label": "Insurance",
+        "value": "INC",
+        "__v": 0
+      },
+      {
+        "_id": "69355be28d90937ac870cf7a",
+        "label": "Banking & Financial Services",
+        "value": "BFS",
+        "__v": 0
+      },
+      {
+        "_id": "69355be28d90937ac870cf7c",
+        "label": "Banking & Financial Services",
+        "value": "RHCG",
+        "__v": 0
+      },
+      {
+        "_id": "69355be38d90937ac870cf7e",
+        "label": "Finance & Accounting",
+        "value": "F&A",
+        "__v": 0
+      },
+      {
+        "_id": "69355be38d90937ac870cf80",
+        "label": "Health care",
+        "value": "HC",
+        "__v": 0
+      },
+      {
+        "_id": "69355be38d90937ac870cf82",
+        "label": "Information Technolgy",
+        "value": "IT",
+        "__v": 0
+      }
+    ],
+    "stage": [
+      {
+        "_id": "69355be48d90937ac870cf84",
+        "label": "Solution",
+        "value": "Solution",
+        "__v": 0
+      },
+      {
+        "_id": "69355be48d90937ac870cf86",
+        "label": "Production",
+        "value": "Prod",
+        "__v": 0
+      },
+      {
+        "_id": "69355be48d90937ac870cf88",
+        "label": "Proof of Concept",
+        "value": "Poc",
+        "__v": 0
+      },
+      {
+        "_id": "69355be48d90937ac870cf8a",
+        "label": "All",
+        "value": "All",
+        "__v": 0
+      }
+    ],
+    "techStack": [
+      {
+        "_id": "69355be58d90937ac870cf8c",
+        "label": "UiPath Agentic",
+        "value": "UiPath Agentic",
+        "__v": 0
+      },
+      {
+        "_id": "69355be58d90937ac870cf8e",
+        "label": "Copilot Studio",
+        "value": "Copilot Studio",
+        "__v": 0
+      },
+      {
+        "_id": "69355be58d90937ac870cf90",
+        "label": "Azure",
+        "value": "Azure",
+        "__v": 0
+      },
+      {
+        "_id": "69355be68d90937ac870cf92",
+        "label": "Langgraph",
+        "value": "Langgraph",
+        "__v": 0
+      },
+      {
+        "_id": "69355be68d90937ac870cf94",
+        "label": "GPT",
+        "value": "GPT",
+        "__v": 0
+      },
+      {
+        "_id": "69355be68d90937ac870cf96",
+        "label": "AWS, Langchain",
+        "value": "AWS, Langchain",
+        "__v": 0
+      },
+      {
+        "_id": "69355be68d90937ac870cf98",
+        "label": "Bedrock (Anthropic",
+        "value": "Bedrock (Anthropic",
+        "__v": 0
+      },
+      {
+        "_id": "69355be78d90937ac870cf9a",
+        "label": "Langchain",
+        "value": "Langchain",
+        "__v": 0
+      },
+      {
+        "_id": "69355be78d90937ac870cf9c",
+        "label": "AA Agentic",
+        "value": "AA Agentic",
+        "__v": 0
+      },
+      {
+        "_id": "69355be78d90937ac870cf9e",
+        "label": "Automation Anywhere",
+        "value": "Automation Anywhere",
+        "__v": 0
+      },
+      {
+        "_id": "69355be78d90937ac870cfa0",
+        "label": "Azure Open AI",
+        "value": "Azure Open AI",
+        "__v": 0
+      },
+      {
+        "_id": "69355be88d90937ac870cfa2",
+        "label": "Aure web apps",
+        "value": "Aure web apps",
+        "__v": 0
+      },
+      {
+        "_id": "69355be88d90937ac870cfa4",
+        "label": "UiPath Gen AI",
+        "value": "UiPath Gen AI",
+        "__v": 0
+      },
+      {
+        "_id": "69355be88d90937ac870cfa6",
+        "label": "Copilot",
+        "value": "Copilot",
+        "__v": 0
+      }
+    ]
+  }
+}
