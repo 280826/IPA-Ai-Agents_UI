@@ -1,19 +1,17 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-// Material modules removed — using native inputs and buttons for this layout
-// import { AuthService } from '../../core/auth.service';
 
 @Component({
-  standalone: true,
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgOptimizedImage],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   email = signal('');
@@ -21,20 +19,12 @@ export class LoginComponent {
   loading = signal(false);
   error = signal<string | null>(null);
 
-  constructor(private auth: AuthService, private router: Router) {}
+  private auth = inject(AuthService);
+  private router = inject(Router);
 
   async onLogin(): Promise<void> {
     this.error.set(null);
     this.loading.set(true);
-    // // local testing hack
-    // // const ok = await this.auth.login(this.email(), this.password());
-    // const ok = await this.auth.login({ username: this.email()!, password: this.password()! });
-    // this.loading.set(false);
-    // if (ok) {
-    //   this.router.navigateByUrl('/agents');
-    // } else {
-    //   this.error.set('Invalid credentials. Please try again.');
-    // }
 
     try {
       const res = await firstValueFrom(
@@ -42,17 +32,22 @@ export class LoginComponent {
       );
       console.log('Login response:', res);
 
-      // res is { token: string } based on your service method
       if (res?.ok) {
-        this.router.navigateByUrl('/agents');
+        await this.router.navigateByUrl('/agents');
       } else {
-        // this.error.set(res.message);
         this.error.set('Invalid credentials. Please try again.');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Login failed', err);
-      this.error.set(err.error?.message || 'Login failed');
-      // this.error.set('Invalid credentials. Please try again.');
+      let message = 'Login failed';
+      if (err instanceof HttpErrorResponse) {
+        message = err.error?.message ?? err.message ?? message;
+      } else if (typeof err === 'object' && err !== null && 'message' in err) {
+        message = String((err as { message?: unknown }).message ?? message);
+      } else if (typeof err === 'string') {
+        message = err;
+      }
+      this.error.set(message);
     } finally {
       this.loading.set(false);
     }

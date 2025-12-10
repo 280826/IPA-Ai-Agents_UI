@@ -5,33 +5,25 @@
   <!-- Hero strip below the global header (1920x200px => height: 12.5rem) -->
   <section class="agent-hero" aria-labelledby="agent-hero-title">
     <div class="agent-hero__inner">
-      <!-- Left: Title + Stage -->
       <div class="agent-hero__left">
-        <h1 id="agent-hero-title" class="agent-hero__title">
-          {{ agent()?.name }}
-        </h1>
+        <h1 id="agent-hero-title" class="agent-hero__title">{{ agent()?.name }}</h1>
 
         <div class="agent-hero__stage" aria-label="Stage">
-          <img src="/assets/images/details/tag.png" />
+          <img ngSrc="/assets/images/details/tag.png" alt="" width="26" height="26" class="agent-hero__stage-icon" />
           <span class="agent-hero__stage-label">Stage:</span>
           <span class="agent-hero__stage-value">{{ stageUi() }}</span>
         </div>
       </div>
 
-
-      <!-- Right: badges with separators -->
       <div class="agent-hero__right flex" role="group" aria-label="Agent metadata">
-        <!-- Industry -->
         <div class="hero-badge">
-          <img src="/assets/images/details/industry.png" class="hero-badge__icon industry" />
-          <span class="hero-badge__text">
-            {{ agent()?.industry || 'Finance & Accounting' }}
-          </span>
+          <img ngSrc="/assets/images/details/industry.png" alt="" width="45" height="45"
+            class="hero-badge__icon industry" />
+          <span class="hero-badge__text">{{ agent()?.industry || 'Finance & Accounting' }}</span>
         </div>
 
         <span class="hero-sep" aria-hidden="true"></span>
 
-        <!-- Agent Count (with see-through circle) -->
         <div class="hero-badge hero-badge--count">
           <div class="count-circle" aria-hidden="true">
             <span class="count-circle__num">
@@ -43,9 +35,9 @@
 
         <span class="hero-sep" aria-hidden="true"></span>
 
-        <!-- Technology -->
         <div class="hero-badge">
-          <img src="/assets/images/details/technology.png" class="hero-badge__icon technology" />
+          <img ngSrc="/assets/images/details/technology.png" alt="" width="44" height="41"
+            class="hero-badge__icon technology" />
           <span class="hero-badge__text">
             @for (t of techList(); track t; let last = $last) {
             {{ t }} @if (!last) { <span class="pipe" aria-hidden="true"> | </span> }
@@ -53,11 +45,19 @@
           </span>
         </div>
       </div>
-
+    </div>
+    <div class="agent-hero__inner2">
+      @if (subAgentNames().length > 0) {
+      <div class="subagents-row" role="list" aria-label="Sub-agents">
+        Sub Agent Names:
+        @for (name of subAgentNames(); track name; let last = $last) {
+        <span class="subagent-chip" role="listitem" tabindex="0">{{ name }}</span>@if(!last){<span aria-hidden="true"
+          class="mid-dot"> &middot; </span>}
+        }
+      </div>
+      }
     </div>
   </section>
-
-
 
   <!-- Two-column layout like your screenshot -->
 
@@ -74,12 +74,12 @@
 
         <ul class="detail-list">
           @for (p of (agent()?.solutionOverview?.points ?? []); track p.heading + p.description) {
-          @if ((p.heading?.trim() || p.description?.trim())) {
+          @if ((p.heading.trim() || p.description.trim())) {
           <li class="detail-item">
             <span class="detail-dot" aria-hidden="true"></span>
             <div class="detail-item-content">
-              @if (p.heading?.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
-              @if (p.description?.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
+              @if (p.heading.trim()) { <strong class="detail-item-title">{{ p.heading }}</strong> }
+              @if (p.description.trim()) { <span class="detail-item-desc">{{ p.description }}</span> }
             </div>
           </li>
           }
@@ -130,32 +130,27 @@
       <h3 class="resources-heading">Resources</h3>
 
 
-<div class="resources-grid">
-  @for (r of agent()?.resources ?? []; track r.url) {
-    <div class="resource-card">
-      <!-- If it's a video URL, show <video> -->
-      @if (isVideoUrl(r.url)) {
-        <div class="resource-thumb">
-          <video controls [src]="r.url" preload="metadata"></video>
-        </div>
-      } @else {
-        <!-- Otherwise, link opens in new tab and show appropriate placeholder -->
-        <a
-          class="resource-thumb"
-          [href]="r.url"
-          target="_blank"
-          rel="noopener"
-          aria-label="Open resource: {{ r.description }}"
-        >
-          <img [src]="resourceThumb(r.url)" alt="{{ r.description }}" />
-        </a>
-      }
+      <div class="resources-grid">
+        @for (r of agent()?.resources ?? []; track r.url) {
+        <div class="resource-card">
+          <!-- If it's a video URL, show <video> -->
+          @if (isVideoUrl(r.url)) {
+          <div class="resource-thumb">
+            <video controls [src]="r.url" preload="metadata"></video>
+          </div>
+          } @else {
+          <!-- Otherwise, link opens in new tab and show appropriate placeholder -->
+          <a class="resource-thumb" [href]="r.url" target="_blank" rel="noopener"
+            aria-label="Open resource: {{ r.description }}">
+            <img [src]="resourceThumb(r.url)" alt="{{ r.description }}" />
+          </a>
+          }
 
-      <!-- Caption -->
-      <p class="resource-caption">{{ r.description }}</p>
-    </div>
-  }
-</div>
+          <!-- Caption -->
+          <p class="resource-caption">{{ r.description }}</p>
+        </div>
+        }
+      </div>
 
     </div>
     }

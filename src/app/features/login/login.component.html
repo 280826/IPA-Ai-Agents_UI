@@ -1,69 +1,75 @@
-<div class="flex flex-col bg-white" style="height: 100vh;">
-  <!-- Hero / header (background image will be added later) -->
-  <div class="hero w-full relative overflow-hidden" style="height: 540px;">
-    <div class="absolute" style="top: 100px; left: 100px;">
-      <img src="/assets/images/IOA.png" alt="Intuitive Operations & Automation" style="width: 439px; height: 64px;" />
+<div class="flex flex-col bg-white h-screen">
+  <!-- Hero / header -->
+  <div class="hero w-full relative overflow-hidden">
+    <div class="absolute top-[6.25rem] left-[6.25rem]">
+      <img ngSrc="/assets/images/IOA.png" alt="Intuitive Operations & Automation" width="439" height="64" loading="lazy" decoding="async" class="w-[27.4375rem] h-[4rem]" />
     </div>
   </div>
 
   <!-- Centered login card overlapping hero -->
   <main class="relative flex-1">
-    <div class="absolute inset-0 flex justify-center" style="margin-top: -270px;">
-      <div class="w-full bg-white rounded-2xl shadow-2xl p-8 ring-1 ring-gray-200 login-card" style="width: 500px; height: 540px;">
-          <div class="mb-6">
-            <h2 class="text-2xl font-semibold text-slate-800">Login to <span class="font-bold">IPA AI Agents</span></h2>
-            <div class="mt-3 border-b-4 border-[#233ba6] w-32"></div>
+    <div class="card-overlap flex justify-center">
+      <div class="bg-white rounded-2xl shadow-2xl p-8 ring-1 ring-gray-200 login-card w-[31.25rem] h-[33.75rem]">
+        <div class="mb-6">
+          <h2 class="text-2xl font-semibold text-slate-800">
+            Login to <span class="font-bold">IPA AI Agents</span>
+          </h2>
+          <div class="title-underline" aria-hidden="true"></div>
+        </div>
+
+        <form (ngSubmit)="onLogin()" class="space-y-4" novalidate>
+          <div class="field">
+            <label for="email" class="block text-lg text-slate-600">Email</label>
+            <input
+              id="email"
+              type="email"
+              [ngModel]="email()"
+              (ngModelChange)="email.set($event)"
+              name="email"
+              placeholder="Exp:Thomas.miller@cognizant.com"
+              required
+              autocomplete="email"
+              class="w-full bg-gray-100 rounded-lg px-4 py-3 text-slate-700 placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-cognizantBlue"
+            />
           </div>
 
-          <form (ngSubmit)="onLogin()" class="space-y-4">
-            <div>
-              <label class="block text-sm text-slate-600 mb-2">Email</label>
-              <input
-                type="email"
-                [ngModel]="email()"
-                (ngModelChange)="email.set($event)"
-                name="email"
-                placeholder="Exp:Thomas.miller@cognizant.com"
-                required
-                class="w-full bg-gray-100 rounded-lg px-4 py-3 text-slate-700 placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-cognizantBlue"
-              />
-            </div>
+          <div class="field">
+            <label for="password" class="block text-lg text-slate-600">Password</label>
+            <input
+              id="password"
+              type="password"
+              [ngModel]="password()"
+              (ngModelChange)="password.set($event)"
+              name="password"
+              required
+              autocomplete="current-password"
+              class="w-full bg-gray-100 rounded-lg px-4 py-3 text-slate-700 placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-cognizantBlue"
+            />
+          </div>
 
-            <div>
-              <label class="block text-sm text-slate-600 mb-2">Password</label>
-              <input
-                type="password"
-                [ngModel]="password()"
-                (ngModelChange)="password.set($event)"
-                name="password"
-                required
-                class="w-full bg-gray-100 rounded-lg px-4 py-3 text-slate-700 placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-cognizantBlue"
-              />
-            </div>
+          <div class="field">
+            <button
+              type="submit"
+              [disabled]="loading()"
+              class="w-full bg-cognizantBlue text-white font-semibold py-3 rounded-lg shadow-md hover:brightness-95 disabled:opacity-60"
+            >
+              Login
+            </button>
+          </div>
 
-            <div>
-              <button
-                type="submit"
-                [disabled]="loading()"
-                class="w-full bg-cognizantBlue text-white font-semibold py-3 rounded-lg shadow-md hover:brightness-95 disabled:opacity-60"
-              >
-                Login
-              </button>
+          @if (error()) {
+            <div class="text-red-600 text-lg" role="alert" aria-live="polite">
+              {{ error() }}
             </div>
-
-            @if (error()) {
-              <div class="text-red-600 text-sm">
-                {{ error() }}
-              </div>
-            }
-          </form>
-        </div>
+          }
+        </form>
       </div>
+    </div>
   </main>
 
   <!-- Footer -->
   <footer class="text-white bg-[#0a0d3a]">
-    <div class="max-w-7xl py-4 text-sm opacity-90" style="padding-left: 100px;">
+    <div class="max-w-7xl py-4 text-lg opacity-90 pl-[6.25rem]">
       ©2025 Cognizant, all rights reserved | Privacy Policy
     </div>
   </footer>

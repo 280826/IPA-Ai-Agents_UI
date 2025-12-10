@@ -55,7 +55,7 @@
             <label class="filter-label">By Technology</label>
           </div>
 
-          <div class="search-inner">
+          <div class="search-inner" (click)="$event.stopPropagation()">
             <div class="search-white-area">
               <img src="/assets/images/search.png" />
 
@@ -77,10 +77,12 @@
                 <!-- <span class="filter-label">By Industries</span> -->
                 <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
                   <option value="">All</option>
-                  <option>Banking and Financial</option>
-                  <option>Finance &amp; Accounting</option>
-                  <option>Supply Chain</option>
-                  <option>Insurance</option>
+                  <option value="BFS">Banking and Financial</option>
+                  <option value="F&A">Finance &amp; Accounting</option>
+                  <option value="LS">Life Sciences</option>
+                  <option value="INS">Insurance</option>
+                  <option value="HC">Healthcare</option>
+                  <option value="IT">Information Technology</option>
                 </select>
                 <!-- </div> -->
 

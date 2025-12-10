@@ -22,6 +22,8 @@
     --container-7xl: 80rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
     --font-weight-semibold: 600;
@@ -210,11 +212,11 @@
   .static {
     position: static;
   }
-  .inset-0 {
-    inset: calc(var(--spacing) * 0);
-  }
   .top-0 {
     top: calc(var(--spacing) * 0);
+  }
+  .top-\[6\.25rem\] {
+    top: 6.25rem;
   }
   .right-0 {
     right: calc(var(--spacing) * 0);
@@ -222,17 +224,14 @@
   .left-0 {
     left: calc(var(--spacing) * 0);
   }
+  .left-\[6\.25rem\] {
+    left: 6.25rem;
+  }
   .z-10 {
     z-index: 10;
   }
   .mx-auto {
     margin-inline: auto;
-  }
-  .mt-3 {
-    margin-top: calc(var(--spacing) * 3);
-  }
-  .mb-2 {
-    margin-bottom: calc(var(--spacing) * 2);
   }
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
@@ -261,14 +260,23 @@
   .inline {
     display: inline;
   }
+  .h-\[4rem\] {
+    height: 4rem;
+  }
+  .h-\[33\.75rem\] {
+    height: 33.75rem;
+  }
   .h-full {
     height: 100%;
   }
   .h-screen {
     height: 100vh;
   }
-  .w-32 {
-    width: calc(var(--spacing) * 32);
+  .w-\[27\.4375rem\] {
+    width: 27.4375rem;
+  }
+  .w-\[31\.25rem\] {
+    width: 31.25rem;
   }
   .w-full {
     width: 100%;
@@ -327,13 +335,6 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
-  .border-b-4 {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 4px;
-  }
-  .border-\[\#233ba6\] {
-    border-color: #233ba6;
-  }
   .border-gray-200 {
     border-color: var(--color-gray-200);
   }
@@ -373,12 +374,19 @@
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
   }
+  .pl-\[6\.25rem\] {
+    padding-left: 6.25rem;
+  }
   .text-center {
     text-align: center;
   }
   .text-2xl {
     font-size: var(--text-2xl);
     line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
   }
   .text-sm {
     font-size: var(--text-sm);
