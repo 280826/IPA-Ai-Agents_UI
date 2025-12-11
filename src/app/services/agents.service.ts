@@ -158,8 +158,8 @@ export class AgentsService {
 
   /** NEW: dropdowns for vertical, stage, techStack */
   dropdowns(): Observable<DropdownsDTO> {
-    const url = "/assets/data/dropdowns.json";
-    // const url = `${environment.apiBaseUrl}/usecase/dropdowns`;
+    // const url = "/assets/data/dropdowns.json";
+    const url = `${environment.apiBaseUrl}/usecase/dropdowns`;
     const key = this.keyFromParams(url);
     const cached = this.getCache<DropdownsDTO>(key);
     if (cached) return of(cached);
