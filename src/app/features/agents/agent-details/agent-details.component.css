@@ -136,7 +136,15 @@
   /* 12px */
   backdrop-filter: blur(0.125rem);
   /* 2px */
-  word-break: break-word;
+  /* word-break: break-word; */
+  /* &.industry {
+    width: -webkit-fill-available;
+    max-width: 10rem;
+    word-break: break-word;
+  } */
+   &.tech-list {
+    max-width: 19rem;
+   }
 }
 
 .hero-badge__text {
