@@ -447,7 +447,7 @@
   padding: 0;
   margin: 0;
   display: inline-flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   /* single line on desktop */
   gap: 2.5rem;
   /* 40px between items */

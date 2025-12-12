@@ -116,7 +116,7 @@
         @for (b of agent()?.benefits?.points ?? []; track b.heading) {
         <!-- Tooltip via title; also expose for a11y via aria-label -->
         <li class="benefit" [attr.title]="b.description" [attr.aria-label]="b.description">
-          <span class="benefit-text">{{ b.heading }}</span>
+          <span class="benefit-text">{{ b.heading.replace(/:/g, '') }}</span>
         </li>
         }
       </ul>

@@ -149,13 +149,60 @@ footer {
 }
 
 /* Hero background image - scrolls with content */
+/* keep the design height in rem so it scales with html font-size */
 .hero-bg {
   background-image: url('/assets/images/agent-store-bg.png');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   position: relative;
-  height: 60rem; /* 960px / 16 = 60rem */
+  height: 60rem; /* 960px @ 16px base; will scale with rem */
+}
+
+/* Center a fixed max-width container for XD-accurate placement. */
+.hero-content,
+.search-pill,
+.discover-section,
+.agents-grid {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Ensure hero content uses internal padding rather than viewport left offsets */
+.hero-content { padding-left: 2.5rem; padding-right: 2.5rem; }
+
+/* Position inner white area with padding rather than large absolute lefts */
+.search-inner {
+  position: absolute;
+  top: 5rem;
+  left: 2.75rem;
+  right: 2.75rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Use percentage-based dividers instead of hard rem offsets */
+.pill-divider {
+  position: absolute;
+  width: 0.125rem;
+  height: 5rem;
+  background: #b8b8b8;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pill-divider-2 {
+  position: absolute;
+  width: 0.125rem;
+  height: 5rem;
+  background: #b8b8b8;
+  top: 0;
+  left: 75%;
+  transform: translateX(-50%);
 }
 
 /* Hero content - relative positioning for absolute children */
@@ -168,14 +215,10 @@ footer {
 .hero-heading {
   position: absolute;
   top: 6.25rem; /* (220px - 120px) / 16 = 6.25rem */
-  left: 7.75rem; /* 124px / 16 = 7.75rem */
-  width: 104.5rem; /* 1672px / 16 = 104.5rem */
   height: 6.6875rem; /* 107px / 16 = 6.6875rem */
-  text-align: center;
   font: 600 4.5rem/5rem Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* 72px / 16 = 4.5rem, 80px / 16 = 5rem */
-  letter-spacing: 0;
   color: #26efe9;
-  opacity: 1;
+  width: 100%;
   margin: 0;
   padding: 0;
 }
@@ -184,36 +227,31 @@ footer {
 .hero-description {
   position: absolute;
   top: 13.5625rem; /* (337px - 120px) / 16 = 13.5625rem */
-  left: 16.125rem; /* 258px / 16 = 16.125rem */
-  width: 87.75rem; /* 1404px / 16 = 87.75rem */
   height: 10.875rem; /* 174px / 16 = 10.875rem */
-  text-align: center;
   font: 400 2.875rem/3.1875rem Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* 46px / 16 = 2.875rem, 51px / 16 = 3.1875rem */
-  letter-spacing: 0;
   color: #ffffff;
-  opacity: 1;
   margin: 0;
   padding: 0;
+  width: 87.75rem; /* 1404px / 16 = 87.75rem */
 }
 
 /* Search pill styling - exact XD positioning and styling */
 .search-pill {
   position: absolute;
-  top: 30.75rem; /* (612px - 120px) / 16 = 30.75rem */
-  left: 2.5rem; /* 40px / 16 = 2.5rem */
-  width: 115rem; /* 1840px / 16 = 115rem */
-  height: 12.5rem; /* 200px / 16 = 12.5rem */
+  top: 30.75rem;
+  height: 12.5rem;
   background: rgba(255, 255, 255, 0.7);
-  border: 0.0625rem solid #707070; /* 1px / 16 = 0.0625rem */
-  border-radius: 2.5rem; /* 40px / 16 = 2.5rem */
-  position: relative;
-  z-index: 8;
+  border: 0.0625rem solid #707070;
+  border-radius: 2.5rem;
+  /* z-index: 8; */
+  width: 115rem;
 }
 
 .search-inner {
   position: absolute;
   top: 5rem; /* 80px / 16 = 5rem */
   left: 2.75rem; /* 44px / 16 = 2.75rem */
+  right: 2.75rem;
   display: flex;
   align-items: center;
   gap: 2rem; /* 32px / 16 = 2rem */
@@ -263,7 +301,8 @@ footer {
   border: none;
   opacity: 1;
   top: 0;
-  left: 50rem; /* 836px from pill left - 44px white area left = 792px / 16 = 49.5rem, rounded to 50rem */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .pill-divider-2 {
@@ -274,17 +313,17 @@ footer {
   border: none;
   opacity: 1;
   top: 0;
-  left: 72.78125rem; /* 1208.5px from pill left - 44px white area left = 1164.5px / 16 = 72.78125rem */
+  left: 75%;
+  transform: translateX(-50%);
 }
 
 .filters-inline {
   display: flex;
-  gap: 4rem;
-  /* gap: 21.53125rem; Distance between dropdowns: (1208.5 - 836 - 2 - 20) / 16 = 21.90625rem, adjusted for spacing */
+  gap: 5rem;
   align-items: center;
   flex: 1;
   justify-content: flex-start;
-  padding-left: 2rem; /* 32px / 16 = 2rem - offset from first HR */
+  padding-left: 0rem;
 }
 
 .filter-group {
@@ -293,12 +332,12 @@ footer {
 
 .filter-group-1 {
   top: 2.1875rem; /* 35px / 16 = 2.1875rem - positioned above white area but within pill */
-  left: 53.8rem; /* Approximately centered between first HR (836px) and second HR (1208.5px) = ~1022px / 16 = 63.875rem from viewport, minus pill offset */
+  left: 45.4%;
 }
 
 .filter-group-2 {
   top: 2.1875rem; /* 35px / 16 = 2.1875rem - positioned above white area but within pill */
-  left: 76.5rem; /* Approximately centered in space after second HR to search button */
+  left: 66%;
 }
 
 .filter-label {
@@ -378,17 +417,17 @@ footer {
 /* Discover Section - exact XD positioning and styling */
 .discover-section {
   position: relative;
-  margin-top: -6.75rem; /* -108px / 16 = -6.75rem to overlap with hero */
-  left: 2.5rem; /* 40px / 16 = 2.5rem */
-  width: 115rem; /* 1840px / 16 = 115rem */
-  height: 10rem; /* 160px / 16 = 10rem */
+  margin-top: -8.75rem;
+  max-width: 115rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  height: 10rem;
   background: #eaf2fa;
-  border-radius: 2.5rem 2.5rem 0 0; /* 40px 40px 0px 0px */
+  border-radius: 2.5rem 2.5rem 0 0;
   opacity: 1;
   display: flex;
   align-items: center;
   padding: 0 1.5rem;
-  margin-bottom: 0;
 }
 
 .discover-heading {
@@ -415,7 +454,7 @@ footer {
 .discover-filter-select {
   background: transparent;
   border: none;
-  border-bottom: 0.125rem solid #707070; /* 2px / 16 = 0.125rem */
+  border-bottom: 0.125rem solid #B8B8B8; /* 2px / 16 = 0.125rem */
   border-radius: 0;
   font: normal normal normal 1.875rem/2.1875rem Arial; /* 30px/35px */
   letter-spacing: 0;
@@ -447,17 +486,6 @@ footer {
   /* Global font already Gellix in your app; ensure fallback consistency */
   --font-sans: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
     sans-serif;
-}
-
-/* Card grid */
-.agents-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(32.5rem, 1fr)); /* min 520px */
-  gap: 3rem 1rem; /* 32px */
-  padding: 0 2rem 1.5rem 2rem; /* 24px 32px */
-  width: 115rem;
-  left: 2.5rem;
-  position: relative;
 }
 
 /* Card container */
@@ -659,6 +687,7 @@ footer {
   grid-template-columns: repeat(auto-fill, minmax(32.5rem, 1fr));
   gap: 3rem; /* 48px */
   padding: 1.5rem 2rem; /* 24px 32px */
+  width: 115rem;
 }
 
 /* Card container (exact size) */
@@ -880,14 +909,14 @@ footer {
 }
 
 .pager-btn {
-  border: 1px solid #e5e7eb;
+  border: 0.0625rem solid #e5e7eb;
   background: #fff;
   color: #1f2937;
   border-radius: 0.5rem; /* 8px */
-  padding: 0.5rem 1rem; /* 8px 16px */
+  padding: 0rem 1rem; /* 0px 16px */
   font-weight: 600;
   cursor: pointer;
-  height: 3rem;
+  height: 3.125rem;
   img {
     display: inline;
     position: relative;
@@ -908,14 +937,14 @@ footer {
 }
 
 .pager-page {
-  min-width: 3rem; /* 48px-ish pill */
-  height: 3rem;
+  min-width: 3.125rem; /* 50px-ish pill */
+  height: 3.125rem;
   text-align: center;
-  border: 1px solid #e5e7eb;
+  border: 0.0625rem solid #e5e7eb;
   background: #fff;
   color: #1f2937;
   border-radius: 0.625rem;
-  padding: 0.5rem 0.75rem;
+  /* padding: 0.5rem 0.75rem; */
   font-weight: 700;
   cursor: pointer;
   &:hover {
@@ -943,7 +972,7 @@ footer {
   gap: 0.5rem;
 }
 .pager-size select {
-  border: 1px solid #e5e7eb;
+  border: 0.0625rem solid #e5e7eb;
   border-radius: 0.5rem;
   padding: 0.4rem 0.6rem;
   background: #fff;
