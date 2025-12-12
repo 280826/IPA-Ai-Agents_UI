@@ -1,10 +1,10 @@
 <div class="flex flex-col h-screen bg-gray-50">
-  <!-- Fixed Header - 120px height -->
-  <header class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-10" style="height: 120px">
+  <!-- Fixed Header - 120px/7.5rem height -->
+  <header class="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-10 h-[7.5rem]">
     <div class="h-full px-12 flex items-center header-logos">
       <!-- Left: IPA image -->
       <div class="flex items-center">
-        <div class="header-logo">
+        <div class="header-logo w-[16.125rem]">
           <img src="/assets/images/agent-store-ipa.png" alt="IPA"
             onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
         </div>
@@ -18,7 +18,7 @@
           <!-- title="Home" -->
           <button
             type="button"
-            class="logo-btn"
+            class="logo-btn w-[19.75rem]"
             aria-label="Go to landing page"
             (click)="navigateHome()"
             style="background: none; border: 0; padding: 0; cursor: pointer;"
@@ -31,7 +31,7 @@
 
       <!-- Right: IOA image aligned to right -->
       <div class="flex items-center justify-end">
-        <div class="header-logo">
+        <div class="header-logo w-[27.438rem]">
           <img src="/assets/images/agent-store-ioa.png" alt="Intuitive Operations & Automation"
             onerror="this.onerror=null;this.src='/assets/images/IOA.png'" />
         </div>
@@ -49,7 +49,7 @@
 
     <!-- Hero Section -->
     <section class="hero-bg text-white">
-      <div class="hero-content text-center relative">
+      <div class="hero-content text-center relative flex justify-center">
         <h1 class="hero-heading">Your Unified Platform for Intelligent Agents</h1>
         <p class="hero-description">
           From productivity to creativity, find the right agent and get started instantly. Explore,
@@ -121,7 +121,7 @@
         <select class="discover-filter-select" [value]="selectedStage()" (change)="onStageChange($event)">
           <!-- <option value="">All</option> -->
           @for (opt of stageOptions(); track opt._id) {
-          <option [value]="opt.label">{{ opt.label }}</option>
+          <option [value]="opt.value">{{ opt.label }}</option>
           }
         </select>
       </div>

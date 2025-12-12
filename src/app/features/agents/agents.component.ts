@@ -34,7 +34,7 @@ function toApiStage(ui: StageUi | undefined): StageApi | undefined {
   if (!ui) return undefined;
   switch (ui.trim()) {
     case 'Production':
-      return 'Prod';
+      return 'Production';
     case 'POC':
       return 'POC';
     case 'Solution':
@@ -130,7 +130,8 @@ export class AgentsComponent {
   // ----- Lifecycle -----
   ngOnInit(): void {
     // fetch dropdowns once
-    this.svc.dropdowns().subscribe({
+    // site = 'ipa' for IPA agents store
+    this.svc.dropdowns('ipa').subscribe({
       next: (dd: DropdownsDTO) => {
         const v = dd?.data?.vertical ?? [];
         const s = dd?.data?.stage ?? [];

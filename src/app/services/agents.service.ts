@@ -157,13 +157,13 @@ export class AgentsService {
   }
 
   /** NEW: dropdowns for vertical, stage, techStack */
-  dropdowns(): Observable<DropdownsDTO> {
-    // const url = "/assets/data/dropdowns.json";
+  dropdowns(site?: string): Observable<DropdownsDTO> {
+    const params = site ? new HttpParams().set('site', site) : undefined;
     const url = `${environment.apiBaseUrl}/usecase/dropdowns`;
-    const key = this.keyFromParams(url);
+    const key = this.keyFromParams(url, params);
     const cached = this.getCache<DropdownsDTO>(key);
     if (cached) return of(cached);
-    return this.http.get<DropdownsDTO>(url).pipe(tap((data) => this.setCache(key, data)));
+    return this.http.get<DropdownsDTO>(url, { params }).pipe(tap((data) => this.setCache(key, data)));
   }
 
   /** NEW: Get-by-id, server returns a single item in data */

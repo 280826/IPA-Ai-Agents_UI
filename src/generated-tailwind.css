@@ -215,17 +215,11 @@
   .top-0 {
     top: calc(var(--spacing) * 0);
   }
-  .top-\[6\.25rem\] {
-    top: 6.25rem;
-  }
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
   .left-0 {
     left: calc(var(--spacing) * 0);
-  }
-  .left-\[6\.25rem\] {
-    left: 6.25rem;
   }
   .z-10 {
     z-index: 10;
@@ -281,6 +275,9 @@
   .h-\[4rem\] {
     height: 4rem;
   }
+  .h-\[7\.5rem\] {
+    height: 7.5rem;
+  }
   .h-\[33\.75rem\] {
     height: 33.75rem;
   }
@@ -289,6 +286,15 @@
   }
   .h-screen {
     height: 100vh;
+  }
+  .w-\[16\.125rem\] {
+    width: 16.125rem;
+  }
+  .w-\[19\.75rem\] {
+    width: 19.75rem;
+  }
+  .w-\[27\.438rem\] {
+    width: 27.438rem;
   }
   .w-\[27\.4375rem\] {
     width: 27.4375rem;
@@ -540,37 +546,32 @@
   font-family: Gellix, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 html {
-  font-size: 16px;
+  font-size: clamp(
+    11px,
+    calc(11px + (5 * ((100vw - 1366px) / 554))),
+    16px
+  );
 }
-@media (min-width: 2560px) {
+@media (min-width: 1921px) and (max-width: 2560px) {
   html {
-    font-size: 23px;
+    font-size: clamp(
+      16px,
+      calc(16px + (2 * ((100vw - 1920px) / 640))),
+      18px
+    );
   }
 }
-@media (min-width: 2048px) and (max-width: 2559px) {
+@media (min-width: 2561px) {
   html {
-    font-size: 21px;
+    font-size: clamp(
+      18px,
+      calc(18px + (2 * ((100vw - 2560px) / 1280))),
+      20px
+    );
   }
 }
-@media (max-width: 1366px) {
-  html {
-    font-size: 11.3px;
-  }
-}
-@media (max-width: 1024px) {
-  html {
-    font-size: 7.65px;
-  }
-}
-@media (max-width: 768px) {
-  html {
-    font-size: 6.4px;
-  }
-}
-@media (max-width: 375px) {
-  html {
-    font-size: 3.13px;
-  }
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 .bg-cognizantBlue {
   background-color: rgb(0 112 210);

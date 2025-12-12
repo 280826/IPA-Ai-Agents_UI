@@ -62,7 +62,24 @@
   justify-content: flex-start;
   background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,1));
   box-shadow: 0 1.875rem 5rem rgba(2,6,23,0.16); /* 30px 80px */
+  box-sizing: border-box; /* ensure padding is included in width/height */
+  width: 31.25rem;
+  height: 33.875rem;
+  padding: 3.125rem;
+  max-width: 100%;
+  /* preserve visual appearance */
+  background-clip: padding-box;
 }
+
+/* Small-screen fallback: keep card usable on narrow viewports */
+@media (max-width: 480px) {
+  .login-card {
+    width: calc(100% - 2rem); /* gutter for small screens */
+    height: auto;
+    padding: 1rem;
+  }
+}
+
 /* No changes needed; card dimensions are controlled in the template using rem classes */
 .login-card h2 {
   letter-spacing: -0.0125rem; /* -0.2px */
