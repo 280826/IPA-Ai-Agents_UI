@@ -1121,8 +1121,8 @@ footer {
 /* Clear button inside the search pill */
 .search-clear {
   position: relative;
-  top: 22%;
-  transform: translateY(-50%);
+  top: -0.35rem;
+  left: -2.5rem;
   background: transparent;
   border: none;
   color: #8b8b8b;

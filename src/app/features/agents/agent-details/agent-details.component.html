@@ -16,10 +16,10 @@
       </div>
 
       <div class="agent-hero__right flex" role="group" aria-label="Agent metadata">
-        <div class="hero-badge">
+        <div class="hero-badge industry">
           <img ngSrc="/assets/images/details/industry.png" alt="" width="45" height="45"
             class="hero-badge__icon industry" />
-          <span class="hero-badge__text">{{ agent()?.industry || 'Finance & Accounting' }}</span>
+          <span class="hero-badge__text" style="width: -webkit-fill-available;">{{ agent()?.industry || 'Finance & Accounting' }}</span>
         </div>
 
         <span class="hero-sep" aria-hidden="true"></span>
@@ -35,7 +35,7 @@
 
         <span class="hero-sep" aria-hidden="true"></span>
 
-        <div class="hero-badge">
+        <div class="hero-badge tech-list">
           <img ngSrc="/assets/images/details/technology.png" alt="" width="44" height="41"
             class="hero-badge__icon technology" />
           <span class="hero-badge__text">

@@ -85,7 +85,7 @@
                 <select class="filter-select" [value]="selectedIndustry()" (change)="onIndustryChange($event)">
                   <!-- <option value="">All</option> -->
                   @for (opt of verticalOptions(); track opt._id) {
-                  <option [value]="opt.value">{{ opt.label }}</option>
+                  <option [value]="opt.value" [selected]="opt.value === selectedIndustry()">{{ opt.label }}</option>
                   }
                 </select>
                 <!-- </div> -->
@@ -100,7 +100,7 @@
                 <select class="filter-select" [value]="selectedTechnology()" (change)="onTechnologyChange($event)">
                   <!-- <option value="">All</option> -->
                   @for (opt of techOptions(); track opt._id) {
-                  <option [value]="opt.value">{{ opt.label }}</option>
+                  <option [value]="opt.value" [selected]="opt.value === selectedTechnology()">{{ opt.label }}</option>
                   }
                 </select>
                 <!-- </div> -->
@@ -121,7 +121,7 @@
         <select class="discover-filter-select" [value]="selectedStage()" (change)="onStageChange($event)">
           <!-- <option value="">All</option> -->
           @for (opt of stageOptions(); track opt._id) {
-          <option [value]="opt.value">{{ opt.label }}</option>
+          <option [value]="opt.value" [selected]="opt.value === selectedStage()">{{ opt.label }}</option>
           }
         </select>
       </div>
