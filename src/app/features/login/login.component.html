@@ -17,52 +17,23 @@
           <div class="title-underline" aria-hidden="true"></div>
         </div>
 
-        <form (ngSubmit)="onLogin()" class="space-y-4" novalidate>
-          <div class="field">
-            <label for="email" class="block text-lg text-slate-600">Email</label>
-            <input
-              id="email"
-              type="email"
-              [ngModel]="email()"
-              (ngModelChange)="email.set($event)"
-              name="email"
-              placeholder="Exp:Thomas.miller@cognizant.com"
-              required
-              autocomplete="email"
-              class="w-full bg-gray-100 rounded-lg px-4 py-3 text-slate-700 placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-cognizantBlue"
-            />
-          </div>
-
-          <div class="field">
-            <label for="password" class="block text-lg text-slate-600">Password</label>
-            <input
-              id="password"
-              type="password"
-              [ngModel]="password()"
-              (ngModelChange)="password.set($event)"
-              name="password"
-              required
-              autocomplete="current-password"
-              class="w-full bg-gray-100 rounded-lg px-4 py-3 text-slate-700 placeholder-slate-400 border border-transparent focus:outline-none focus:ring-2 focus:ring-cognizantBlue"
-            />
-          </div>
-
-          <div class="field">
-            <button
-              type="submit"
-              [disabled]="loading()"
-              class="w-full bg-cognizantBlue text-white font-semibold py-3 rounded-lg shadow-md hover:brightness-95 disabled:opacity-60"
-            >
-              Login
-            </button>
-          </div>
+        <div class="space-y-4">
+          <p class="text-lg text-slate-600">Use your Cognizant Microsoft account to continue.</p>
+          <button
+            type="button"
+            (click)="onMicrosoftLogin()"
+            [disabled]="loading()"
+            class="w-full bg-cognizantBlue text-white font-semibold py-3 rounded-lg shadow-md hover:brightness-95 disabled:opacity-60"
+          >
+            {{ loading() ? 'Signing in…' : 'Sign in with Microsoft' }}
+          </button>
 
           @if (error()) {
             <div class="text-red-600 text-lg" role="alert" aria-live="polite">
               {{ error() }}
             </div>
           }
-        </form>
+        </div>
       </div>
     </div>
   </main>
