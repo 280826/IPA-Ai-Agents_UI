@@ -19,11 +19,7 @@ export class AuthService {
       redirectUri: `${window.location.origin}/auth-callback.html`,
       postLogoutRedirectUri: window.location.origin,
     },
-    cache: {
-      cacheLocation: BrowserCacheLocation.LocalStorage,
-      // Popup callbacks need the temporary request state to be shared with the opener.
-      temporaryCacheLocation: BrowserCacheLocation.LocalStorage,
-    },
+    cache: { cacheLocation: BrowserCacheLocation.LocalStorage },
   });
   private initialization?: Promise<void>;
 
