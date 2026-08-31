@@ -22,7 +22,7 @@ jobs:
         uses: Azure/static-web-apps-deploy@v1
         env:
           # 👉 Force Oryx to use a supported Node version for Angular 22
-          NODE_VERSION: '22.22.3'
+          NODE_VERSION: '22.22.0'
           # 👉 Turn on Angular's persistent build cache in the action environment
           NG_BUILD_CACHE: 'enabled'
           # 👉 Run debug commands inside Oryx AFTER the build (before deploy/validation)
@@ -42,8 +42,6 @@ jobs:
           output_location: "dist/IPA-Ai-Agents_UI/browser"
           # Force the build command Oryx should run for the app
           app_build_command: "npm run build -- --configuration production"
-          # No API in this project; keep this true if you don't have Functions
-          skip_api_build: true
 
   close_preview:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
