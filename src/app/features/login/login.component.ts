@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
 
   async ngOnInit(): Promise<void> {
+    await this.auth.initialize();
     if (this.auth.isLoggedIn()) {
       await this.router.navigateByUrl('/agents');
     }
