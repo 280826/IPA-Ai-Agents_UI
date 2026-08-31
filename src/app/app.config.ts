@@ -1,4 +1,4 @@
-import { ApplicationConfig, Provider } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer, Provider } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import {
@@ -7,6 +7,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { AuthService } from './services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()), // enable DI interceptors
     // register the DI interceptor
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } as Provider,
+    provideAppInitializer(() => inject(AuthService).initialize()),
   ],
 };
