@@ -14,10 +14,16 @@ export class AuthService {
     auth: {
       clientId: environment.msal.clientId,
       authority: `https://login.microsoftonline.com/${environment.msal.tenantId}`,
-      redirectUri: window.location.origin,
+      // A popup callback should be a lightweight same-origin page, not the Angular app.
+      // MSAL reads the authorization response from this page in the opener window.
+      redirectUri: `${window.location.origin}/auth-callback.html`,
       postLogoutRedirectUri: window.location.origin,
     },
-    cache: { cacheLocation: BrowserCacheLocation.LocalStorage },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+      // Popup callbacks need the temporary request state to be shared with the opener.
+      temporaryCacheLocation: BrowserCacheLocation.LocalStorage,
+    },
   });
   private initialization?: Promise<void>;
 
@@ -47,8 +53,7 @@ export class AuthService {
   private async initializeMsal(): Promise<void> {
     this.ensureConfigured();
     await this.msal.initialize();
-    const result = await this.msal.handleRedirectPromise();
-    const account = result?.account ?? this.msal.getActiveAccount() ?? this.msal.getAllAccounts()[0];
+    const account = this.msal.getActiveAccount() ?? this.msal.getAllAccounts()[0];
     if (account) {
       this.msal.setActiveAccount(account);
       await this.refreshAccessToken(account);
