@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -10,12 +10,18 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loading = signal(false);
   error = signal<string | null>(null);
 
   private auth = inject(AuthService);
   private router = inject(Router);
+
+  async ngOnInit(): Promise<void> {
+    if (this.auth.isLoggedIn()) {
+      await this.router.navigateByUrl('/agents');
+    }
+  }
 
   async onMicrosoftLogin(): Promise<void> {
     this.error.set(null);
