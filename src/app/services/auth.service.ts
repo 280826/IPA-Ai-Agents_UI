@@ -14,7 +14,9 @@ export class AuthService {
     auth: {
       clientId: environment.msal.clientId,
       authority: `https://login.microsoftonline.com/${environment.msal.tenantId}`,
-      redirectUri: window.location.origin,
+      // Silent refresh must return to a page that does not boot Angular; otherwise
+      // MSAL detects the application loading inside its hidden iframe and aborts.
+      redirectUri: `${window.location.origin}/auth-callback.html`,
       postLogoutRedirectUri: window.location.origin,
     },
     cache: { cacheLocation: BrowserCacheLocation.LocalStorage },
@@ -32,6 +34,9 @@ export class AuthService {
     await this.msal.loginRedirect({
       scopes: ['openid', 'profile', 'email', ...environment.msal.apiScopes],
       prompt: 'select_account',
+      // Keep interactive sign-in returning to the SPA, where the redirect result
+      // is processed and the user is sent to the agents screen.
+      redirectUri: window.location.origin,
     });
   }
 
